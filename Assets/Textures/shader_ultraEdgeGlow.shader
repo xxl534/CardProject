@@ -13,7 +13,7 @@
    Color (0,0,0,0)
   }
   Blend SrcAlpha One
-//  Blend SrcColor one
+//  Blend SrcAlpha OneMinusSrcAlpha
   AlphaTest Greater 0.01
   ColorMask RGB
 		CGPROGRAM
@@ -74,8 +74,8 @@
 			uv_1.x=coor.x+0.5;
 			uv_1.y=coor.y+0.5;
 			float4 newPix=tex2D(_MainTex,uv_1);
-			o.Albedo = newPix.rgb*_EdgeColor.rgb;
-			o.Alpha=newPix.a*_EdgeColor.a;
+			o.Albedo = newPix.rgb*_EdgeColor.rgb*2;
+			o.Alpha=newPix.a*_EdgeColor.a*2;
 		}
 		ENDCG
 	} 
