@@ -187,6 +187,7 @@
      <Compile Include="Assets\Scripts\Battle\BattleLayerLoader.cs" />
      <Compile Include="Assets\Scripts\BossControl.cs" />
      <Compile Include="Assets\Scripts\ButtonControl.cs" />
+     <Compile Include="Assets\Scripts\Card.cs" />
      <Compile Include="Assets\Scripts\Card\BattleCardControl.cs" />
      <Compile Include="Assets\Scripts\Card\CardInfo.cs" />
      <Compile Include="Assets\Scripts\GameController\GameController.cs" />
