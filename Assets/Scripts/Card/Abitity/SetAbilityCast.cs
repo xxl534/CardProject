@@ -20,8 +20,5 @@ public class SetAbilityCast : MonoBehaviour {
 		
 	}
 
-	void magicAttack(Card from,Card to)
-	{
 
-	}
 }

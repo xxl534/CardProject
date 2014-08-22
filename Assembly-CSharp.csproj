@@ -192,10 +192,18 @@
      <Compile Include="Assets\Scripts\BossControl.cs" />
      <Compile Include="Assets\Scripts\ButtonControl.cs" />
      <Compile Include="Assets\Scripts\Card\Abitity\BaseAbility.cs" />
+     <Compile Include="Assets\Scripts\Card\Abitity\DurativelAbility.cs" />
+     <Compile Include="Assets\Scripts\Card\Abitity\IAbilityEffect.cs" />
+     <Compile Include="Assets\Scripts\Card\Abitity\ILevelUpgrader.cs" />
+     <Compile Include="Assets\Scripts\Card\Abitity\RealAbility.cs" />
      <Compile Include="Assets\Scripts\Card\Abitity\SetAbilityCast.cs" />
+     <Compile Include="Assets\Scripts\Card\BaseCard.cs" />
+     <Compile Include="Assets\Scripts\Card\BattleCard.cs" />
      <Compile Include="Assets\Scripts\Card\BattleCardControl.cs" />
-     <Compile Include="Assets\Scripts\Card\Card.cs" />
      <Compile Include="Assets\Scripts\Card\CardInfo.cs" />
+     <Compile Include="Assets\Scripts\Card\CardRarity.cs" />
+     <Compile Include="Assets\Scripts\Card\ICastAbility.cs" />
+     <Compile Include="Assets\Scripts\Card\RealCard.cs" />
      <Compile Include="Assets\Scripts\GameController\GameController.cs" />
      <Compile Include="Assets\Scripts\GameController\RunOnCondition.cs" />
      <Compile Include="Assets\Scripts\GameController\SceneFade.cs" />
@@ -213,6 +221,7 @@
      <Compile Include="Assets\Scripts\StarCounter\BigStarControl.cs" />
      <Compile Include="Assets\Scripts\StarCounter\StarCounterControl.cs" />
      <Compile Include="Assets\Scripts\StarCounter\StarCounterLayerControl.cs" />
+     <Compile Include="Assets\Scripts\Test.cs" />
      <Compile Include="Assets\Scripts\Test2.cs" />
      <Compile Include="Assets\Scripts\Tools\Administrator.cs" />
      <Compile Include="Assets\Scripts\Tools\ComputeContainerSize.cs" />
@@ -221,7 +230,6 @@
      <Compile Include="Assets\Scripts\Unuse\Layers.cs" />
      <Compile Include="Assets\Scripts\Unuse\PrefabPath.cs" />
      <Compile Include="Assets\Scripts\Unuse\Tags.cs" />
-     <Compile Include="Assets\Scripts\test.cs" />
      <Compile Include="Assets\StarFlyPath.cs" />
      <Compile Include="Assets\SwordControl.cs" />
      <Compile Include="Assets\UnitTest.cs" />
