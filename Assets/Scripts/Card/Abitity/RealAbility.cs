@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RealAbility : MonoBehaviour,ICastAbility{
+public class RealAbility : MonoBehaviour
+	//,ICastAbility
+{
 	/// <summary>
 	///array about experience mount needed for every level to upgrade. 
 	/// </summary>
@@ -28,9 +30,9 @@ public class RealAbility : MonoBehaviour,ICastAbility{
 				}
 	}
 
-	public virtual ICastAbility CastAbilityTo(BattleCard from,BattleCard to,RealAbility b)
-	{
-		_baseAbility._abilityEffect.AbilityEffect (from, to, this);
-		return null;
-	}
+//	public virtual ICastAbility CastAbilityTo(BattleCard from,BattleCard to,RealAbility b)
+//	{
+//		_baseAbility._abilityEffect.AbilityEffect (from, to, this);
+//		return null;
+//	}
 }
