@@ -2,15 +2,21 @@
 using System.Collections;
 
 public class BaseCard : MonoBehaviour {
-	protected int _maxHealth,
-	_maxMana,
+	protected int 	_strength,
 	_agility,
-	_defense,
-	_damage,
-	_drapRate,
+	_magic,
+	_maxHealth,
+	_maxMana,
+	_physicalDefense,
+	_magicalDefense,
+	_physicalCriticalChance,
+	_magicalCriticalChance,
+	_physicalDamage,
+	_magicalDamage,
 	_healthResilience,
 	_magicResilience,
-		_price;
+	_drapRate,
+	_price;
 	public string _name;
 	public string _description;
 	protected	BaseAbility _normalAttack;
@@ -22,9 +28,12 @@ public class BaseCard : MonoBehaviour {
 
 	protected BaseCard()
 	{
-		}
+
+	}
 	protected BaseCard(BaseCard baseCard)
 	{
 
-		}
+	}
+
+
 }
