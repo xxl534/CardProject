@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -9,6 +9,8 @@ using System;
 /// This card are used as battle levels' enemies or player storage which is used for battle. 
 /// </summary>
 public class ConcreteCard : MonoBehaviour {
+
+	#region Instance member
 	private BaseCard _baseCard;
 	private int 	_strength,
 	_agility,
@@ -32,8 +34,9 @@ public class ConcreteCard : MonoBehaviour {
 	/// </summary>
 	_level,
 	_experience;
-	private CardRarity _cardRarity;
+	private Rarity _cardRarity;
 	private List<Ability> _abilities;
+#endregion
 
 	#region Properties
 	public string name
@@ -93,6 +96,52 @@ public class ConcreteCard : MonoBehaviour {
 		}
 	}
 
+	public int maxHealth
+	{
+		get{return  _maxHealth;}
+	}
+	public int maxMana
+	{
+		get{return _maxMana;}
+	}
+	public int magicalDefense
+	{
+		get{return _magicalDefense;}
+	}
+	public int magicalCriticalChance
+	{
+		get{return _magicalCriticalChance;}
+	}
+	public int magicalDamage
+	{
+		get{return _magicalDamage;}
+	}
+	public int healthResilience
+	{
+		get{return _healthResilience;}
+	}
+	public int magicResilience
+	{
+		get{return _magicResilience;}
+	}
+	public int evasion
+	{
+		get{return _evasion;}
+	}
+	public int drapRate
+	{
+		get{return _drapRate;}
+	}
+	public int price
+	{
+		get{return price;}
+	}
+	public int maxLevel
+	{
+		get{return _maxLevel;}
+	}
+
+
 	public int physicalDamage
 	{
 		get{return _physicalDamage;}
@@ -110,7 +159,33 @@ public class ConcreteCard : MonoBehaviour {
 		get{return _physicalDefense;}
 //		set{_physicalDefense=value;}
 	}
-
+	/// <summary>
+	/// The increase of experience may affect level value.
+	/// </summary>
+	/// <value>The experience.</value>
+	public int experience
+	{
+		get {return _experience;}
+		set{
+			if(value<_experience)
+			{
+				Debug.Log("Decrease of experience is forbidden");
+				throw new System.ArgumentException("experience");
+			}
+			_experience=value;
+			int newLevel=level;
+			while(newLevel<maxLevel&&_experience>baseCard.experienceTable[newLevel-1])
+			{
+				_experience-=baseCard.experienceTable[newLevel-1];
+				newLevel++;
+			}
+			if(_experience>baseCard.experienceTable[newLevel-1])
+			{//When experience exceed the max,it equals the max
+				_experience=baseCard.experienceTable[newLevel-1];
+			}
+			level=newLevel;
+		}
+	}
 	/// <summary>
 	/// Strength,agility and magic are changed along with level
 	/// </summary>
@@ -124,14 +199,18 @@ public class ConcreteCard : MonoBehaviour {
 			magic = _baseCard.magicBase + (int)(_level * _baseCard.magicGrowth);
 		}
 	}
+	public BaseCard baseCard
+	{
+		get{return _baseCard;}
+	}
 #endregion
 
 	public ConcreteCard()
 	{
-		
+
 	}
 
-	public ConcreteCard(BaseCard baseCard,CardRarity rarity,int level,List<Ability> abilities)
+	public ConcreteCard(BaseCard baseCard,Rarity rarity,int level,List<Ability> abilities)
 	{
 		if (baseCard == null) {
 						throw new System.ArgumentNullException ("baseCard");
@@ -144,6 +223,7 @@ public class ConcreteCard : MonoBehaviour {
 				}
 		_cardRarity = rarity;
 		_maxLevel = _baseCard.maxLevelViaRarityTable [(int)_cardRarity];
+	
 
 		if (level > _maxLevel || level < 1) {
 			Debug.Log("The level of card should not be less than 1 nor be larger than card's max level.");
@@ -155,6 +235,9 @@ public class ConcreteCard : MonoBehaviour {
 			throw new System.ArgumentNullException ("abilities");
 				}
 		_abilities = abilities;
+
+		_price=baseCard.price;
 	}
+
 
 }

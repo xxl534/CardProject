@@ -2,22 +2,68 @@
 using System.Collections;
 
 /// <summary>
-/// Description of how an ability entity effect the target card
+/// Generate a ability entity according to the ability that casted.
 /// </summary>
-public delegate void AbilityEffect(BattleCard from,AbilityEntity abilityEntity);
+public delegate void AbilityCast(BattleCard from,Ability ability);
 
 
 //public delegate Ability  AbilityLevelUpdater(Ability ability,int level);
 public  class AbilityBase : MonoBehaviour {
-	public AbilityType _abilityType;
-	public string _name;
-	public string _description;
-	public string _targetAttr;
-	public string _EffectOrBuff;
-//	public int _interval;
-//	public int _duration;
-	public int[] _value;
-	public AbilityEffect _abilityEffect;
-	public CardAttacked _cardAttacked;
 
+	#region Instance members
+	private int _id;
+	private Rarity _rarity;
+	private AbilityType _abilityType;
+	private int _maxLevel;
+	private string _name,
+				 _description,
+				 _targetAttr,
+	_abilityCast,
+				_cardAttacked;
+	private string[] _variables;
+	private int[][] _valueTable;
+#endregion
+
+#region Properties
+	public int id
+	{
+		get{return _id;}
+	}
+	public AbilityType abilityType
+	{
+		get{return _abilityType;}
+	}
+	public int maxLevel
+	{
+		get{return _maxLevel;}
+	}
+	public string name
+	{
+		get{return _name;}
+	}
+	public string description
+	{
+		get{return _description;}
+	}
+	public string targetAttr
+	{
+		get{return _targetAttr;}
+	}
+	public int[][] valueTable
+	{
+		get{return _valueTable;}
+	}
+	public string abilityCast
+	{
+		get{return _abilityCast;}
+	}
+	public string cardAttacked
+	{
+		get{return _cardAttacked;}
+	}
+	public string[] variables
+	{
+		get{return  _variables;}
+	}
+#endregion
 }

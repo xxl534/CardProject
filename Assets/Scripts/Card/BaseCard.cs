@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 /// <summary>
@@ -7,16 +7,18 @@ using System.Collections;
 /// Value of concrete card's attributes are result from relative base card and card level. 
 /// The value of instance member with postfix "Base" is attribute's value of concrete card with level 0.
 /// </summary>
-public class BaseCard : MonoBehaviour {
+public class BaseCard : MonoBehaviour{
 	#region Static member
 	private static  float _rate_strength_maxHealth,_rate_strength_physicalDefense,_rate_strength_physicalDamage,_rate_strength_healthResilience,
 	_rate_agility_physicalDefense,_rate_agility_physicalCriticalChance,_rate_agility_evasion,
 	_rate_magic_maxMana,_rate_magic_magicalDefense,_rate_magic_magicalCriticalChance,_rate_magic_magicalDamage,_rate_magic_magicResilience;
 
 	private static int[] _maxLevelViaRarityTable;
+	private static int[] _experienceTable;
 #endregion
 
 	#region Instance member
+	private int _id;
 	private int 	_strengthBase;private float _strengthGrowth;
 	private int  _agilityBase;private float _agilityGrowth;
 	private int _magicBase;private float _magicGrowth;
@@ -33,13 +35,14 @@ public class BaseCard : MonoBehaviour {
 	_evasionBase,
 	_drapRate,
 	_price;
-	private CardRarity _cardRarity;
+	private Rarity _cardRarity;
 	private string _name;
 	private string _description;
+
 	private int[] _abilitiesId;
 #endregion
 
-	#region Properties static
+	#region Properties static member
 	//static properties
 	public float rate_strength_maxHealth
 	{
@@ -93,10 +96,18 @@ public class BaseCard : MonoBehaviour {
 	{
 		get{return _maxLevelViaRarityTable;}
 	}
+	public int[] experienceTable
+	{
+		get{return _experienceTable;}
+	}
 #endregion
 
 	#region Properties instance member
 	//member properties
+	public int id
+	{
+		get{return _id;}
+	}
 	public int 	strengthBase
 	{
 		get{return _strengthBase;}
@@ -173,7 +184,7 @@ public class BaseCard : MonoBehaviour {
 	{
 		get{return _price;}
 	}
-	public CardRarity cardRarity
+	public Rarity cardRarity
 	{
 		get{return _cardRarity;}
 	}
@@ -190,7 +201,5 @@ public class BaseCard : MonoBehaviour {
 		get{return _abilitiesId;}
 	}
 #endregion
-	
-
 
 }
