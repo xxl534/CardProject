@@ -5,7 +5,7 @@ using Holoville.HOTween;
 public class BattleCardControl : MonoBehaviour {
 	public int _slotIndex;
 	public BattleControl _battleController;
-	public CardInfo _cardInfo;
+	public BattleCard _cardInfo;
 	Vector3 _origLocalPosition;
 	/// <summary>
 	///If the card has been used,this shell is vacant,When reload a new card to this battle card shell "vacant" is false; 

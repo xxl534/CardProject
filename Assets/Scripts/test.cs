@@ -1,43 +1,55 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
+using System.Reflection;
+using UnityEngine;
 
-public class Test : MonoBehaviour {
-	void Awake()
+
+public class Test:MonoBehaviour
+{
+	public class MyFieldClassA
 	{
-		C1 c1 = new C1 ();
-		C2 c2 = new C2 ();
-//		Debug.Log (c2.name);
-		c2.print ();
-	}
-	// Use this for initialization
-	void Start () {
+		public string Field = "A Field";
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-}
-
-public class C1
-{
-	public string name;
-	public C1()
+	public class MyFieldClassB
 	{
-		name="baseClass";
+		private string field = "B Field";
+		public string Field 
+		{
+			get
+			{
+				return "hi";
+			}
+			set
+			{
+				if (field!=value)
+				{
+					field=value;
+				}
+			}
+		}
 	}
-}
-
-public class C2:C1
-{
-	public C2()
+	 void Start()
 	{
-		this.name="DerivedClass";
-	}
+		MyFieldClassB myFieldObjectB = new MyFieldClassB();
+		MyFieldClassA myFieldObjectA = new MyFieldClassA();
+		
+		Type myTypeA = typeof(MyFieldClassA);
+		FieldInfo myFieldInfo = myTypeA.GetField("Field");
+		
+		Type myTypeB = typeof(MyFieldClassB);
+		FieldInfo[] fields = myTypeB.GetFields (BindingFlags.NonPublic|BindingFlags.Instance);
+		Debug.Log (fields.Length);
+		foreach (FieldInfo fie in fields) {
+					Debug.Log(string.Format("The value of the private field is: '{0}'", 
+					                  fie.GetValue(myFieldObjectB)));
 
-	public void print()
-	{
-		Debug.Log (base.name);
-		Debug.Log (name);
+				}
+//		FieldInfo myFieldInfo1 = myTypeB.GetField("field", 
+//		                                          BindingFlags.NonPublic | BindingFlags.Instance);
+//		
+//		Debug.Log(string.Format( "The value of the public field is: '{0}'", 
+//		                  myFieldInfo.GetValue(myFieldObjectA)));
+//		Debug.Log(string.Format("The value of the private field is: '{0}'", 
+//		                  myFieldInfo1.GetValue(myFieldObjectB)));
 	}
 }

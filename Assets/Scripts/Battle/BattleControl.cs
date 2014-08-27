@@ -60,7 +60,7 @@ public class BattleControl : MonoBehaviour {
 		}
 	}
 
-	public void ShowCardDetail(CardInfo card)
+	public void ShowCardDetail(BattleCard card)
 	{
 
 	}
