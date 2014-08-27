@@ -13,7 +13,7 @@ public static class AbilityFactory {
 
 	}
 
-	public static BaseAbility GeneAbility(BaseAbility baseAbility)
+	public static Ability GeneAbility(AbilityBase baseAbility)
 	{
 		return null;
 	}

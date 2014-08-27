@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public delegate void AbilityEffect(BattleCard from,AbilityEntity abilityEntity); 
-public delegate Ability  AbilityLevelUpdater(Ability ability,int level)
+/// <summary>
+/// Description of how an ability entity effect the target card
+/// </summary>
+public delegate void AbilityEffect(BattleCard from,AbilityEntity abilityEntity);
+
+
+//public delegate Ability  AbilityLevelUpdater(Ability ability,int level);
 public  class AbilityBase : MonoBehaviour {
 	public AbilityType _abilityType;
 	public string _name;
