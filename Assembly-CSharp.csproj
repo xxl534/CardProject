@@ -19,7 +19,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_4_5_2;UNITY_4_5;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_4_5_1;UNITY_4_5;UNITY_IPHONE;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;UNITY_IPHONE_API;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_GAMECENTER;UNITY_IOS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -39,10 +39,10 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>D:/Unity3D/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>D:/Unity3D/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -201,9 +201,9 @@
      <Compile Include="Assets\Scripts\Card\Abitity\AbilityVariable.cs" />
      <Compile Include="Assets\Scripts\Card\Abitity\AbstractAbilityBase.cs" />
      <Compile Include="Assets\Scripts\Card\Abitity\ActiveAbilityBase.cs" />
-     <Compile Include="Assets\Scripts\Card\Abitity\CardAttackedStatic.cs" />
      <Compile Include="Assets\Scripts\Card\Abitity\DurativeAbilityBase.cs" />
      <Compile Include="Assets\Scripts\Card\Abitity\DurativeAbilityMonitor.cs" />
+     <Compile Include="Assets\Scripts\Card\Abitity\EffectCardStatic.cs" />
      <Compile Include="Assets\Scripts\Card\Abitity\IAbilityEffect.cs" />
      <Compile Include="Assets\Scripts\Card\Abitity\InstantAbilityBase.cs" />
      <Compile Include="Assets\Scripts\Card\Abitity\PositiveAbilityBase.cs" />
@@ -212,7 +212,9 @@
      <Compile Include="Assets\Scripts\Card\BattleCard.cs" />
      <Compile Include="Assets\Scripts\Card\BattleCardControl.cs" />
      <Compile Include="Assets\Scripts\Card\CardData.cs" />
+     <Compile Include="Assets\Scripts\Card\CardEffectedStatic.cs" />
      <Compile Include="Assets\Scripts\Card\CardFactory.cs" />
+     <Compile Include="Assets\Scripts\Card\CardRarity.cs" />
      <Compile Include="Assets\Scripts\Card\ConcreteCard.cs" />
      <Compile Include="Assets\Scripts\Card\Rarity.cs" />
      <Compile Include="Assets\Scripts\GameController\GameController.cs" />
@@ -232,6 +234,7 @@
      <Compile Include="Assets\Scripts\StarCounter\BigStarControl.cs" />
      <Compile Include="Assets\Scripts\StarCounter\StarCounterControl.cs" />
      <Compile Include="Assets\Scripts\StarCounter\StarCounterLayerControl.cs" />
+     <Compile Include="Assets\Scripts\Test.cs" />
      <Compile Include="Assets\Scripts\Test2.cs" />
      <Compile Include="Assets\Scripts\Tools\Administrator.cs" />
      <Compile Include="Assets\Scripts\Tools\ComputeContainerSize.cs" />
@@ -240,7 +243,6 @@
      <Compile Include="Assets\Scripts\Unuse\Layers.cs" />
      <Compile Include="Assets\Scripts\Unuse\PrefabPath.cs" />
      <Compile Include="Assets\Scripts\Unuse\Tags.cs" />
-     <Compile Include="Assets\Scripts\test.cs" />
      <Compile Include="Assets\StarFlyPath.cs" />
      <Compile Include="Assets\SwordControl.cs" />
      <Compile Include="Assets\UnitTest.cs" />
@@ -291,7 +293,7 @@
      <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
      <None Include="Assets\NGUI\Examples\Resources\Localization.txt" />
  <Reference Include="HOTween">
- <HintPath>E:/Unity Project/GitProject/CardProject/Assets/Plugins/HOTween/HOTween.dll</HintPath>
+ <HintPath>C:/Users/Game05/Documents/GitHub/CardProject/Assets/Plugins/HOTween/HOTween.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -8,7 +8,7 @@ public class Ability : MonoBehaviour {
 	private int _interval,_duration;
 
 	private AbilityCast _abilityCast;
-	private CardAttacked _cardAttacked;
+	private EffectCard _effectCard;
 #endregion
 
 	#region Properties

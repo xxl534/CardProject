@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// Generate a ability entity according to the ability that casted.
 /// </summary>
-public delegate void AbilityCast(BattleCard from,Ability ability);
+public delegate AbilityEntity AbilityCast(Ability ability,BattleCard from,BattleCard to);
 
 
 //public delegate Ability  AbilityLevelUpdater(Ability ability,int level);
@@ -19,7 +19,7 @@ public  class AbilityBase : MonoBehaviour {
 				 _description,
 				 _targetAttr,
 	_abilityCast,
-				_cardAttacked;
+				_effectCard;
 	private string[] _variables;
 	private int[][] _valueTable;
 #endregion
@@ -57,9 +57,9 @@ public  class AbilityBase : MonoBehaviour {
 	{
 		get{return _abilityCast;}
 	}
-	public string cardAttacked
+	public string effectCard
 	{
-		get{return _cardAttacked;}
+		get{return _effectCard;}
 	}
 	public string[] variables
 	{

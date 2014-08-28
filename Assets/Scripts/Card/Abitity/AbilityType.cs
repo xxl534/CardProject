@@ -2,5 +2,5 @@
 using System.Collections;
 
 public enum AbilityType  {
-	Instant,Durative,Aura
+	Physical,Magical
 };

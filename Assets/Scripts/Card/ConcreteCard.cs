@@ -8,11 +8,11 @@ using System;
 /// A concrete card based on an particular role with specilized level and rarity.
 /// This card are used as battle levels' enemies or player storage which is used for battle. 
 /// </summary>
-public class ConcreteCard : MonoBehaviour {
+public class ConcreteCard :MonoBehaviour{
 
 	#region Instance member
-	private BaseCard _baseCard;
-	private int 	_strength,
+	protected BaseCard _baseCard;
+	protected int 	_strength,
 	_agility,
 	_magic,
 	_maxHealth,
@@ -35,7 +35,7 @@ public class ConcreteCard : MonoBehaviour {
 	_level,
 	_experience;
 	private Rarity _cardRarity;
-	private List<Ability> _abilities;
+	protected List<Ability> _abilities;
 #endregion
 
 	#region Properties

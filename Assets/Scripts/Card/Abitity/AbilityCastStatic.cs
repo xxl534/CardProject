@@ -7,7 +7,7 @@ public static class AbilityCastStatic{
 //		return false;
 //	}
 
-	public static 	AbilityCast AbilityCast_physicalDamage = delegate(BattleCard from, Ability ability) {
+	public static 	AbilityCast AbilityCast_physicalDamage = delegate(Ability ability,BattleCard from, BattleCard to) {
 		int damage=Random.Range(ability.GetValue(AbilityVariable.minDamage),ability.GetValue(AbilityVariable.maxDamage))
 					+from.physicalDamage;
 		int criticalChance=Random.Range(1,101);
@@ -15,6 +15,9 @@ public static class AbilityCastStatic{
 		{
 			damage*=2;
 		}
-
+		AbilityEntity abilityEntity=new AbilityEntity(from ,to,ability.abilityType);
+		abilityEntity.SetValue(AbilityVariable.damage,damage);
+		return abilityEntity;
 		};
+
 }
