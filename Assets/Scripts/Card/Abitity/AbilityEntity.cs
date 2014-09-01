@@ -3,14 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 public class AbilityEntity :MonoBehaviour {
 	#region Instance menbers
-	private Dictionary<string ,int> _variables;
-	private BattleCard _targetCard;
-	private BattleCard _castCard;
-	private AbilityType _abilityType;
-	private EffectCard _effectCard;
+	protected int _id;
+	protected Dictionary<string ,int> _variables;
+	protected string _targetAttr;
+	protected BattleCard _targetCard;
+	protected BattleCard _castCard;
+	protected AbilityType _abilityType;
+	protected EffectCard _effectCard;
 #endregion
 
 	#region Properties
+	public int abilityId
+	{
+		get{return _id;}
+	}
 	public BattleCard castCard
 	{
 		get{return _castCard;}
@@ -29,19 +35,33 @@ public class AbilityEntity :MonoBehaviour {
 	public EffectCard effectCard
 	{
 		get{return _effectCard;}
+		set{_effectCard=value;}
+	}
+	public string targetAttr
+	{
+		get{return _targetAttr;}
+		set{_targetAttr=value;}
 	}
 	#endregion
 
+
+	protected AbilityEntity()
+	{
+		_variables = new Dictionary<string, int> ();
+	}
 	/// <summary>
 	/// Initializes a new instance of the <see cref="AbilityEntity"/> class.
 	/// </summary>
 	/// <param name="from">BattleCard casts this AbilityEntity.</param>
 	/// <param name="to">Target BattleCard.</param>
-	public AbilityEntity(BattleCard from ,BattleCard to,AbilityType abilityType)
+	public AbilityEntity(int abilityId,BattleCard from ,BattleCard to,AbilityType abilityType,EffectCard effectCard,string targetAttr=null):this()
 	{
 		castCard = from;
 		targetCard = to;
 		this.abilityType = abilityType;
+		this.effectCard = effectCard;
+		this.targetAttr = targetAttr;
+		_id = abilityId;
 	}
 
 	/// <summary>
@@ -51,7 +71,7 @@ public class AbilityEntity :MonoBehaviour {
 	/// <param name="value">Variable value.</param>
 	public void SetValue(string name,int value)
 	{
-		_variables.Add (name, value);
+		_variables[name]=value;
 	}
 	/// <summary>
 	/// Gets a variable of this AbilityEntity by name.

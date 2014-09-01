@@ -53,6 +53,10 @@ public class Ability : MonoBehaviour {
 	{
 		get{return _baseAbility.targetAttr;}
 	}
+	public EffectCard effectCard
+	{
+		get{return _effectCard;}
+	}
 
 	#endregion
 

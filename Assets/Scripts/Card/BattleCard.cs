@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 /// <summary>
 ///This kind of card will only exist on battle field .
 ///The modification of attribute on BattleCard will not effect relative ConcreteCard 
@@ -12,6 +12,9 @@ public class BattleCard : ConcreteCard {
 	protected CardEffected _cardEffect;
 	protected int _health;
 	protected int _mana;
+
+	protected Dictionary<int,DotAndHot> _DotAndHotTable;
+	protected Dictionary<int,BuffAndDebuff> _buffAndDebuffTable;
 #endregion
 
 	#region Properties
@@ -145,6 +148,8 @@ public class BattleCard : ConcreteCard {
 			_magicResilience+=(int)(valueDelta*BaseCard.rate_magic_magicResilience);
 		}
 	}
+
+
 #endregion
 
 	public BattleCard(ConcreteCard concreteCard)
@@ -156,5 +161,15 @@ public class BattleCard : ConcreteCard {
 	void CardDead()
 	{
 
+	}
+
+	public void AddDotOrHot(DotAndHot dotOrHot)
+	{
+		_DotAndHotTable[dotOrHot.id]=dotOrHot;
+	}
+
+	public void AddBuffOrDebuff(BuffAndDebuff buffOrDebuff)
+	{
+		_buffAndDebuffTable [buffOrDebuff.id] = buffOrDebuff;
 	}
 }
