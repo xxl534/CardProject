@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System;
+using System.Reflection;
 
 /// <summary>
 /// Each base card is a data type of a role.Concrete cards which represent one role are generated from the same base card.
@@ -13,12 +16,13 @@ public class BaseCard : MonoBehaviour{
 	_rate_agility_physicalDefense,_rate_agility_physicalCriticalChance,_rate_agility_evasion,
 	_rate_magic_maxMana,_rate_magic_magicalDefense,_rate_magic_magicalCriticalChance,_rate_magic_magicalDamage,_rate_magic_magicResilience;
 
-	private static int[] _maxLevelViaRarityTable;
-	private static int[] _experienceTable;
+	private static List<int> _maxLevelTable;
+	private static List<int> _experienceTable;
 #endregion
 
 	#region Instance member
 	private int _id;
+	private string _cardSprite,_backgroundSprite;
 	private int 	_strengthBase;private float _strengthGrowth;
 	private int  _agilityBase;private float _agilityGrowth;
 	private int _magicBase;private float _magicGrowth;
@@ -39,66 +43,191 @@ public class BaseCard : MonoBehaviour{
 	private string _name;
 	private string _description;
 
-	private int[] _abilitiesId;
+	private List<int> _abilitiesId;
 #endregion
 
 	#region Properties static member
 	//static properties
-	public float rate_strength_maxHealth
+	public static float rate_strength_maxHealth
 	{
 		get{return _rate_strength_maxHealth;}
+		private set{
+			if(value<0f)
+			{
+				Debug.Log("Static attribute rate_strength_maxHealth should not be negative");
+				throw new ArgumentException("Static attribute rate_strength_maxHealth should not be negative");
+			}
+			_rate_strength_maxHealth=value;
+		}
 	}
-	public float rate_strength_physicalDefense
+	public static float rate_strength_physicalDefense
 	{
 		get{return _rate_strength_physicalDefense;}
+		private set{
+			if(value<0f)
+			{
+				Debug.Log("Static attribute rate_strength_physicalDefense should not be negative");
+				throw new ArgumentException("Static attribute rate_strength_physicalDefense should not be negative");
+			}
+			_rate_strength_physicalDefense=value;
+		}
 	}
-	public float rate_strength_physicalDamage
+	public static float rate_strength_physicalDamage
 	{
 		get{return _rate_strength_physicalDamage;}
+		private set{
+			if(value<0f)
+			{
+				Debug.Log("Static attribute rate_strength_physicalDamage should not be negative");
+				throw new ArgumentException("Static attribute rate_strength_physicalDamage should not be negative");
+			}
+			_rate_strength_physicalDamage=value;
+		}
 	}
-	public float rate_strength_healthResilience
+	public static float rate_strength_healthResilience
 	{
 		get{return _rate_strength_healthResilience;}
+		private set{
+			if(value<0f)
+			{
+				Debug.Log("Static attribute rate_strength_healthResilience should not be negative");
+				throw new ArgumentException("Static attribute rate_strength_healthResilience should not be negative");
+			}
+			_rate_strength_healthResilience=value;
+		}
 	}
-	public float rate_agility_physicalDefense
+	public static float rate_agility_physicalDefense
 	{
 		get{return _rate_agility_physicalDefense;}
+		private set{
+			if(value<0f)
+			{
+				Debug.Log("Static attribute rate_agility_physicalDefense should not be negative");
+				throw new ArgumentException("Static attribute rate_agility_physicalDefense should not be negative");
+			}
+			_rate_agility_physicalDefense=value;
+		}
 	}
-	public float rate_agility_physicalCriticalChance
+	public static float rate_agility_physicalCriticalChance
 	{
 		get{return _rate_agility_physicalCriticalChance;}
+		private set{
+			if(value<0f)
+			{
+				Debug.Log("Static attribute rate_agility_physicalCriticalChance should not be negative");
+				throw new ArgumentException("Static attribute rate_agility_physicalCriticalChance should not be negative");
+			}
+			_rate_agility_physicalCriticalChance=value;
+		}
 	}
-	public float rate_agility_evasion
+	public static float rate_agility_evasion
 	{
 		get{return _rate_agility_evasion;}
+		private set{
+			if(value<0f)
+			{
+				Debug.Log("Static attribute rate_agility_evasion should not be negative");
+				throw new ArgumentException("Static attribute rate_agility_evasion should not be negative");
+			}
+			_rate_agility_evasion=value;
+		}
 	}
-	public float rate_magic_maxMana
+	public static float rate_magic_maxMana
 	{
 		get{return _rate_magic_maxMana;}
+		private set{
+			if(value<0f)
+			{
+				Debug.Log("Static attribute rate_magic_maxMana should not be negative");
+				throw new ArgumentException("Static attribute rate_magic_maxMana should not be negative");
+			}
+			_rate_magic_maxMana=value;
+		}
 	}
-	public float rate_magic_magicalDefense
+	public static float rate_magic_magicalDefense
 	{
 		get{return _rate_magic_magicalDefense;}
+		private set{
+			if(value<0f)
+			{
+				Debug.Log("Static attribute rate_magic_magicalDefense should not be negative");
+				throw new ArgumentException("Static attribute rate_magic_magicalDefense should not be negative");
+			}
+			_rate_magic_magicalDefense=value;
+		}
 	}
-	public float rate_magic_magicalCriticalChance
+	public static float rate_magic_magicalCriticalChance
 	{
 		get{return _rate_magic_magicalCriticalChance;}
+		private set{
+			if(value<0f)
+			{
+				Debug.Log("Static attribute rate_magic_magicalCriticalChance should not be negative");
+				throw new ArgumentException("Static attribute rate_magic_magicalCriticalChance should not be negative");
+			}
+			_rate_magic_magicalCriticalChance=value;
+		}
 	}
-	public float rate_magic_magicalDamage
+	public static float rate_magic_magicalDamage
 	{
 		get{return _rate_magic_magicalDamage;}
+		private set{
+			if(value<0f)
+			{
+				Debug.Log("Static attribute rate_magic_magicalDamage should not be negative");
+				throw new ArgumentException("Static attribute rate_magic_magicalDamage should not be negative");
+			}
+			_rate_magic_magicalDamage=value;
+		}
 	}
-	public float rate_magic_magicResilience
+	public static float rate_magic_magicResilience
 	{
 		get{return _rate_magic_magicResilience;}
+		private set{
+			if(value<0f)
+			{
+				Debug.Log("Static attribute rate_magic_magicResilience should not be negative");
+				throw new ArgumentException("Static attribute rate_magic_magicResilience should not be negative");
+			}
+			_rate_magic_magicResilience=value;
+		}
 	}
-	public int[] maxLevelViaRarityTable
+
+	/// <summary>
+	/// maxLevelTable has same number item as Enum Rarity does 
+	/// It should be sorted
+	/// </summary>
+	/// <value>The max level table.</value>
+	public static List<int> maxLevelTable
 	{
-		get{return _maxLevelViaRarityTable;}
+		get{return _maxLevelTable;}
+		private set{
+			if(value.Count!=Enum.GetValues(typeof(Rarity)).Length)
+			{
+				Debug.Log("maxLevelTable count error");
+				throw new System.ArgumentException("maxLevelTable count error");
+			}
+			if(!IsIntListSorted(value))
+			{
+				Debug.Log("maxLevelTable item sequence error");
+				throw new System.ArgumentException("maxLevelTable item sequence error");
+			}
+			_maxLevelTable=value;}
 	}
-	public int[] experienceTable
+	/// <summary>
+	/// ExperienceTable should be consistent with the max maxLevel and be sorted.
+	/// </summary>
+	/// <value>The experience table.</value>
+	public static List<int> experienceTable
 	{
 		get{return _experienceTable;}
+		private set{
+			if(!IsIntListSorted(value))
+			{
+				Debug.Log("ExperienceTable item sequence error");
+				throw new System.ArgumentException("ExperienceTable item sequence error");
+			}
+			_experienceTable=value;}
 	}
 #endregion
 
@@ -106,87 +235,242 @@ public class BaseCard : MonoBehaviour{
 	//member properties
 	public int id
 	{
-		get{return _id;}
+		 get{return _id;}
+		private set{
+			if(value<=0)
+			{
+				Debug.Log("Attribute id should not be negative");
+				throw new ArgumentException("Attribute id should not be negative");
+			}
+			_id=value;}
+	}
+
+	public string cardSprite
+	{
+		get{return _cardSprite;}
+		private set{
+			_cardSprite=value;
+		}
+	}
+	public string backgroundSprite
+	{
+		get{return _backgroundSprite;}
+		private set{
+			_backgroundSprite=value;
+		}
 	}
 	public int 	strengthBase
 	{
 		get{return _strengthBase;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute strengthBase should not be negative");
+				throw new ArgumentException("Attribute strengthBase should not be negative");
+			}
+			_strengthBase=value;}
 	}
 	public float strengthGrowth
 	{
 		get{return _strengthGrowth;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute strengthGrowth should not be negative");
+				throw new ArgumentException("Attribute strengthGrowth should not be negative");
+			}
+			_strengthGrowth=value;}
 	}
 	public int  agilityBase
 	{
 		get{return _agilityBase;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute agilityBase should not be negative");
+				throw new ArgumentException("Attribute agilityBase should not be negative");
+			}
+			_agilityBase=value;}
 	}
 	public float agilityGrowth
 	{
 		get{return _agilityGrowth;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute agilityGrowth should not be negative");
+				throw new ArgumentException("Attribute agilityGrowth should not be negative");
+			}
+			_agilityGrowth=value;}
 	}
 	public int magicBase
 	{
 		get{return _magicBase;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute magicBase should not be negative");
+				throw new ArgumentException("Attribute magicBase should not be negative");
+			}
+			_magicBase=value;}
 	}
 	public float magicGrowth
 	{
 		get{return _magicGrowth;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute magicGrowth should not be negative");
+				throw new ArgumentException("Attribute magicGrowth should not be negative");
+			}
+			_magicGrowth=value;}
 	}
 	public int maxHealthBase
 	{
 		get{return _maxHealthBase;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute maxHealthBase should not be negative");
+				throw new ArgumentException("Attribute maxHealthBase should not be negative");
+			}
+			_maxHealthBase=value;}
 	}
 	public int maxManaBase
 	{
 		get{return _maxManaBase;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute maxManaBase should not be negative");
+				throw new ArgumentException("Attribute maxManaBase should not be negative");
+			}
+			_maxManaBase=value;}
 	}
 	public int physicalDefenseBase
 	{
 		get{return _physicalDefenseBase;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute physicalDefenseBase should not be negative");
+				throw new ArgumentException("Attribute physicalDefenseBase should not be negative");
+			}
+			_physicalDefenseBase=value;}
 	}
 	public int magicalDefenseBase
 	{
 		get{return _magicalDefenseBase;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute magicalDefenseBase should not be negative");
+				throw new ArgumentException("Attribute magicalDefenseBase should not be negative");
+			}
+			_magicalDefenseBase=value;}
 	}
 	public int physicalCriticalChanceBase
 	{
 		get{return _physicalCriticalChanceBase;}
+		set{_physicalCriticalChanceBase=value;}
 	}
 	public int magicalCriticalChanceBase
 	{
 		get{return _magicalCriticalChanceBase;}
+		set{_magicalCriticalChanceBase=value;}
 	}
 	public int physicalDamageBase
 	{
 		get{return _physicalDamageBase;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute physicalDamageBase should not be negative");
+				throw new ArgumentException("Attribute physicalDamageBase should not be negative");
+			}
+			_physicalDamageBase=value;}
 	}
 	public int magicalDamageBase
 	{
 		get{return _magicalDamageBase;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute magicalDamageBase should not be negative");
+				throw new ArgumentException("Attribute magicalDamageBase should not be negative");
+			}
+			_magicalDamageBase=value;}
 	}
 	public int healthResilienceBase
 	{
 		get{return _healthResilienceBase;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute healthResilienceBase should not be negative");
+				throw new ArgumentException("Attribute healthResilienceBase should not be negative");
+			}
+			_healthResilienceBase=value;}
 	}
 	public int magicResilienceBase
 	{
 		get{return _magicResilienceBase;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute magicResilienceBase should not be negative");
+				throw new ArgumentException("Attribute magicResilienceBase should not be negative");
+			}
+			_magicResilienceBase=value;}
 	}
 	public int evasionBase
 	{
 		get{return _evasionBase;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute evasionBase should not be negative");
+				throw new ArgumentException("Attribute evasionBase should not be negative");
+			}
+			_evasionBase=value;}
 	}
 	public int drapRate
 	{
 		get{return _drapRate;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute drapRate should not be negative");
+				throw new ArgumentException("Attribute drapRate should not be negative");
+			}
+			_drapRate=value;}
 	}
 	public int price
 	{
 		get{return _price;}
+		private set{
+			if(value<0)
+			{
+				Debug.Log("Attribute price should not be negative");
+				throw new ArgumentException("Attribute price should not be negative");
+			}
+			_price=value;}
 	}
-	public Rarity cardRarity
+	public Rarity rarity
 	{
 		get{return _cardRarity;}
+		private set{
+			Array array=	Enum.GetValues( typeof(Rarity));
+			for (int i = 0; i < array.Length; i++) {
+				if((Rarity)array.GetValue(i)==value)
+				{
+					_cardRarity=value;
+					return;
+				}
+			}
+			Debug.Log(string.Format("Illegal card rarity value :{0}" ,value));
+			throw new System.ArgumentException(string.Format("Illegal card rarity value :{0}" ,value));
+		}
 	}
 	public string name
 	{
@@ -195,11 +479,120 @@ public class BaseCard : MonoBehaviour{
 	public string description
 	{
 		get{return _description;}
+		set{_description=value;}
 	}
-	public int[] abilitiesId
+	public List<int> abilitiesId
 	{
 		get{return _abilitiesId;}
+		set{_abilitiesId=value;}
 	}
 #endregion
 
+	private BaseCard()
+	{}
+
+	public static BaseCard GeneBaseCard(KeyValuePair<string,Dictionary<string,object>> cardInfo)
+	{
+		BaseCard baseCard=new BaseCard();
+		baseCard._name=cardInfo.Key;
+		Type type=typeof(BaseCard);
+		Dictionary<string,object> cardAttr=cardInfo.Value;
+		foreach(string attribute in cardAttr.Keys)
+		{
+			PropertyInfo propertyInfo= type.GetProperty(attribute);
+			if(propertyInfo==null)
+			{
+				Debug.Log(string.Format("Illegal field:Card attribute '{0}' does not exist",attribute));
+				throw new System.FieldAccessException(string.Format("Illegal field:Card attribute '{0}' does not exist",attribute));
+			}
+			object valueOb=cardAttr[attribute];
+			if(propertyInfo.PropertyType.IsEnum)
+			{
+				try{
+					int value=Convert.ToInt32(valueOb);
+				}catch{
+				 valueOb=	Enum.Parse(propertyInfo.PropertyType,(string)valueOb);
+				}
+			}
+			propertyInfo.SetValue(baseCard,valueOb,null);
+		}
+		if(!baseCard.CheckInstanceFields())
+		{
+			throw new System.ArgumentException(string.Format("The card data is deficient in card that named:{0}",baseCard.name));
+		}
+		return baseCard;
+	}
+
+	public static void LoadStaticFields(Dictionary<string,object> staticFields)
+	{
+		Type type=typeof(BaseCard);
+		foreach(string attribute in staticFields.Keys)
+		{
+			PropertyInfo propertyInfo= type.GetProperty(attribute,BindingFlags.Static);
+			if(propertyInfo==null)
+			{
+				Debug.Log(string.Format("Illegal static field:Card static attribute '{0}' does not exist",attribute));
+				throw new System.FieldAccessException(string.Format("Illegal static field:Card static attribute '{0}' does not exist",attribute));
+			}
+			object valueOb=staticFields[attribute];
+
+			propertyInfo.SetValue(null,valueOb,null);
+		}
+	}
+
+
+	public static bool CheckStaticFields()
+	{
+		bool bPass=true;
+		foreach(PropertyInfo propertyInfo in typeof(BaseCard).GetProperties(BindingFlags.Static))
+		{
+			if(propertyInfo.PropertyType==typeof(float))
+			{
+				if(propertyInfo.GetValue(null,null)==(object)0f){
+					Debug.Log(string.Format("lack of static field: '{0}'",propertyInfo.Name));
+					bPass=false;
+				}
+			}
+		}
+		if(_maxLevelTable==null)
+		{
+			Debug.Log("lack of static field: maxLevelTable");
+			bPass=false;
+		}
+		if(_experienceTable==null)
+		{
+			Debug.Log("lack of static field: experienceTable");
+			bPass=false;
+		}
+		if(_maxLevelTable!=null&&_experienceTable!=null)
+		{
+			if(_experienceTable.Count!=_maxLevelTable[_maxLevelTable.Count-1])
+			{
+				Debug.Log("experienceTable and maxLevelTable are not consistent");
+				bPass=false;
+			}
+		}
+		return bPass;
+	}
+
+	bool  CheckInstanceFields()
+	{
+		bool bPass=true;
+		if(_id<=0){
+			Debug.Log("Lack of id data");
+			bPass=false;
+		}
+		return bPass;
+	}
+
+	static bool  IsIntListSorted(List<int> intList)
+	{
+		bool bPass=true;
+		for(int i=1;i!=intList.Count;i++)
+		{
+			if(intList[i-1]>intList[i])
+				bPass=false;
+		}
+		return bPass;
+	}
 }

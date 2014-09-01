@@ -3,28 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PlayerControl : MonoBehaviour {
-	GameController _gameController;
-	int _health,_maxHealth,_magic,_maxMagic;
+	private  List<ConcreteCard> _cardBag;
+	private List<ConcreteCard> _playCardSet;
+	private GameController _gameController;
 
-	public int health{
-		get{return _health;}
+	public List<ConcreteCard> cardBag
+	{
+		get{return _cardBag;}
 	}
-
-	public int maxHealth{
-		get{return _maxHealth;}
+	public List<ConcreteCard> playCardSet
+	{
+		get{return _playCardSet;}
 	}
-
-	public int magic{
-		get{return _magic;}
-	}
-
-	public int maxMagic{
-		get{return _maxMagic;}
-	}
-
 	void Awake()
 	{
 		_gameController = GameObject.FindGameObjectWithTag (Tags.gameController).GetComponent<GameController> ();
+		_playCardSet=new List<ConcreteCard>();
+		_cardBag=new List<ConcreteCard>();
 	}
 	// Use this for initialization
 	void Start () {

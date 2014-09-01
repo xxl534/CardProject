@@ -57,10 +57,10 @@ public class ConcreteCard :MonoBehaviour{
 		get{return _strength;}
 		set{
 			_strength=value;
-			_maxHealth=_baseCard.maxHealthBase+(int)(_strength*_baseCard.rate_strength_maxHealth);
-			_physicalDamage=_baseCard.physicalDamageBase+(int)(_strength*_baseCard.rate_strength_physicalDamage);
-			_physicalDefense=_baseCard.physicalDefenseBase+(int)(_strength*_baseCard.rate_strength_physicalDefense);
-			_healthResilience=_baseCard.healthResilienceBase+(int)(_strength*_baseCard.rate_strength_healthResilience);
+			_maxHealth=_baseCard.maxHealthBase+(int)(_strength*BaseCard.rate_strength_maxHealth);
+			_physicalDamage=_baseCard.physicalDamageBase+(int)(_strength*BaseCard.rate_strength_physicalDamage);
+			_physicalDefense=_baseCard.physicalDefenseBase+(int)(_strength*BaseCard.rate_strength_physicalDefense);
+			_healthResilience=_baseCard.healthResilienceBase+(int)(_strength*BaseCard.rate_strength_healthResilience);
 		}
 	}
 
@@ -73,9 +73,9 @@ public class ConcreteCard :MonoBehaviour{
 		get{return _agility;}
 		set{
 			_agility=value;
-			_physicalDefense=_baseCard.physicalDefenseBase+(int)(_agility*_baseCard.rate_agility_physicalDefense);
-			_physicalCriticalChance=_baseCard.physicalCriticalChanceBase+(int)(_agility*_baseCard.rate_agility_physicalCriticalChance);
-			_evasion=_baseCard.evasionBase+(int)(_agility*_baseCard.rate_agility_evasion);
+			_physicalDefense=_baseCard.physicalDefenseBase+(int)(_agility*BaseCard.rate_agility_physicalDefense);
+			_physicalCriticalChance=_baseCard.physicalCriticalChanceBase+(int)(_agility*BaseCard.rate_agility_physicalCriticalChance);
+			_evasion=_baseCard.evasionBase+(int)(_agility*BaseCard.rate_agility_evasion);
 		}
 	}
 
@@ -88,11 +88,11 @@ public class ConcreteCard :MonoBehaviour{
 		get{return _magic;}
 		set{
 			_magic=value;
-			_maxMana=_baseCard.maxManaBase+(int)(_magic*_baseCard.rate_magic_maxMana);
-			_magicalDefense=_baseCard.magicalDefenseBase+(int)(_magic*_baseCard.rate_magic_magicalDefense);
-			_magicalCriticalChance=_baseCard.magicalCriticalChanceBase+(int)(_magic*_baseCard.rate_magic_magicalCriticalChance);
-			_magicalDamage=_baseCard.magicalDamageBase+(int)(_magic*_baseCard.rate_magic_magicalDamage);
-			_magicResilience=_baseCard.magicResilienceBase+(int)(_magic*_baseCard.rate_magic_magicResilience);
+			_maxMana=_baseCard.maxManaBase+(int)(_magic*BaseCard.rate_magic_maxMana);
+			_magicalDefense=_baseCard.magicalDefenseBase+(int)(_magic*BaseCard.rate_magic_magicalDefense);
+			_magicalCriticalChance=_baseCard.magicalCriticalChanceBase+(int)(_magic*BaseCard.rate_magic_magicalCriticalChance);
+			_magicalDamage=_baseCard.magicalDamageBase+(int)(_magic*BaseCard.rate_magic_magicalDamage);
+			_magicResilience=_baseCard.magicResilienceBase+(int)(_magic*BaseCard.rate_magic_magicResilience);
 		}
 	}
 
@@ -174,14 +174,14 @@ public class ConcreteCard :MonoBehaviour{
 			}
 			_experience=value;
 			int newLevel=level;
-			while(newLevel<maxLevel&&_experience>baseCard.experienceTable[newLevel-1])
+			while(newLevel<maxLevel&&_experience>BaseCard.experienceTable[newLevel-1])
 			{
-				_experience-=baseCard.experienceTable[newLevel-1];
+				_experience-=BaseCard.experienceTable[newLevel-1];
 				newLevel++;
 			}
-			if(_experience>baseCard.experienceTable[newLevel-1])
+			if(_experience>BaseCard.experienceTable[newLevel-1])
 			{//When experience exceed the max,it equals the max
-				_experience=baseCard.experienceTable[newLevel-1];
+				_experience=BaseCard.experienceTable[newLevel-1];
 			}
 			level=newLevel;
 		}
@@ -203,6 +203,10 @@ public class ConcreteCard :MonoBehaviour{
 	{
 		get{return _baseCard;}
 	}
+	public List<Ability> abilities
+	{
+		get{return _abilities;}
+	}
 #endregion
 
 	public ConcreteCard()
@@ -217,12 +221,12 @@ public class ConcreteCard :MonoBehaviour{
 				}
 		_baseCard = baseCard;
 
-		if (rarity > _baseCard.cardRarity||rarity<0) {
+		if (rarity > _baseCard.rarity||rarity<0) {
 			Debug.Log("The rarity of concrete card should not be less than 0 nor be larger than base card's rarity.");
 			throw new System.ArgumentException("rarity");
 				}
 		_cardRarity = rarity;
-		_maxLevel = _baseCard.maxLevelViaRarityTable [(int)_cardRarity];
+		_maxLevel = BaseCard.maxLevelTable [(int)_cardRarity];
 	
 
 		if (level > _maxLevel || level < 1) {

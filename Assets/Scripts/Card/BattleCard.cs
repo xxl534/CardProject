@@ -105,10 +105,10 @@ public class BattleCard : ConcreteCard {
 		set{
 			int valueDelta=value-_strength;
 			_strength=value;
-			_maxHealth+=(int)(valueDelta*_baseCard.rate_strength_maxHealth);
-			_physicalDamage+=(int)(valueDelta*_baseCard.rate_strength_physicalDamage);
-			_physicalDefense+=(int)(valueDelta*_baseCard.rate_strength_physicalDefense);
-			_healthResilience+=(int)(valueDelta*_baseCard.rate_strength_healthResilience);
+			_maxHealth+=(int)(valueDelta*BaseCard.rate_strength_maxHealth);
+			_physicalDamage+=(int)(valueDelta*BaseCard.rate_strength_physicalDamage);
+			_physicalDefense+=(int)(valueDelta*BaseCard.rate_strength_physicalDefense);
+			_healthResilience+=(int)(valueDelta*BaseCard.rate_strength_healthResilience);
 		}
 	}
 	
@@ -122,9 +122,9 @@ public class BattleCard : ConcreteCard {
 		set{
 			int valueDelta=value-_agility;
 			_agility=value;
-			_physicalDefense+=(int)(valueDelta*_baseCard.rate_agility_physicalDefense);
-			_physicalCriticalChance+=(int)(valueDelta*_baseCard.rate_agility_physicalCriticalChance);
-			_evasion+=(int)(valueDelta*_baseCard.rate_agility_evasion);
+			_physicalDefense+=(int)(valueDelta*BaseCard.rate_agility_physicalDefense);
+			_physicalCriticalChance+=(int)(valueDelta*BaseCard.rate_agility_physicalCriticalChance);
+			_evasion+=(int)(valueDelta*BaseCard.rate_agility_evasion);
 		}
 	}
 	
@@ -138,11 +138,11 @@ public class BattleCard : ConcreteCard {
 		set{
 			int valueDelta=value-_magic;
 			_magic=value;
-			_maxMana+=(int)(valueDelta*_baseCard.rate_magic_maxMana);
-			_magicalDefense+=(int)(valueDelta*_baseCard.rate_magic_magicalDefense);
-			_magicalCriticalChance+=(int)(valueDelta*_baseCard.rate_magic_magicalCriticalChance);
-			_magicalDamage+=(int)(valueDelta*_baseCard.rate_magic_magicalDamage);
-			_magicResilience+=(int)(valueDelta*_baseCard.rate_magic_magicResilience);
+			_maxMana+=(int)(valueDelta*BaseCard.rate_magic_maxMana);
+			_magicalDefense+=(int)(valueDelta*BaseCard.rate_magic_magicalDefense);
+			_magicalCriticalChance+=(int)(valueDelta*BaseCard.rate_magic_magicalCriticalChance);
+			_magicalDamage+=(int)(valueDelta*BaseCard.rate_magic_magicalDamage);
+			_magicResilience+=(int)(valueDelta*BaseCard.rate_magic_magicResilience);
 		}
 	}
 #endregion

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -15,6 +15,13 @@ public class LevelInfo:MonoBehaviour {
 	bool _unlocked;
 
 	int _index;
+
+	private LevelData _levelData;
+
+	public LevelData leveldata
+	{
+		get{return _levelData;}
+	}
 
 	public bool unlocked
 	{
@@ -65,4 +72,12 @@ public class LevelInfo:MonoBehaviour {
 	{
 		return (int)_starNum;
 	}
+
+	public void LoadFromJson(Dictionary<string ,object> dict)
+	{
+		_levelData=LevelData.GetLevelData(dict);
+	}
+
+	public void LoadFromPlayerPrefs()
+	{}
 }

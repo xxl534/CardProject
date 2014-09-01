@@ -2,7 +2,7 @@
 using System.Collections;
 using Holoville.HOTween;
 
-public class BattleCardControl : MonoBehaviour {
+public class BattleCardShell : MonoBehaviour {
 	public int _slotIndex;
 	public BattleControl _battleController;
 	public BattleCard _cardInfo;
@@ -74,20 +74,25 @@ public 	void MouseClick()
 	{
 		if(this==other)
 			return true;
-		if(other.GetType()==typeof(BattleCardControl))
-		{
-			Debug.Log("action deny");
-			return false;
-		}
-		else if(other.GetType()==typeof(BossControl))
-		{
-			Debug.Log("attack boss");
-			BossControl boss=other as BossControl;
-			boss.Injure(3);
-			_vacant=true;
-			gameObject.SetActive(false);
-			return true;
-		}
+//		if(other.GetType()==typeof(BattleCardShell))
+//		{
+//			Debug.Log("action deny");
+//			return false;
+//		}
+//		else if(other.GetType()==typeof(BossControl))
+//		{
+//			Debug.Log("attack boss");
+//			BossControl boss=other as BossControl;
+//			boss.Injure(3);
+//			_vacant=true;
+//			gameObject.SetActive(false);
+//			return true;
+//		}
 		return false;
+	}
+
+	public void LoadCard(ConcreteCard concreteCard)
+	{
+
 	}
 }
