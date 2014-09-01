@@ -36,7 +36,8 @@ public static class AbilityCastStatic
 				if (criticalChance <= from.physicalCriticalChance) {
 						damage = (int)(damage*_physicalCriticalFactor);
 				}
-				AbilityEntity abilityEntity = new AbilityEntity (ability.baseAbility.id,from, to, ability.abilityType,EffectCardStatic.EffectCard_PhysicalDamage);
+				AbilityEntity abilityEntity = new AbilityEntity (ability.baseAbility.id,ability.name,
+		                                                 from, to, ability.abilityType,EffectCardStatic.EffectCard_PhysicalDamage);
 				abilityEntity.SetValue (AbilityVariable.value, damage);
 				return abilityEntity;
 		};
@@ -48,8 +49,18 @@ public static class AbilityCastStatic
 		if (criticalChance <= from.magicalCriticalChance) {
 			damage =(int)(damage*_magicalCriticalFactor);
 		}
-		AbilityEntity abilityEntity = new AbilityEntity (ability.baseAbility.id,from, to, ability.abilityType,EffectCardStatic.EffectCard_MagicalDamage);
+		AbilityEntity abilityEntity = new AbilityEntity (ability.baseAbility.id,ability.name,
+		                                                 from, to, ability.abilityType,EffectCardStatic.EffectCard_MagicalDamage);
 		abilityEntity.SetValue (AbilityVariable.value, damage);
+		return abilityEntity;
+	};
+
+	public static AbilityCast AbilityCast_Healing= delegate(Ability ability, BattleCard from, BattleCard to) {
+		int healing=Random.Range(ability.GetValue (AbilityVariable.minValue), ability.GetValue (AbilityVariable.maxValue))
+			+ from.magicalDamage;
+		AbilityEntity abilityEntity = new AbilityEntity (ability.baseAbility.id,ability.name,
+		                                                 from, to, ability.abilityType,EffectCardStatic.EffectCard_Healing);
+		abilityEntity.SetValue (AbilityVariable.value, healing);
 		return abilityEntity;
 	};
 
@@ -63,7 +74,8 @@ public static class AbilityCastStatic
 		{
 			value+=from.magicalDamage;
 		}
-		AbilityEntity abilityEntity = new AbilityEntity (ability.baseAbility.id,from, to, ability.abilityType, EffectCardStatic.EffectCard_GenerateDotOrHot);
+		AbilityEntity abilityEntity = new AbilityEntity (ability.baseAbility.id,ability.name,
+		                                                 from, to, ability.abilityType, EffectCardStatic.EffectCard_GenerateDotOrHot);
 		abilityEntity.SetValue(AbilityVariable.value,value);
 		abilityEntity.SetValue(AbilityVariable.dot,ability.GetValue(AbilityVariable.dot));
 		abilityEntity.SetValue(AbilityVariable.interval,ability.GetValue(AbilityVariable.interval));
@@ -71,10 +83,12 @@ public static class AbilityCastStatic
 				return abilityEntity;
 		};
 
-	public static AbilityCast AbilityCast_NormalBuff = delegate(Ability ability, BattleCard from, BattleCard to) {
-		AbilityEntity abilityEntity = new AbilityEntity (ability.baseAbility.id,from, to, ability.abilityType, EffectCardStatic.EffectCard_GenerateBuffOrDebuff);
+	public static AbilityCast AbilityCast_DebuffOrBuff = delegate(Ability ability, BattleCard from, BattleCard to) {
+		AbilityEntity abilityEntity = new AbilityEntity (ability.baseAbility.id,ability.name,
+		                                                 from, to, ability.abilityType, EffectCardStatic.EffectCard_GenerateDebuffOrBuff);
 				abilityEntity.targetAttr = ability.target;
 				abilityEntity.SetValue (AbilityVariable.value, ability.GetValue (AbilityVariable.value));
+		abilityEntity.SetValue(AbilityVariable .debuff,ability.GetValue(AbilityVariable.debuff));
 				abilityEntity.SetValue (AbilityVariable.interval, ability.GetValue (AbilityVariable.interval));
 				abilityEntity.SetValue (AbilityVariable.duration, ability.GetValue (AbilityVariable.duration));
 				return abilityEntity;

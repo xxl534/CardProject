@@ -14,7 +14,7 @@ public class BattleCard : ConcreteCard {
 	protected int _mana;
 
 	protected Dictionary<int,DotAndHot> _DotAndHotTable;
-	protected Dictionary<int,BuffAndDebuff> _buffAndDebuffTable;
+	protected Dictionary<int,DebuffAndBuff> _debuffAndBuffTable;
 #endregion
 
 	#region Properties
@@ -168,8 +168,8 @@ public class BattleCard : ConcreteCard {
 		_DotAndHotTable[dotOrHot.id]=dotOrHot;
 	}
 
-	public void AddBuffOrDebuff(BuffAndDebuff buffOrDebuff)
+	public void AddDebuffOrBuff(DebuffAndBuff debuffOrBuff)
 	{
-		_buffAndDebuffTable [buffOrDebuff.id] = buffOrDebuff;
+		_debuffAndBuffTable [debuffOrBuff.id] = debuffOrBuff;
 	}
 }

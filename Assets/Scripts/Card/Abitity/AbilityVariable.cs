@@ -11,6 +11,7 @@ public static class AbilityVariable  {
 	public static string restorativeValue="restorativeValue";
 	public static string value="value";
 	public static string dot="dot";
+	public static string debuff="debuff";
 
 	static AbilityVariable()
 	{

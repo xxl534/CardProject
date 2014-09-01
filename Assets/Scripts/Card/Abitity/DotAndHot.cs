@@ -1,7 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-public class DotAndHot :DurativeState {
+public class DotAndHot :DurativeState,IClear {
+	protected bool _isDot;
+
+	public bool isDot
+	{
+		get{return _isDot;}
+	}
 	public int interval
 	{
 		get{return _interval;}
@@ -18,9 +24,11 @@ public class DotAndHot :DurativeState {
 		set{_id=value;}
 	}
 
-	public DotAndHot(int id,BattleCard from,BattleCard to,AbilityType abilityType,int interval,int duration)
+	public DotAndHot(int id,string name,bool isDot,BattleCard from,BattleCard to,AbilityType abilityType,int interval,int duration)
 	{
 		this.id = id;
+		_name=name;
+		_isDot=isDot;
 		_castCard = from;
 		_targetCard = to;
 		_abilityType = abilityType;
@@ -42,5 +50,6 @@ public class DotAndHot :DurativeState {
 		duration--;
 
 	}
-//	public DotAndHot (Bat);
+	public virtual void Clear()
+	{}
 }

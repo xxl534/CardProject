@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class AbilityEntity :MonoBehaviour {
 	#region Instance menbers
 	protected int _id;
+	protected string _name;
 	protected Dictionary<string ,int> _variables;
 	protected string _targetAttr;
 	protected BattleCard _targetCard;
@@ -16,6 +17,10 @@ public class AbilityEntity :MonoBehaviour {
 	public int abilityId
 	{
 		get{return _id;}
+	}
+	public string name
+	{
+		get{return _name;}
 	}
 	public BattleCard castCard
 	{
@@ -54,7 +59,7 @@ public class AbilityEntity :MonoBehaviour {
 	/// </summary>
 	/// <param name="from">BattleCard casts this AbilityEntity.</param>
 	/// <param name="to">Target BattleCard.</param>
-	public AbilityEntity(int abilityId,BattleCard from ,BattleCard to,AbilityType abilityType,EffectCard effectCard,string targetAttr=null):this()
+	public AbilityEntity(int abilityId,string name,BattleCard from ,BattleCard to,AbilityType abilityType,EffectCard effectCard,string targetAttr=null):this()
 	{
 		castCard = from;
 		targetCard = to;
@@ -62,6 +67,7 @@ public class AbilityEntity :MonoBehaviour {
 		this.effectCard = effectCard;
 		this.targetAttr = targetAttr;
 		_id = abilityId;
+		_name=name;
 	}
 
 	/// <summary>

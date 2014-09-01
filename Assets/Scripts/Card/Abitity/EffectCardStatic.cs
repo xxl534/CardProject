@@ -53,40 +53,46 @@ public static class EffectCardStatic {
 		return -damage;
 	};
 
+	public static EffectCard EffectCard_Healing=delegate(AbilityEntity abilityEntity) {
+		BattleCard target=abilityEntity.targetCard;
+		int healing=abilityEntity.GetValue(AbilityVariable.value);
+		target.health+=healing;
+		return healing;
+	};
+
 	public static EffectCard EffectCard_GenerateDotOrHot = delegate(AbilityEntity abilityEntity) {
 		BattleCard to=abilityEntity.targetCard,from=abilityEntity.castCard;
 		int id=(from.GetHashCode ().ToString () + from.baseCard.id.ToString ()).GetHashCode ();
-		DotAndHot dotOrHot = new DotAndHot (id,from,to,abilityEntity.abilityType,
+		bool isDot=abilityEntity.GetValue(AbilityVariable.dot)==1;
+		DotAndHot dotOrHot = new DotAndHot (id,abilityEntity.name,isDot, from,to,abilityEntity.abilityType,
 		                               abilityEntity.GetValue(AbilityVariable.interval),abilityEntity.GetValue(AbilityVariable.duration));
 		int value=abilityEntity.GetValue(AbilityVariable .value);
-		if(abilityEntity.GetValue(AbilityVariable.dot)!=1)
-		{
-			value*=-1;
+		if(isDot)
+		{// Is a HOT
+			dotOrHot.effectCard=EffectCard_Healing;
 		}
-				dotOrHot.SetValue (AbilityVariable.value,value);
-		
+		else
+		{//Is a DOT
 				if (abilityEntity.abilityType == AbilityType.Physical) {
 			dotOrHot.effectCard = EffectCard_PhysicalDamage;
 				} else if (abilityEntity.abilityType == AbilityType.Magical) {
 			dotOrHot.effectCard = EffectCard_MagicalDamage;
 				}
-				to.AddDotOrHot (dotOrHot);
+		}
+		dotOrHot.SetValue (AbilityVariable.value,value);
+		to.AddDotOrHot (dotOrHot);
 		return 0;
 		};
 
-	public static EffectCard EffectCard_GenerateBuffOrDebuff = delegate(AbilityEntity abilityEntity) {
+	public static EffectCard EffectCard_GenerateDebuffOrBuff= delegate(AbilityEntity abilityEntity) {
 		BattleCard to=abilityEntity.targetCard,from=abilityEntity.castCard;
 		PropertyInfo propertyInfo=typeof(BattleCard).GetProperty(abilityEntity.targetAttr);
-		BuffAndDebuff buffOrDebuff = new BuffAndDebuff (abilityEntity.abilityId,from,to,abilityEntity.abilityType,
-		                               abilityEntity.GetValue(AbilityVariable.duration),propertyInfo);
-		buffOrDebuff.SetValue (AbilityVariable.value, abilityEntity.GetValue (AbilityVariable.value));
-		
-		if (abilityEntity.abilityType == AbilityType.Physical) {
-			buffOrDebuff.effectCard = EffectCard_PhysicalDamage;
-		} else if (abilityEntity.abilityType == AbilityType.Magical) {
-			buffOrDebuff.effectCard = EffectCard_MagicalDamage;
-		}
-		to.AddBuffOrDebuff (buffOrDebuff);
-		return 0;
+		bool isDebuff=abilityEntity.GetValue(AbilityVariable.debuff)==1;
+		DebuffAndBuff debuffOrBuff = new DebuffAndBuff (abilityEntity.abilityId,abilityEntity.name,isDebuff, from,to,
+		                                                abilityEntity.abilityType,abilityEntity.GetValue(AbilityVariable.duration),propertyInfo);
+		int valueDelta=abilityEntity.GetValue(AbilityVariable.value);
+		debuffOrBuff.SetValue (AbilityVariable.restorativeValue, -valueDelta);
+		int value =System.Convert.ToInt32(propertyInfo.GetValue(to,null))+valueDelta;
+		return valueDelta;
 	};
 }
