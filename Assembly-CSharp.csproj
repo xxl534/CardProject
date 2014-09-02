@@ -201,14 +201,13 @@
      <Compile Include="Assets\Scripts\Card\Abitity\DotAndHot.cs" />
      <Compile Include="Assets\Scripts\Card\Abitity\DurativeState.cs" />
      <Compile Include="Assets\Scripts\Card\Abitity\EffectCardStatic.cs" />
-     <Compile Include="Assets\Scripts\Card\Abitity\IClear.cs" />
+     <Compile Include="Assets\Scripts\Card\Abitity\TargetArea.cs" />
      <Compile Include="Assets\Scripts\Card\Abitity\TargetType.cs" />
      <Compile Include="Assets\Scripts\Card\BaseCard.cs" />
      <Compile Include="Assets\Scripts\Card\BattleCard.cs" />
      <Compile Include="Assets\Scripts\Card\BattleCardShell.cs" />
      <Compile Include="Assets\Scripts\Card\CardEffectedStatic.cs" />
      <Compile Include="Assets\Scripts\Card\CardFactory.cs" />
-     <Compile Include="Assets\Scripts\Card\CardRarity.cs" />
      <Compile Include="Assets\Scripts\Card\ConcreteCard.cs" />
      <Compile Include="Assets\Scripts\Card\Rarity.cs" />
      <Compile Include="Assets\Scripts\FlyStar.cs" />
@@ -233,6 +232,7 @@
      <Compile Include="Assets\Scripts\StarCounter\StarCounterLayerControl.cs" />
      <Compile Include="Assets\Scripts\StarFlyPath.cs" />
      <Compile Include="Assets\Scripts\SwordControl.cs" />
+     <Compile Include="Assets\Scripts\Test.cs" />
      <Compile Include="Assets\Scripts\Test2.cs" />
      <Compile Include="Assets\Scripts\Tools\Administrator.cs" />
      <Compile Include="Assets\Scripts\Tools\ComputeContainerSize.cs" />
@@ -242,7 +242,6 @@
      <Compile Include="Assets\Scripts\Unuse\Layers.cs" />
      <Compile Include="Assets\Scripts\Unuse\PrefabPath.cs" />
      <Compile Include="Assets\Scripts\Unuse\Tags.cs" />
-     <Compile Include="Assets\Scripts\test.cs" />
      <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />
      <None Include="Assets\NGUI\ReadMe - 3.6.8.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text 2.shader" />
@@ -263,6 +262,7 @@
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored 3.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 2.shader" />
+     <None Include="Assets\Resources\Json\Card\card.txt" />
      <None Include="Assets\Textures\shader_edgeGlow 1.shader" />
      <None Include="Assets\xinjiandewendang.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text 3.shader" />
@@ -273,6 +273,7 @@
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 1.shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
      <None Include="Assets\Plugins\HOTween_License.txt" />
+     <None Include="Assets\Resources\Json\Ability\ability.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
      <None Include="Assets\Textures\shader_ultraEdgeGlow.shader" />
      <None Include="Assets\Plugins\HOTween\HOTween_License.txt" />
@@ -290,6 +291,7 @@
      <None Include="Assets\Holoville\HOUnityEditor\Editor\HOEditorUtils.xml" />
      <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
      <None Include="Assets\NGUI\Examples\Resources\Localization.txt" />
+     <None Include="Assets\Resources\Json\Card\cardStatic.txt" />
  <Reference Include="HOTween">
  <HintPath>E:/Unity Project/GitProject/CardProject/Assets/Plugins/HOTween/HOTween.dll</HintPath>
  </Reference>

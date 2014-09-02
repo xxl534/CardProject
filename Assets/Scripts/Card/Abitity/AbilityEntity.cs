@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-public class AbilityEntity :MonoBehaviour {
+public class AbilityEntity {
 	#region Instance menbers
 	protected int _id;
 	protected string _name;
@@ -54,11 +54,7 @@ public class AbilityEntity :MonoBehaviour {
 	{
 		_variables = new Dictionary<string, int> ();
 	}
-	/// <summary>
-	/// Initializes a new instance of the <see cref="AbilityEntity"/> class.
-	/// </summary>
-	/// <param name="from">BattleCard casts this AbilityEntity.</param>
-	/// <param name="to">Target BattleCard.</param>
+
 	public AbilityEntity(int abilityId,string name,BattleCard from ,BattleCard to,AbilityType abilityType,EffectCard effectCard,string targetAttr=null):this()
 	{
 		castCard = from;

@@ -16,13 +16,13 @@ public class BaseCard : MonoBehaviour{
 	_rate_agility_physicalDefense,_rate_agility_physicalCriticalChance,_rate_agility_evasion,
 	_rate_magic_maxMana,_rate_magic_magicalDefense,_rate_magic_magicalCriticalChance,_rate_magic_magicalDamage,_rate_magic_magicResilience;
 
-	private static List<int> _maxLevelTable;
-	private static List<int> _experienceTable;
+	public static List<int> _maxLevelTable;
+	public static List<int> _experienceTable;
 #endregion
 
 	#region Instance member
 	private int _id;
-	private string _cardSprite,_backgroundSprite;
+	private string _cardSprite;
 	private int 	_strengthBase;private float _strengthGrowth;
 	private int  _agilityBase;private float _agilityGrowth;
 	private int _magicBase;private float _magicGrowth;
@@ -43,7 +43,7 @@ public class BaseCard : MonoBehaviour{
 	private string _name;
 	private string _description;
 
-	private List<int> _abilitiesId;
+	public List<int> _abilitiesId;
 #endregion
 
 	#region Properties static member
@@ -198,36 +198,38 @@ public class BaseCard : MonoBehaviour{
 	/// It should be sorted
 	/// </summary>
 	/// <value>The max level table.</value>
-	public static List<int> maxLevelTable
+	public static List<object> maxLevelTable
 	{
-		get{return _maxLevelTable;}
+		get{return _maxLevelTable.ConvertAll(x=>(object)x);}
 		private set{
-			if(value.Count!=Enum.GetValues(typeof(Rarity)).Length)
+			_maxLevelTable=value.ConvertAll(x=>System.Convert.ToInt32(x));
+			if(_maxLevelTable.Count!=Enum.GetValues(typeof(Rarity)).Length)
 			{
 				Debug.Log("maxLevelTable count error");
 				throw new System.ArgumentException("maxLevelTable count error");
 			}
-			if(!IsIntListSorted(value))
+			if(!IsIntListSorted(_maxLevelTable))
 			{
 				Debug.Log("maxLevelTable item sequence error");
 				throw new System.ArgumentException("maxLevelTable item sequence error");
 			}
-			_maxLevelTable=value;}
+		}
 	}
 	/// <summary>
 	/// ExperienceTable should be consistent with the max maxLevel and be sorted.
 	/// </summary>
 	/// <value>The experience table.</value>
-	public static List<int> experienceTable
+	public static List<object> experienceTable
 	{
-		get{return _experienceTable;}
+		get{return _experienceTable.ConvertAll(x=>(object)x);}
 		private set{
-			if(!IsIntListSorted(value))
+			_experienceTable=value.ConvertAll(x=>System.Convert.ToInt32(x));
+			if(!IsIntListSorted(_experienceTable))
 			{
 				Debug.Log("ExperienceTable item sequence error");
 				throw new System.ArgumentException("ExperienceTable item sequence error");
 			}
-			_experienceTable=value;}
+		}
 	}
 #endregion
 
@@ -248,17 +250,17 @@ public class BaseCard : MonoBehaviour{
 	public string cardSprite
 	{
 		get{return _cardSprite;}
-		private set{
+		set{
 			_cardSprite=value;
 		}
 	}
-	public string backgroundSprite
-	{
-		get{return _backgroundSprite;}
-		private set{
-			_backgroundSprite=value;
-		}
-	}
+//	public string backgroundSprite
+//	{
+//		get{return _backgroundSprite;}
+//		private set{
+//			_backgroundSprite=value;
+//		}
+//	}
 	public int 	strengthBase
 	{
 		get{return _strengthBase;}
@@ -351,22 +353,22 @@ public class BaseCard : MonoBehaviour{
 	{
 		get{return _physicalDefenseBase;}
 		private set{
-			if(value<0)
-			{
-				Debug.Log("Attribute physicalDefenseBase should not be negative");
-				throw new ArgumentException("Attribute physicalDefenseBase should not be negative");
-			}
+//			if(value<0)
+//			{
+//				Debug.Log("Attribute physicalDefenseBase should not be negative");
+//				throw new ArgumentException("Attribute physicalDefenseBase should not be negative");
+//			}
 			_physicalDefenseBase=value;}
 	}
 	public int magicalDefenseBase
 	{
 		get{return _magicalDefenseBase;}
 		private set{
-			if(value<0)
-			{
-				Debug.Log("Attribute magicalDefenseBase should not be negative");
-				throw new ArgumentException("Attribute magicalDefenseBase should not be negative");
-			}
+//			if(value<0)
+//			{
+//				Debug.Log("Attribute magicalDefenseBase should not be negative");
+//				throw new ArgumentException("Attribute magicalDefenseBase should not be negative");
+//			}
 			_magicalDefenseBase=value;}
 	}
 	public int physicalCriticalChanceBase
@@ -427,11 +429,11 @@ public class BaseCard : MonoBehaviour{
 	{
 		get{return _evasionBase;}
 		private set{
-			if(value<0)
-			{
-				Debug.Log("Attribute evasionBase should not be negative");
-				throw new ArgumentException("Attribute evasionBase should not be negative");
-			}
+//			if(value<0)
+//			{
+//				Debug.Log("Attribute evasionBase should not be negative");
+//				throw new ArgumentException("Attribute evasionBase should not be negative");
+//			}
 			_evasionBase=value;}
 	}
 	public int drapRate
@@ -460,16 +462,7 @@ public class BaseCard : MonoBehaviour{
 	{
 		get{return _cardRarity;}
 		private set{
-			Array array=	Enum.GetValues( typeof(Rarity));
-			for (int i = 0; i < array.Length; i++) {
-				if((Rarity)array.GetValue(i)==value)
-				{
 					_cardRarity=value;
-					return;
-				}
-			}
-			Debug.Log(string.Format("Illegal card rarity value :{0}" ,value));
-			throw new System.ArgumentException(string.Format("Illegal card rarity value :{0}" ,value));
 		}
 	}
 	public string name
@@ -481,10 +474,10 @@ public class BaseCard : MonoBehaviour{
 		get{return _description;}
 		set{_description=value;}
 	}
-	public List<int> abilitiesId
+	public List<object> abilitiesId
 	{
-		get{return _abilitiesId;}
-		set{_abilitiesId=value;}
+//		get{return _abilitiesId;}
+		set{_abilitiesId=value.ConvertAll(x=>System.Convert.ToInt32(x));}
 	}
 #endregion
 
@@ -509,10 +502,19 @@ public class BaseCard : MonoBehaviour{
 			if(propertyInfo.PropertyType.IsEnum)
 			{
 				try{
-					int value=Convert.ToInt32(valueOb);
+					int value=System.Convert.ToInt32(valueOb);
 				}catch{
-				 valueOb=	Enum.Parse(propertyInfo.PropertyType,(string)valueOb);
+					valueOb=	Enum.Parse(propertyInfo.PropertyType,(string)valueOb);
 				}
+				if(!Enum.IsDefined(propertyInfo.PropertyType,valueOb))
+				{
+					Debug.Log(string.Format("Illegal {0} value :{1}" ,propertyInfo.PropertyType,valueOb));
+					throw new System.ArgumentException(string.Format("Illegal {0} value :{1}" ,propertyInfo.PropertyType,valueOb));
+				}
+			}
+			if(valueOb.GetType()!=propertyInfo.PropertyType)
+			{
+				valueOb=System.Convert.ChangeType(valueOb,propertyInfo.PropertyType);
 			}
 			propertyInfo.SetValue(baseCard,valueOb,null);
 		}
@@ -528,14 +530,19 @@ public class BaseCard : MonoBehaviour{
 		Type type=typeof(BaseCard);
 		foreach(string attribute in staticFields.Keys)
 		{
-			PropertyInfo propertyInfo= type.GetProperty(attribute,BindingFlags.Static);
+			PropertyInfo propertyInfo= type.GetProperty(attribute,BindingFlags.Static|BindingFlags.Public);
 			if(propertyInfo==null)
 			{
 				Debug.Log(string.Format("Illegal static field:Card static attribute '{0}' does not exist",attribute));
 				throw new System.FieldAccessException(string.Format("Illegal static field:Card static attribute '{0}' does not exist",attribute));
 			}
 			object valueOb=staticFields[attribute];
-
+//			Debug.Log("property name:"+propertyInfo.Name+";property type:"+propertyInfo.PropertyType);
+//			Debug.Log(valueOb.GetType());
+			if(valueOb.GetType()!=propertyInfo.PropertyType)
+			{
+				valueOb= System.Convert.ChangeType(valueOb,propertyInfo.PropertyType);
+			}
 			propertyInfo.SetValue(null,valueOb,null);
 		}
 	}
@@ -544,8 +551,9 @@ public class BaseCard : MonoBehaviour{
 	public static bool CheckStaticFields()
 	{
 		bool bPass=true;
-		foreach(PropertyInfo propertyInfo in typeof(BaseCard).GetProperties(BindingFlags.Static))
+		foreach(PropertyInfo propertyInfo in typeof(BaseCard).GetProperties(BindingFlags.Static|BindingFlags.Public))
 		{
+			Debug.Log(propertyInfo.Name+":"+propertyInfo.GetValue(null,null));
 			if(propertyInfo.PropertyType==typeof(float))
 			{
 				if(propertyInfo.GetValue(null,null)==(object)0f){

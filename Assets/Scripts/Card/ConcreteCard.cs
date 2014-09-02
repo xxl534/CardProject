@@ -174,14 +174,14 @@ public class ConcreteCard :MonoBehaviour{
 			}
 			_experience=value;
 			int newLevel=level;
-			while(newLevel<maxLevel&&_experience>BaseCard.experienceTable[newLevel-1])
+			while(newLevel<maxLevel&&_experience>BaseCard._experienceTable[newLevel-1])
 			{
-				_experience-=BaseCard.experienceTable[newLevel-1];
+				_experience-=BaseCard._experienceTable[newLevel-1];
 				newLevel++;
 			}
-			if(_experience>BaseCard.experienceTable[newLevel-1])
+			if(_experience>BaseCard._experienceTable[newLevel-1])
 			{//When experience exceed the max,it equals the max
-				_experience=BaseCard.experienceTable[newLevel-1];
+				_experience=BaseCard._experienceTable[newLevel-1];
 			}
 			level=newLevel;
 		}
@@ -226,7 +226,7 @@ public class ConcreteCard :MonoBehaviour{
 			throw new System.ArgumentException("rarity");
 				}
 		_cardRarity = rarity;
-		_maxLevel = BaseCard.maxLevelTable [(int)_cardRarity];
+		_maxLevel = BaseCard._maxLevelTable [(int)_cardRarity];
 	
 
 		if (level > _maxLevel || level < 1) {

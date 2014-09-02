@@ -157,6 +157,7 @@
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored 3.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 2.shader" />
+     <None Include="Assets\Resources\Json\Card\card.txt" />
      <None Include="Assets\Textures\shader_edgeGlow 1.shader" />
      <None Include="Assets\xinjiandewendang.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text 3.shader" />
@@ -167,6 +168,7 @@
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 1.shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
      <None Include="Assets\Plugins\HOTween_License.txt" />
+     <None Include="Assets\Resources\Json\Ability\ability.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
      <None Include="Assets\Textures\shader_ultraEdgeGlow.shader" />
      <None Include="Assets\Plugins\HOTween\HOTween_License.txt" />
@@ -184,6 +186,7 @@
      <None Include="Assets\Holoville\HOUnityEditor\Editor\HOEditorUtils.xml" />
      <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
      <None Include="Assets\NGUI\Examples\Resources\Localization.txt" />
+     <None Include="Assets\Resources\Json\Card\cardStatic.txt" />
  <Reference Include="Assembly-UnityScript">
  <HintPath>E:/Unity Project/GitProject/CardProject/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
  </Reference>

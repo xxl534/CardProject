@@ -24,7 +24,7 @@ public class AbilityFactory
 		void LoadAbilities ()
 		{
 				TextAsset[] textAssets = Resources.LoadAll<TextAsset> (ResourcesFolderPath.json_ability);
-				foreach (TextAsset tAsset in textAssets) {
+		foreach (TextAsset tAsset in textAssets) {
 						string jsonString = tAsset.text;
 						var dict = MiniJSON.Json.Deserialize (jsonString) as Dictionary<string,object>;
 						Dictionary<string,object> abilitiesInfo = dict ["ability"] as Dictionary<string,object>;
@@ -65,7 +65,7 @@ public class AbilityFactory
 		{
 				bool bPass = true;
 				bPass &= AbilityCastStatic.HasAbilityCast (abilityBase.abilityCast);
-				bPass &= EffectCardStatic.HasEffectCard (abilityBase.effectCard);
+//				bPass &= EffectCardStatic.HasEffectCard (abilityBase.effectCard);
 				foreach (string variableName in abilityBase.variables) {
 						bPass &= AbilityVariable.HasVariableString (variableName);
 				}
@@ -89,13 +89,13 @@ public class AbilityFactory
 			throw new System.ArgumentException(string.Format("Level of ability '{0}' should not be larger than maxLevel",abilityBase.name));
 		}
 		AbilityCast abilityCast=AbilityCastStatic.GetAbilityCast( abilityBase.abilityCast);
-		EffectCard effectCard=EffectCardStatic.GetEffectCard(abilityBase.effectCard);
+//		EffectCard effectCard=EffectCardStatic.GetEffectCard(abilityBase.effectCard);
 		Dictionary<string,int > variables=new Dictionary<string, int>();
-		List<string> variableName=abilityBase.variables;
-		List<int> variableValue=abilityBase.variableValueTable[level-1];
+		List<string> variableName=abilityBase._variables;
+		List<int> variableValue=abilityBase._variableValueTable[level-1];
 		for (int i = 0; i < variableName.Count; i++) {
 			variables.Add(variableName[i],variableValue[i]);
 				}
-		return new Ability(abilityBase,level,abilityCast,effectCard,variables);
+		return new Ability(abilityBase,level,abilityCast,variables);
 	}
 }

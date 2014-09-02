@@ -4,12 +4,13 @@ using System.Collections.Generic;
 public class Ability : MonoBehaviour {
 	#region Instance members
 	private AbilityBase _baseAbility;
+	private int _mana;
 	private Dictionary<string,int> _variableValues;
 	private int _level;
 //	private int _interval,_duration;
 
 	private AbilityCast _abilityCast;
-	private EffectCard _effectCard;
+//	private EffectCard _effectCard;
 #endregion
 
 	#region Properties
@@ -17,9 +18,21 @@ public class Ability : MonoBehaviour {
 	{
 		get{return _baseAbility.name;}
 	}
+	public int mana
+	{
+		get{return _mana;}
+	}
 	public string description
 	{
 		get{return _baseAbility.description;}
+	}
+	public TargetType targetType
+	{
+		get{return _baseAbility.targetType;}
+	}
+	public TargetArea targetArea
+	{
+		get{return _baseAbility.targetArea;}
 	}
 	public int level
 	{
@@ -31,9 +44,9 @@ public class Ability : MonoBehaviour {
 				throw new System.ArgumentException(string.Format("Value illegal when set level of ability '{0}'",name));
 			}
 			_level=value;
-			List<int> variableValue=_baseAbility.variableValueTable[_level-1];
+			List<int> variableValue=_baseAbility._variableValueTable[_level-1];
 			for (int i = 0; i < _baseAbility.variables.Count; i++) {
-				_variableValues[_baseAbility.variables[i]]=variableValue[i];
+				_variableValues[_baseAbility._variables[i]]=variableValue[i];
 			}
 		}
 	}
@@ -53,10 +66,10 @@ public class Ability : MonoBehaviour {
 	{
 		get{return _baseAbility.targetAttr;}
 	}
-	public EffectCard effectCard
-	{
-		get{return _effectCard;}
-	}
+//	public EffectCard effectCard
+//	{
+//		get{return _effectCard;}
+//	}
 
 	#endregion
 
@@ -65,12 +78,19 @@ public class Ability : MonoBehaviour {
 		return _variableValues[variableName];
 	}
 
-	public  Ability(AbilityBase abilityBase,int level,AbilityCast abilityCast,EffectCard effectCard,Dictionary<string,int> variables)
+	public  Ability(AbilityBase abilityBase,int level,AbilityCast abilityCast,Dictionary<string,int> variables)
 	{
 		_baseAbility=abilityBase;
 		_level=level;
 		_abilityCast=abilityCast;
-		_effectCard=effectCard;
+//		_effectCard=effectCard;
 		_variableValues=variables;
+		if(_variableValues.ContainsKey(AbilityVariable .mana))
+		{
+			_mana=_variableValues[AbilityVariable .mana];
+		}
+		else{
+			_mana=0;
+		}
 	}
 }

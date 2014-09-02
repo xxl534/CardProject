@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Reflection;
-public class DebuffAndBuff : DurativeState,IClear {
+public class DebuffAndBuff : DurativeState {
 	protected PropertyInfo _targetProperty;
 	protected bool _isDeBuff;
 	protected int _remainTime;
@@ -53,7 +53,7 @@ public class DebuffAndBuff : DurativeState,IClear {
 				}
 	}
 
-	public virtual void Clear()
+	public override void Clear()
 	{
 		object value=	_targetProperty.GetValue(_targetCard,null);
 		value=(object)((int)value+GetValue(AbilityVariable.restorativeValue));

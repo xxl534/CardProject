@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -18,14 +18,16 @@ public  class AbilityBase
 		private int _id;
 		private Rarity _rarity;
 		private AbilityType _abilityType;
+	private TargetType _targetType;
+	private TargetArea _targetArea;
 		private int _maxLevel;
 		private string _name,
 				_description,
 				_targetAttr,
-				_abilityCast,
-				_effectCard;
-		private List<string> _variables;
-		private List<List<int>> _variableValueTable;
+	_abilityCast;
+//				_effectCard;
+		public List<string> _variables;
+		public List<List<int>> _variableValueTable;
 #endregion
 
 #region Properties
@@ -58,18 +60,19 @@ public  class AbilityBase
 	}
 		public AbilityType abilityType {
 		get{ return _abilityType;}
-		private set{
-			Array array=	Enum.GetValues( typeof(AbilityType));
-			for (int i = 0; i < array.Length; i++) {
-				if((AbilityType)array.GetValue(i)==value)
-				{
-					_abilityType=value;
-					return;
-				}
-			}
-			Debug.Log(string.Format("Illegal abilityType value :{0}" ,value));
-			throw new System.ArgumentException(string.Format("Illegal abilityType value :{0}" ,value));
-		}
+		private set{_abilityType=value;}
+	}
+		
+	public TargetType targetType
+	{
+		get{return _targetType;}
+		private set{_targetType=value;}
+	}
+
+	public TargetArea targetArea
+	{
+		get{return _targetArea;}
+		private set{_targetArea=value;}
 	}
 
 		public int maxLevel {
@@ -80,7 +83,7 @@ public  class AbilityBase
 				Debug.Log("Attribute maxLevel should not be negative");
 				throw new ArgumentException("Attribute maxLevel should not be negative");
 			}
-			_id=value;}
+			_maxLevel=value;}
 	}
 
 		public string name {
@@ -97,9 +100,13 @@ public  class AbilityBase
 		private set{_targetAttr=value;}
 	}
 
-		public List<List<int>> variableValueTable {
-		get{ return _variableValueTable;}
-		private set{_variableValueTable=value;}
+		public List<object> variableValueTable {
+		get{ return _variableValueTable.ConvertAll(x=>(object)x);}
+		private set{
+			_variableValueTable=value.ConvertAll(x=>{
+				List<int> intList=(x as List<object>).ConvertAll(y=>System.Convert.ToInt32(y));
+				return intList;});
+		}
 	}
 
 		public string abilityCast {
@@ -107,14 +114,15 @@ public  class AbilityBase
 		private set{_abilityCast=value;}
 	}
 
-		public string effectCard {
-		get{ return _effectCard;}
-		private set{_effectCard=value;}
-	}
+//		public string effectCard {
+//		get{ return _effectCard;}
+//		private set{_effectCard=value;}
+//	}
 
-		public List<string> variables {
-		get{ return  _variables;}
-		private set{_variables=value;}
+		public List<object> variables {
+		get{ return  _variables.ConvertAll(x=>(object)x);}
+		private set{	_variables=value.ConvertAll(x=>x.ToString());
+		}
 	}
 #endregion
 
@@ -138,10 +146,21 @@ public  class AbilityBase
 			if(propertyInfo.PropertyType.IsEnum)
 			{
 				try{
-					int value=Convert.ToInt32(valueOb);
+					int value=System.Convert.ToInt32(valueOb);
 				}catch{
 					valueOb=	Enum.Parse(propertyInfo.PropertyType,(string)valueOb);
 				}
+				if(!Enum.IsDefined(propertyInfo.PropertyType,valueOb))
+				{
+					Debug.Log(string.Format("Illegal {0} value :{1}" ,propertyInfo.PropertyType,valueOb));
+					throw new System.ArgumentException(string.Format("Illegal {0} value :{1}" ,propertyInfo.PropertyType,valueOb));
+				}
+			}
+//			Debug.Log(propertyInfo.Name);
+//			Debug.Log(valueOb.GetType()+","+propertyInfo.PropertyType);
+			if(valueOb.GetType()!=propertyInfo.PropertyType)
+			{
+				valueOb=System.Convert.ChangeType (valueOb,propertyInfo.PropertyType);
 			}
 			propertyInfo.SetValue(abilityBase,valueOb,null);
 		}
@@ -159,11 +178,11 @@ public  class AbilityBase
 			Debug.Log("Lack of id data");
 			bPass=false;
 		}
-		if(_effectCard==null)
-		{
-			Debug.Log("Lack of effectCard data");
-			bPass=false;
-		}
+//		if(_effectCard==null)
+//		{
+//			Debug.Log("Lack of effectCard data");
+//			bPass=false;
+//		}
 		if(_abilityCast==null)
 		{
 			Debug.Log("Lack of abilityCast data");
@@ -181,7 +200,6 @@ public  class AbilityBase
 		}else{
 			if(_variableValueTable.Count!=_maxLevel)
 			{
-				Debug.Log("Count of variableValueTable is incosistent with maxLevel");
 				bPass=false;
 			}
 		}
