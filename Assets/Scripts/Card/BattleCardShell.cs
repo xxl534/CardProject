@@ -5,14 +5,15 @@ using Holoville.HOTween;
 public class BattleCardShell : MonoBehaviour {
 	public int _slotIndex;
 	public BattleControl _battleController;
-	public BattleCard _cardInfo;
+	public BattleCard _battleCard;
 	Vector3 _origLocalPosition;
 	/// <summary>
 	///If the card has been used,this shell is vacant,When reload a new card to this battle card shell "vacant" is false; 
 	/// </summary>
 	public bool _vacant = true;
-	
-
+	public Material _material_role;
+	public GameObject _shell;
+	public GameObject _glowEdge;
 	/// <summary>
 	/// The card toggle .
 	/// </summary>
@@ -36,7 +37,7 @@ public class BattleCardShell : MonoBehaviour {
 	void Update () {
 		_clickTimer += Time.deltaTime;
 		if (_showCardTimer > _showCardTime)
-						_battleController.ShowCardDetail (_cardInfo);
+						_battleController.ShowCardDetail (_battleCard);
 	}
 
 	void OnMouseOver()

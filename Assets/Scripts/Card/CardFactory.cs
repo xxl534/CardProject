@@ -10,12 +10,29 @@ public class CardFactory
 		private Dictionary<int,BaseCard> _baseCardTable;
 		private Dictionary<string,Texture> _cardRoleSpriteTable;
 		private AbilityFactory _abilityFactory;
-		private bool _loadStatic = false;
+		
+		public bool ContainsCard (string cardName)
+		{
+				return _baseCardIdTable.ContainsKey (cardName);
+		}
 
-		public ConcreteCard GeneConcreteCard (int cardId, Rarity rarity=Rarity.Normal, int level=1, int[] abilitiesLevel=null)
+		public bool ContainsCard (int cardId)
+		{
+				return _baseCardTable.ContainsKey (cardId);
+		}
+
+		public ConcreteCard GeneConcreteCard (string cardName, int level=1, int[] abilitiesLevel=null)
+		{
+				int cardId = _baseCardIdTable [cardName];
+				BaseCard baseCard = _baseCardTable [cardId];
+//				Debug.Log ("Card name:" + cardName + ";  Card id:" + cardId + "; BaseCard:" + (baseCard == null));
+				return GeneConcreteCard (baseCard, level, abilitiesLevel);
+		}
+
+		public ConcreteCard GeneConcreteCard (int cardId,int level=1, int[] abilitiesLevel=null)
 		{
 				BaseCard baseCard = _baseCardTable [cardId];
-				return GeneConcreteCard (baseCard, rarity, level, abilitiesLevel);
+				return GeneConcreteCard (baseCard,  level, abilitiesLevel);
 		}
 		/// <summary>
 		/// Generate  ConcreteCard based on BaseCard.
@@ -25,7 +42,7 @@ public class CardFactory
 		/// <param name="rarity">ConcreteCard's rarity.</param>
 		/// <param name="level">ConcreteCard level.</param>
 		/// <param name="abilitiesLevel">level of ConcreteCard's abilities.</param>
-		public ConcreteCard GeneConcreteCard (BaseCard baseCard, Rarity rarity, int level, int[] abilitiesLevel=null)
+		public ConcreteCard GeneConcreteCard (BaseCard baseCard, int level, int[] abilitiesLevel=null)
 		{
 				List<Ability> abilityList = new List<Ability> ();
 				//That's for not to exam whether the array is null every for-loop
@@ -44,7 +61,7 @@ public class CardFactory
 						Ability ability = _abilityFactory.GeneAbility (baseCard._abilitiesId [i], abilityLevel);
 						abilityList.Add (ability);
 				}
-				return new ConcreteCard (baseCard, rarity, level, abilityList);
+				return new ConcreteCard (baseCard,  level, abilityList);
 	
 		}
 
@@ -62,7 +79,8 @@ public class CardFactory
 				_cardRoleSpriteTable = new Dictionary<string, Texture> ();
 				_abilityFactory = AbilityFactory.GetAbilityFactory ();
 				LoadCards ();
-
+				LoadCardStatic ();
+//		Debug.Log (_baseCardIdTable.Count + "    " + _baseCardTable.Count);
 		}
 
 		/// <summary>
@@ -109,23 +127,26 @@ public class CardFactory
 										_baseCardTable.Add (id, baseCard);
 								}
 						}
-						if (dict.ContainsKey ("cardStatic")) {
-								if (_loadStatic == false) {
-										Dictionary<string,object> cardStatics = dict ["cardStatic"] as Dictionary<string,object>;
-										BaseCard.LoadStaticFields (cardStatics);
-										_loadStatic = true;
-								} else {
-										Debug.Log ("BaseCard static fields already loaded");
-										throw new System.Exception ("BaseCard static fields already loaded");
-								}
-						}
 				}
+		}
+
+		void LoadCardStatic ()
+		{
+				TextAsset textAsset = Resources.Load<TextAsset> (ResourcesFolderPath.json_card + "/cardStatic");
+				if (textAsset == null) {
+						Debug.Log ("card static infomation file access error");
+						throw new System.Exception ("card static infomation file access error");
+				}
+				string json = textAsset.text;
+				Dictionary<string,object> dict = MiniJSON.Json.Deserialize (json) as Dictionary<string,object>;
+				Dictionary<string,object> cardStatics = dict ["cardStatic"] as Dictionary<string,object>;
+				BaseCard.LoadStaticFields (cardStatics);
+
 				if (!BaseCard.CheckStaticFields ()) {
 						Debug.Log ("BaseCard static fields incomplete error");
 						throw new System.Exception ("BaseCard static fields incomplete error");
 				}
 		}
-
 		/// <summary>
 		/// Checks the legality of BaseCard's cardSprite and backgroundSprite.
 		/// </summary>
@@ -133,7 +154,6 @@ public class CardFactory
 		void CheckSprite (BaseCard baseCard)
 		{
 				//Check role texture.
-			
 				if (baseCard.cardSprite == null) {
 						baseCard.cardSprite = baseCard.name;
 				}
@@ -148,7 +168,6 @@ public class CardFactory
 						}
 						_cardRoleSpriteTable.Add (roleSpriteName, roleSprite);
 				}
-
 //				//Check background texture.
 //				string bgSpriteName = baseCard.backgroundSprite;
 //				if (!_cardBgSpriteTable.ContainsKey (bgSpriteName)) {

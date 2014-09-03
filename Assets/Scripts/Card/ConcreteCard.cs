@@ -34,7 +34,6 @@ public class ConcreteCard :MonoBehaviour{
 	/// </summary>
 	_level,
 	_experience;
-	private Rarity _cardRarity;
 	protected List<Ability> _abilities;
 #endregion
 
@@ -159,6 +158,10 @@ public class ConcreteCard :MonoBehaviour{
 		get{return _physicalDefense;}
 //		set{_physicalDefense=value;}
 	}
+	public Rarity rarity
+	{
+		get{return _baseCard.rarity;}
+	}
 	/// <summary>
 	/// The increase of experience may affect level value.
 	/// </summary>
@@ -214,19 +217,15 @@ public class ConcreteCard :MonoBehaviour{
 
 	}
 
-	public ConcreteCard(BaseCard baseCard,Rarity rarity,int level,List<Ability> abilities)
+	public ConcreteCard(BaseCard baseCard,int level,List<Ability> abilities)
 	{
 		if (baseCard == null) {
 						throw new System.ArgumentNullException ("baseCard");
 				}
 		_baseCard = baseCard;
 
-		if (rarity > _baseCard.rarity||rarity<0) {
-			Debug.Log("The rarity of concrete card should not be less than 0 nor be larger than base card's rarity.");
-			throw new System.ArgumentException("rarity");
-				}
-		_cardRarity = rarity;
-		_maxLevel = BaseCard._maxLevelTable [(int)_cardRarity];
+
+		_maxLevel = BaseCard._maxLevelTable [(int)rarity];
 	
 
 		if (level > _maxLevel || level < 1) {

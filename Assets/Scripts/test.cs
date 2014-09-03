@@ -9,6 +9,7 @@ public class Test:MonoBehaviour
 	void Start()
 	{
 		CardFactory cf=CardFactory.GetCardFactory();
+
 		//		Int64 i=1;
 //		int l=System.Convert.ToInt32(i);
 //		typeof(C1).GetProperty("si").SetValue(null,l,null);

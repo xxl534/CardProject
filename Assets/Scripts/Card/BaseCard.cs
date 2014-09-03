@@ -10,7 +10,7 @@ using System.Reflection;
 /// Value of concrete card's attributes are result from relative base card and card level. 
 /// The value of instance member with postfix "Base" is attribute's value of concrete card with level 0.
 /// </summary>
-public class BaseCard : MonoBehaviour{
+public class BaseCard {
 	#region Static member
 	private static  float _rate_strength_maxHealth,_rate_strength_physicalDefense,_rate_strength_physicalDamage,_rate_strength_healthResilience,
 	_rate_agility_physicalDefense,_rate_agility_physicalCriticalChance,_rate_agility_evasion,
@@ -496,7 +496,7 @@ public class BaseCard : MonoBehaviour{
 			if(propertyInfo==null)
 			{
 				Debug.Log(string.Format("Illegal field:Card attribute '{0}' does not exist",attribute));
-				throw new System.FieldAccessException(string.Format("Illegal field:Card attribute '{0}' does not exist",attribute));
+				throw new System.Exception(string.Format("Illegal field:Card attribute '{0}' does not exist",attribute));
 			}
 			object valueOb=cardAttr[attribute];
 			if(propertyInfo.PropertyType.IsEnum)
@@ -553,7 +553,7 @@ public class BaseCard : MonoBehaviour{
 		bool bPass=true;
 		foreach(PropertyInfo propertyInfo in typeof(BaseCard).GetProperties(BindingFlags.Static|BindingFlags.Public))
 		{
-			Debug.Log(propertyInfo.Name+":"+propertyInfo.GetValue(null,null));
+//			Debug.Log(propertyInfo.Name+":"+propertyInfo.GetValue(null,null));
 			if(propertyInfo.PropertyType==typeof(float))
 			{
 				if(propertyInfo.GetValue(null,null)==(object)0f){

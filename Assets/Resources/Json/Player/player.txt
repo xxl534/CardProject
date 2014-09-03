@@ -1,0 +1,1 @@
+{"player":{"cardSet":["Shadow Hunter"],"coins":1000}}

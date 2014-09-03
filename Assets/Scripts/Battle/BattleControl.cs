@@ -21,6 +21,7 @@ public class BattleControl : MonoBehaviour
 		/// </summary>
 		BattleCardShell _currentActiveCard;
 		GameController _gameController;
+	public Material[] _shellMaterials;
 
 		void Awake ()
 		{
@@ -82,13 +83,13 @@ public class BattleControl : MonoBehaviour
 						enemyLevels.Add (levelData.level);
 						enemyAbilityLevels.Add (levelData.enemiesAbilityLevel);
 				}
-				foreach (int i in levelData.boss) {
+				foreach (int i in levelData.bossIndices) {
 						enemyLevels [i] += _bossLevelDelta;
 						enemyAbilityLevels [i] += _bossAbilityLevelDelta;
+						
 				}
 				for (int i = 0; i < levelData.enemiesId.Count; i++) {
-						ConcreteCard enemyCard = _cardFactory.GeneConcreteCard (levelData.enemiesId [i],
-			                                                     levelData.enemiesRarity [i], enemyLevels [i]);
+						ConcreteCard enemyCard = _cardFactory.GeneConcreteCard (levelData.enemiesId [i], enemyLevels [i]);
 						foreach (var ability in enemyCard.abilities) {
 								int abilityLevel = enemyAbilityLevels [i];
 								if (abilityLevel > ability.maxLevel) {

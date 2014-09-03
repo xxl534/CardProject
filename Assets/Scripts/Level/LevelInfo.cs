@@ -14,7 +14,7 @@ public class LevelInfo:MonoBehaviour {
 	StarNum _starNum;
 	bool _unlocked;
 
-	int _index;
+	  int _index;
 
 	private LevelData _levelData;
 
@@ -28,6 +28,10 @@ public class LevelInfo:MonoBehaviour {
 		get{return _unlocked;}
 	}
 
+//	void Awake()
+//	{
+//		LoadFromJson ();
+//	}
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Level_editMode"/> class.
 	/// </summary>
@@ -73,9 +77,19 @@ public class LevelInfo:MonoBehaviour {
 		return (int)_starNum;
 	}
 
-	public void LoadFromJson(Dictionary<string ,object> dict)
+	public void LoadFromJson()
 	{
-		_levelData=LevelData.GetLevelData(dict);
+		TextAsset text = Resources.Load <TextAsset>(string.Format("{0}/level_{1:000}",ResourcesFolderPath.json_level ,_index+1));
+		string json = text.text;
+		Dictionary<string ,object> dict = MiniJSON.Json.Deserialize (json)as Dictionary<string,object>;
+		_levelData=LevelData.GetLevelData(dict["level"]as Dictionary<string,object>);
+		Debug.Log ("experience:"+_levelData.experience);
+		Debug.Log ("level:"+_levelData.level);
+		foreach (var item in _levelData.enemiesId)
+						Debug.Log (item);
+		foreach (var item in _levelData.bossIndices) {
+			Debug.Log(item);
+				}
 	}
 
 	public void LoadFromPlayerPrefs()
