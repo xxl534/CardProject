@@ -8,10 +8,11 @@ using System;
 /// A concrete card based on an particular role with specilized level and rarity.
 /// This card are used as battle levels' enemies or player storage which is used for battle. 
 /// </summary>
-public class ConcreteCard :MonoBehaviour{
+public class ConcreteCard {
 
 	#region Instance member
 	protected BaseCard _baseCard;
+	protected Texture _cardSprite;
 	protected int 	_strength,
 	_agility,
 	_magic,
@@ -38,6 +39,10 @@ public class ConcreteCard :MonoBehaviour{
 #endregion
 
 	#region Properties
+	public int id
+	{
+		get{return _baseCard.id;}
+	}
 	public string name
 	{
 		get{return _baseCard.name;}
@@ -210,6 +215,10 @@ public class ConcreteCard :MonoBehaviour{
 	{
 		get{return _abilities;}
 	}
+	public Texture roleTexture
+	{
+		get{return _cardSprite;}
+	}
 #endregion
 
 	public ConcreteCard()
@@ -217,7 +226,7 @@ public class ConcreteCard :MonoBehaviour{
 
 	}
 
-	public ConcreteCard(BaseCard baseCard,int level,List<Ability> abilities)
+	public ConcreteCard(BaseCard baseCard,int level,List<Ability> abilities,Texture cardSprite)
 	{
 		if (baseCard == null) {
 						throw new System.ArgumentNullException ("baseCard");
@@ -240,6 +249,8 @@ public class ConcreteCard :MonoBehaviour{
 		_abilities = abilities;
 
 		_price=baseCard.price;
+
+		_cardSprite=cardSprite;
 	}
 
 

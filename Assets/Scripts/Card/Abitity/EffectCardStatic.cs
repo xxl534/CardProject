@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -62,7 +62,7 @@ public static class EffectCardStatic {
 
 	public static EffectCard EffectCard_GenerateDotOrHot = delegate(AbilityEntity abilityEntity) {
 		BattleCard to=abilityEntity.targetCard,from=abilityEntity.castCard;
-		int id=(from.GetHashCode ().ToString () + from.baseCard.id.ToString ()).GetHashCode ();
+		int id=(from.GetHashCode ().ToString () + from.concreteCard.id.ToString ()).GetHashCode ();
 		bool isDot=abilityEntity.GetValue(AbilityVariable.dot)==1;
 		DotAndHot dotOrHot = new DotAndHot (id,abilityEntity.name,isDot, from,to,abilityEntity.abilityType,
 		                               abilityEntity.GetValue(AbilityVariable.interval),abilityEntity.GetValue(AbilityVariable.duration));

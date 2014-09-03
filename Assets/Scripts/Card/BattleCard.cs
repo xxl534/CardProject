@@ -5,16 +5,31 @@ using System.Collections.Generic;
 ///This kind of card will only exist on battle field .
 ///The modification of attribute on BattleCard will not effect relative ConcreteCard 
 /// </summary>
-public class BattleCard : ConcreteCard {
+public class BattleCard : MonoBehaviour {
 
 	#region Instance member
 	protected ConcreteCard _concreteCard;
 	protected CardEffected _cardEffect;
-	protected int _health;
-	protected int _mana;
 
 	protected Dictionary<int,DotAndHot> _DotAndHotTable;
 	protected Dictionary<int,DebuffAndBuff> _debuffAndBuffTable;
+
+	protected int _health,
+	_mana,	
+	_strength,
+	_agility,
+	_magic,
+	_maxHealth,
+	_maxMana,
+	_physicalDefense,
+	_magicalDefense,
+	_physicalCriticalChance,
+	_magicalCriticalChance,
+	_physicalDamage,
+	_magicalDamage,
+	_healthResilience,
+	_magicResilience,
+	_evasion;
 #endregion
 
 	#region Properties
@@ -149,7 +164,10 @@ public class BattleCard : ConcreteCard {
 		}
 	}
 
-
+	public ConcreteCard concreteCard
+	{
+		get{return _concreteCard;}
+	}
 #endregion
 
 	public BattleCard(ConcreteCard concreteCard)

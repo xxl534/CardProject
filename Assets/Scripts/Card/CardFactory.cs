@@ -61,7 +61,7 @@ public class CardFactory
 						Ability ability = _abilityFactory.GeneAbility (baseCard._abilitiesId [i], abilityLevel);
 						abilityList.Add (ability);
 				}
-				return new ConcreteCard (baseCard,  level, abilityList);
+				return new ConcreteCard (baseCard,  level, abilityList,_cardRoleSpriteTable[baseCard.cardSprite]);
 	
 		}
 
@@ -78,6 +78,7 @@ public class CardFactory
 				_baseCardTable = new Dictionary<int, BaseCard> ();
 				_cardRoleSpriteTable = new Dictionary<string, Texture> ();
 				_abilityFactory = AbilityFactory.GetAbilityFactory ();
+		LoadCardTexture();
 				LoadCards ();
 				LoadCardStatic ();
 //		Debug.Log (_baseCardIdTable.Count + "    " + _baseCardTable.Count);
@@ -158,28 +159,19 @@ public class CardFactory
 						baseCard.cardSprite = baseCard.name;
 				}
 				string roleSpriteName = baseCard.cardSprite;
-				
 				if (!_cardRoleSpriteTable.ContainsKey (roleSpriteName)) {
-						string roleSpritePath = ResourcesFolderPath.textures_role + "/" + roleSpriteName;
-						Texture roleSprite = Resources.Load<Texture> (roleSpritePath);
-						if (roleSprite == null) {
 								Debug.Log (string.Format ("Illegal cardSprite name:{0} ", roleSpriteName));
 								throw new System.ArgumentException (string.Format ("Illegal cardSprite name:{0} ", roleSpriteName));
-						}
-						_cardRoleSpriteTable.Add (roleSpriteName, roleSprite);
 				}
-//				//Check background texture.
-//				string bgSpriteName = baseCard.backgroundSprite;
-//				if (!_cardBgSpriteTable.ContainsKey (bgSpriteName)) {
-//						string bgSpritePath = ResourcesFolderPath.textures_background + bgSpriteName;
-//						Texture bgSprite = Resources.Load<Texture> (bgSpritePath);
-//						if (bgSprite == null) {
-//								Debug.Log (string.Format ("Illegal background texture name:{0} ", bgSpriteName));
-//								throw new System.ArgumentException (string.Format ("Illegal background texture name:{0} ", bgSpriteName));
-//						}
-//						_cardBgSpriteTable.Add (bgSpriteName, bgSprite);
-//				}
 		}
+
+	void LoadCardTexture()
+	{
+		Texture[] textures=Resources.LoadAll<Texture>(ResourcesFolderPath.textures_role);
+		foreach (var item in textures) {
+			_cardRoleSpriteTable.Add(item.name,item);
+				}
+	}
 
 
 }

@@ -11,9 +11,10 @@ public class BattleCardShell : MonoBehaviour {
 	///If the card has been used,this shell is vacant,When reload a new card to this battle card shell "vacant" is false; 
 	/// </summary>
 	public bool _vacant = true;
-	public Material _material_role;
+	public GameObject _role;
 	public GameObject _shell;
 	public GameObject _glowEdge;
+	public UILabel _label_hp,_label_mp;
 	/// <summary>
 	/// The card toggle .
 	/// </summary>
@@ -94,6 +95,16 @@ public 	void MouseClick()
 
 	public void LoadCard(ConcreteCard concreteCard)
 	{
-
+		//chu shi hua battle card
+		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!************************
+		if( _origLocalPosition!=null)
+			transform.localPosition=_origLocalPosition;
+		_vacant = false;
+		_shell.renderer.material=_battleController._shellMaterials[(int)concreteCard.rarity];
+		_role.renderer.material.mainTexture=concreteCard.roleTexture;
+		_label_hp.text=_battleCard.health.ToString();
+		_label_mp.text=_battleCard.mana.ToString();
+		transform.localRotation=Quaternion.Euler(new Vector3(0,180f,0));
+		gameObject.SetActive(true);
 	}
 }

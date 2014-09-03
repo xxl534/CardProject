@@ -57,19 +57,17 @@ public class BattleControl : MonoBehaviour
 				_playerCard = _player.playCardSet;
 				for (int i = 0; i < _enemyCardShellSet.Length; i++) {
 						if (i < _enemyCard.Count) {
-								_enemyCardShellSet [i].gameObject.SetActive (true);
+//								_enemyCardShellSet [i].gameObject.SetActive (true);
 								_enemyCardShellSet [i].LoadCard (_enemyCard [i]);
-						} else {
-								_enemyCardShellSet [i].gameObject.SetActive (false);
-						}
+						} 
+//			else {
+//								_enemyCardShellSet [i].gameObject.SetActive (false);
+//						}
 				}
 				for (int i = 0; i < _playerCardShellSet.Length; i++) {
-						if (i < _playerCard.Count) {
-								_playerCardShellSet [i].gameObject.SetActive (true);
+						if (i < _playerCard.Count) {					
 								_playerCardShellSet [i].LoadCard (_playerCard [i]);
-						} else {
-								_playerCardShellSet [i].gameObject.SetActive (false);
-						}
+			}
 				}
 		}
 
