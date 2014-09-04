@@ -47,7 +47,7 @@ public class SceneFade : MonoBehaviour {
 
 	public bool IsOpeque()
 	{
-		return fader.alpha==1f;
+		return fader.alpha==1;
 	}
 
 }

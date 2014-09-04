@@ -166,7 +166,6 @@ public class LevelGateControl : MonoBehaviour,IComparable<LevelGateControl>
 
 				if (_levelInfo.unlocked) {
 						_gameController.LevelButtonClick (this);
-						Debug.Log ("ue");
 				}
 		}
 

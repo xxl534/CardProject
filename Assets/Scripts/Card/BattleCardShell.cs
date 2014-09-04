@@ -10,7 +10,7 @@ public class BattleCardShell : MonoBehaviour {
 	/// <summary>
 	///If the card has been used,this shell is vacant,When reload a new card to this battle card shell "vacant" is false; 
 	/// </summary>
-	public bool _vacant = true;
+	private bool _vacant;
 	public GameObject _role;
 	public GameObject _shell;
 	public GameObject _glowEdge;
@@ -25,7 +25,11 @@ public class BattleCardShell : MonoBehaviour {
 	float _clickTimer=0f;
 	float _clickInterval=0.5f;
 
-
+	public bool vacant
+	{
+		get{return _vacant;}
+//		set{_vacant=value;}
+	}
 
 	// Use this for initialization
 	void Awake()
@@ -95,16 +99,24 @@ public 	void MouseClick()
 
 	public void LoadCard(ConcreteCard concreteCard)
 	{
-		//chu shi hua battle card
-		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!************************
+		_battleCard.LoadConcreteCard (concreteCard);
+
 		if( _origLocalPosition!=null)
 			transform.localPosition=_origLocalPosition;
 		_vacant = false;
+		_toggle = false;
 		_shell.renderer.material=_battleController._shellMaterials[(int)concreteCard.rarity];
 		_role.renderer.material.mainTexture=concreteCard.roleTexture;
 		_label_hp.text=_battleCard.health.ToString();
 		_label_mp.text=_battleCard.mana.ToString();
 		transform.localRotation=Quaternion.Euler(new Vector3(0,180f,0));
 		gameObject.SetActive(true);
+	}
+
+	public void CardRoleDead()
+	{
+		_vacant = true;
+		gameObject.SetActive (false);
+		_battleController.CheckVacantShell ();
 	}
 }

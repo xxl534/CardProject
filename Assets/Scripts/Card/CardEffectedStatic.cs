@@ -6,7 +6,7 @@ using System.Collections;
 public delegate void  CardEffected(AbilityEntity abilityEntity);
 public static class CardEffectedStatic {
 
-	public static CardEffected cardEffected_normal = delegate(AbilityEntity abilityEntity) {
+	public static CardEffected CardEffected_Normal = delegate(AbilityEntity abilityEntity) {
 		abilityEntity.effectCard(abilityEntity);
 	};
 }

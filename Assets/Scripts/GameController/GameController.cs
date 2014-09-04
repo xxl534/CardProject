@@ -36,12 +36,11 @@ public class GameController : MonoBehaviour
 				_starCounter = GameObject.FindGameObjectWithTag (Tags.starCounter).GetComponentInChildren<StarCounterControl> ();
 				_sceneFade = GameObject.FindGameObjectWithTag (Tags.sceneFader).GetComponent<SceneFade> ();
 				_battleController = GameObject.FindGameObjectWithTag (Tags.battle).GetComponent<BattleControl> ();
-				_battleController.gameObject.SetActive (false);
+				//_battleController.gameObject.SetActive (false);
 
 				_maps = new List<MapLayerControl> ();
 				_levels = new List<LevelGateControl> ();
 				_pathPoints = new List<PathPointControl> ();
-		
 		}
 	
 		void Start ()
@@ -174,17 +173,17 @@ public class GameController : MonoBehaviour
 				}
 				if (_pathPoints [_pathPoints.Count - 1]._levelPostfix < _levels.Count)
 						_pathPoints [_pathPoints.Count - 1]._nextLevelGate = _levels [_pathPoints [_pathPoints.Count - 1]._levelPostfix];
+
+				_battleController.gameObject.SetActive (false);
 		}
 
 		public void LevelButtonClick (LevelGateControl level)
 		{
 				if (level != _selectLevel) {
 						if (_selectLevel != null && _selectLevel.GetMapLayer () == _maps [_selectMapIndex]) {
-								Debug.Log (1);
 								_selectLevel = level;
 								_SwordForSelection.Disappear (ShowSword);
 						} else {
-								Debug.Log (2);
 								_selectLevel = level;
 								ShowSword ();
 						}
@@ -196,7 +195,7 @@ public class GameController : MonoBehaviour
 		void ShowSword ()
 		{
 			
-				Debug.Log ("showSword");
+//				Debug.Log ("showSword");
 				_SwordForSelection.transform.parent = _selectLevel.GetMainButton ().transform;
 				_SwordForSelection.transform.localPosition = Vector3.zero;
 				_SwordForSelection.transform.localScale = Vector3.one;

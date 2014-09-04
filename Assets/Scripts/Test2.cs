@@ -19,7 +19,7 @@ public class Test2 : Test {
 	void Start()
 	{
 		GameObject flystar= Resources.Load<GameObject>("Prefabs/flyStar");
-		Debug.Log (flystar == null);
+//		Debug.Log (flystar == null);
 	}
 	// Update is called once per frame
 	void Update () {

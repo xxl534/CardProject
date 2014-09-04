@@ -12,23 +12,25 @@ public class BattleControl : MonoBehaviour
 		private CardFactory _cardFactory;
 		public BattleCardShell[] _playerCardShellSet;
 		public BattleCardShell[] _enemyCardShellSet;
+		public Material[] _shellMaterials;
+		private PlayerControl _player;
+		private GameController _gameController;
 		private List<ConcreteCard> _enemyCard;
 		private List<ConcreteCard> _playerCard;
-		private PlayerControl _player;
-		private int _enemyWave = 0, enemyPerWave = 5;
+		private int _enemyIndex;
 		/// <summary>
 		///Launcher of event(attack boss,merge another card or provide buff....)  
 		/// </summary>
-		BattleCardShell _currentActiveCard;
-		GameController _gameController;
-	public Material[] _shellMaterials;
+		private BattleCardShell _currentActiveCard;
 
 		void Awake ()
 		{
 				_player = GameObject.FindGameObjectWithTag (Tags.player).GetComponent<PlayerControl> ();
 				_gameController = GameObject.FindGameObjectWithTag (Tags.gameController).GetComponent<GameController> ();
 				_enemyCard = new List<ConcreteCard> ();
+				_playerCard = new List<ConcreteCard> ();
 				_cardFactory = CardFactory.GetCardFactory ();
+				Debug.Log ("battleControlAwake");
 		}
 		// Use this for initialization
 		void Start ()
@@ -42,6 +44,19 @@ public class BattleControl : MonoBehaviour
 	
 		}
 
+		void Clear ()
+		{
+				_enemyCard.Clear ();
+				_playerCard.Clear ();
+				_enemyIndex = 0;
+				_currentActiveCard = null;
+				foreach (var item in _enemyCardShellSet) {
+						item.gameObject.SetActive (false);
+				}
+				foreach (var item in _playerCardShellSet) {
+						item.gameObject.SetActive (false);
+				}
+		}
 		/// <summary>
 		/// Loads the battle layer elements by level information.
 		/// </summary>
@@ -53,27 +68,20 @@ public class BattleControl : MonoBehaviour
 				//				3.The last wave of enemie must has boss shown.
 				//             4.Every level has at least one enemy will have odds to drop a whole card or a card fragment out.
 				//				5.Every player card will gain some experience after win the battle.
-				LoadEnemyCard (levelInfo);
-				_playerCard = _player.playCardSet;
-				for (int i = 0; i < _enemyCardShellSet.Length; i++) {
-						if (i < _enemyCard.Count) {
-//								_enemyCardShellSet [i].gameObject.SetActive (true);
-								_enemyCardShellSet [i].LoadCard (_enemyCard [i]);
-						} 
-//			else {
-//								_enemyCardShellSet [i].gameObject.SetActive (false);
-//						}
-				}
-				for (int i = 0; i < _playerCardShellSet.Length; i++) {
-						if (i < _playerCard.Count) {					
-								_playerCardShellSet [i].LoadCard (_playerCard [i]);
-			}
-				}
-		}
 
-		void LoadEnemyCard (LevelInfo levelInfo)
+				Clear ();
+				LoadEnemyConcreteCard (levelInfo);
+				LoadPlayerConcreteCard ();
+				LoadEnemyWave ();
+				LoadPlayerBattleCard ();
+		}
+		
+		/// <summary>
+		/// Loads the enemy ConcreteCard via level imformation.
+		/// </summary>
+		/// <param name="levelInfo">Level information.</param>
+		void LoadEnemyConcreteCard (LevelInfo levelInfo)
 		{
-				_enemyCard.Clear ();
 				LevelData levelData = levelInfo.leveldata;
 				List<int> enemyLevels = new List<int> ();
 				List<int> enemyAbilityLevels = new List<int> ();
@@ -99,10 +107,87 @@ public class BattleControl : MonoBehaviour
 				}
 		}
 
-	void RoundStart()
-	{}
-	void RoundEnd()
-	{}
+		void LoadPlayerConcreteCard ()
+		{
+				for (int i = 0; i < _player.playCardSet.Count; i++) {
+						_playerCard.Add (_player.playCardSet [i]);
+				}
+		}
+
+		/// <summary>
+		/// Loads a wave of enemy battleCard.
+		/// </summary>
+		void LoadEnemyWave ()
+		{
+				bool emptyWave = true;
+				for (int i = 0; i < _enemyCardShellSet.Length; i++) {
+						if (_enemyIndex + i < _enemyCard.Count) {
+								if (_enemyCard [i + _enemyIndex] != null) {
+										emptyWave = false;
+										_enemyCardShellSet [i].LoadCard (_enemyCard [i + _enemyIndex]);
+								}
+								_enemyIndex++;
+						} else {
+								break;
+						}
+				}
+
+				//In case of a wave of empty enemy
+				if (emptyWave) {
+						Debug.Log ("Load a wave of empty enemy");
+						LoadEnemyWave ();
+				}
+		}
+
+		/// <summary>
+		/// Loads the player's concrete card into card shells.
+		/// </summary>
+		void LoadPlayerBattleCard ()
+		{
+				for (int i = 0; i < _playerCardShellSet.Length; i++) {
+						if (i < _playerCard.Count) {
+								if (_playerCard [i] != null) {
+										_playerCardShellSet [i].LoadCard (_playerCard [i]);
+								}
+						}
+				}
+		}
+
+		public void CheckVacantShell ()
+		{
+				bool enemyWaveDead = true, playerRolesDead = true;
+				for (int i = 0; i < _enemyCardShellSet.Length; i++) {
+						if (_enemyCardShellSet [i].vacant == false) {
+								enemyWaveDead = false;
+								break;
+						}
+				}
+				for (int i = 0; i < _playerCardShellSet.Length; i++) {
+						if (_playerCardShellSet [i].vacant == false) {
+								playerRolesDead = false;
+								break;
+						}
+				}
+				if (enemyWaveDead) {
+						if (_enemyIndex < _enemyCard.Count) {
+								LoadEnemyWave ();
+						} else {
+								BattleComplete ();
+								return;
+						}
+				}
+				if (playerRolesDead) {
+						BattleAbort ();
+				}
+		}
+
+		void RoundStart ()
+		{
+		}
+
+		void RoundEnd ()
+		{
+		}
 		/// <summary>
 		/// Freeze battle layer so that no operation is available.
 		/// </summary>

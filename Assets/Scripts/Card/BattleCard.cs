@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 /// <summary>
 ///This kind of card will only exist on battle field .
 ///The modification of attribute on BattleCard will not effect relative ConcreteCard 
@@ -8,6 +9,8 @@ using System.Collections.Generic;
 public class BattleCard : MonoBehaviour {
 
 	#region Instance member
+
+	public  BattleCardShell _shell;
 	protected ConcreteCard _concreteCard;
 	protected CardEffected _cardEffect;
 
@@ -43,7 +46,7 @@ public class BattleCard : MonoBehaviour {
 			_health=value;
 			if(_health<=0)
 			{
-				CardDead();
+				CardRoleDead();
 			}
 		}
 	}
@@ -170,15 +173,49 @@ public class BattleCard : MonoBehaviour {
 	}
 #endregion
 
-	public BattleCard(ConcreteCard concreteCard)
+	public void LoadConcreteCard(ConcreteCard concreteCard)
 	{
-
+		_concreteCard = concreteCard;
+		_strength = concreteCard.strength;
+		_agility = concreteCard.agility;
+		_magic = concreteCard.magic;
+		_maxHealth = concreteCard.maxHealth;
+		_maxMana = concreteCard.maxMana;
+		_health = _maxHealth;
+		_mana = 0;
+		_physicalDefense = concreteCard.physicalDefense;
+		_magicalDefense = concreteCard.magicalDefense;
+		_physicalCriticalChance = concreteCard.physicalCriticalChance;
+		_magicalCriticalChance = concreteCard.magicalCriticalChance;
+		_physicalDamage = concreteCard.physicalDamage;
+		_magicalDamage = concreteCard.magicalDamage;
+		_healthResilience = concreteCard.healthResilience;
+		_magicResilience = concreteCard.magicResilience;
+		_evasion = concreteCard.evasion;
 	}
 
-
-	void CardDead()
+	void Awake()
 	{
-
+		_DotAndHotTable = new Dictionary<int, DotAndHot> ();
+		_debuffAndBuffTable = new Dictionary<int, DebuffAndBuff> ();
+		_cardEffect = CardEffectedStatic.CardEffected_Normal;
+	}
+	public void Clear()
+	{
+		FieldInfo[] fields = typeof(BattleCard).GetFields (BindingFlags.NonPublic | BindingFlags.Instance);
+		foreach (var item in fields) {
+			if(item.FieldType==typeof(int))
+			{
+				item.SetValue(this,0);
+			}
+		}
+		_debuffAndBuffTable.Clear ();
+		_DotAndHotTable.Clear ();
+		}
+	void CardRoleDead()
+	{
+		Clear ();
+		_shell.CardRoleDead ();
 	}
 
 	public void AddDotOrHot(DotAndHot dotOrHot)
