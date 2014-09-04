@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Holoville.HOTween;
+
 
 public class BattleControl : MonoBehaviour
 {
+	static float _shellRotateTime=1;
+
 		/// <summary>
 		/// The level difference between boss and normal enemy.
 		/// </summary>
@@ -179,6 +183,22 @@ public class BattleControl : MonoBehaviour
 				if (playerRolesDead) {
 						BattleAbort ();
 				}
+		}
+		
+		public 	void RotateShells ()
+		{
+			foreach (var item in _playerCardShellSet) {
+				if(item.gameObject.activeSelf==true&&item.transform.localRotation!=Quaternion.identity)
+			{
+				HOTween.To (item.transform,_shellRotateTime,new TweenParms().Prop("localRotation",Quaternion.identity).Ease(EaseType.Linear));
+			}
+				}
+		foreach (var item in _enemyCardShellSet) {
+			if(item.gameObject.activeSelf==true&&item.transform.localRotation!=Quaternion.identity)
+			{
+				HOTween.To (item.transform,_shellRotateTime,new TweenParms().Prop("localRotation",Quaternion.identity).Ease(EaseType.Linear));
+			}
+		}
 		}
 
 		void RoundStart ()

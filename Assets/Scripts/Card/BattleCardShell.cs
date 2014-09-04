@@ -3,6 +3,7 @@ using System.Collections;
 using Holoville.HOTween;
 
 public class BattleCardShell : MonoBehaviour {
+	static float _toggleDistance=0.3f;
 	public int _slotIndex;
 	public BattleControl _battleController;
 	public BattleCard _battleCard;
@@ -45,18 +46,29 @@ public class BattleCardShell : MonoBehaviour {
 						_battleController.ShowCardDetail (_battleCard);
 	}
 
-	void OnMouseOver()
+//	void OnMouseOver()
+//	{
+//		Debug.Log("on");
+//			_showCardTimer+=Time.deltaTime;
+//	}
+	void OnHover()
 	{
-			_showCardTimer+=Time.deltaTime;
+		Debug.Log("hover");
 	}
-
-	void OnMouseExit()
+	void OnClick()
 	{
-	_showCardTimer=0;
-		_battleController.StopShowCardDetail();
+		Debug.Log("click");
+		MouseClick();
 	}
+//	void OnMouseExit()
+//	{
+//		Debug.Log("mouseOut");
+//	_showCardTimer=0;
+//		_battleController.StopShowCardDetail();
+//	}
 
-public 	void MouseClick()
+
+ 	void MouseClick()
 	{
 			if(_clickTimer>_clickInterval){
 			_battleController.CardClick(this);
@@ -69,10 +81,15 @@ public 	void MouseClick()
 	{
 		_toggle = !_toggle;
 		if (_toggle) {
-			HOTween.To (transform,0.5f,new TweenParms().Prop("localPosition",_origLocalPosition+new Vector3(0,70f,0)).Ease(EaseType.EaseInOutQuad));
+			HOTween.To (transform,0.5f,new TweenParms().Prop("localPosition",_origLocalPosition+new Vector3(0,_toggleDistance,0)).Ease(EaseType.EaseInOutQuad).OnComplete(delegate(){
+				_glowEdge.SetActive(true);
+			}));
 
 				} else {
-			HOTween.To (transform,0.5f,new TweenParms().Prop("localPosition",_origLocalPosition).Ease(EaseType.EaseInOutQuad));
+			HOTween.To (transform,0.5f,new TweenParms().Prop("localPosition",_origLocalPosition).Ease(EaseType.EaseInOutQuad).OnComplete(delegate(){
+				_glowEdge.SetActive(false);
+		}
+				));
 				}
 	}
 

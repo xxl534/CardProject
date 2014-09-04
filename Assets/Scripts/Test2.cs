@@ -16,13 +16,13 @@ public class Test2 : Test {
 //		HOTween.showPathGizmos = true;
 //	}
 
-	void Start()
+	void OnMouseOver()
 	{
-		GameObject flystar= Resources.Load<GameObject>("Prefabs/flyStar");
-//		Debug.Log (flystar == null);
+		Debug.Log("On");
 	}
-	// Update is called once per frame
-	void Update () {
-	
+
+	void OnClick()
+	{
+		Debug.Log("click");
 	}
 }

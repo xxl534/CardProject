@@ -211,6 +211,11 @@ public class GameController : MonoBehaviour
 						_maps [_selectMapIndex].gameObject.SetActive (false);
 						_battleController.gameObject.SetActive (true);
 						_sceneFade.ExitFading ();
+			_battleController.gameObject.AddComponent<RunOnCondition> ().RunWhenBoolChange (delegate{
+				return _sceneFade.gameObject.activeSelf;},
+			                                                                              false, delegate {
+								_battleController.RotateShells ();
+						});
 				});
 		}
 

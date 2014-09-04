@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-public class Ability : MonoBehaviour {
+public class Ability {
 	#region Instance members
 	private AbilityBase _baseAbility;
 	private int _mana;
