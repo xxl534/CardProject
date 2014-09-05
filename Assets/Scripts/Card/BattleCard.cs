@@ -16,7 +16,10 @@ public class BattleCard : MonoBehaviour {
 
 	protected Dictionary<int,DotAndHot> _DotAndHotTable;
 	protected Dictionary<int,DebuffAndBuff> _debuffAndBuffTable;
-
+	/// <summary>
+	/// If a card doesn't have enough mana to cast an ability,it's 'ableToCast'= false;
+	/// </summary>
+	protected bool _ableToCast;
 	protected int _health,
 	_mana,	
 	_strength,
@@ -36,6 +39,11 @@ public class BattleCard : MonoBehaviour {
 #endregion
 
 	#region Properties
+	public bool ableToCast
+	{
+		get{return _ableToCast;}
+	}
+
 	/// <summary>
 	/// If health less equal than zero ,this battle card will be dead and be moved from battle field.
 	/// </summary>
@@ -53,7 +61,15 @@ public class BattleCard : MonoBehaviour {
 	public int mana
 	{
 		get{return _mana;}
-		set{_mana=value;}
+		set{_mana=value;
+			foreach (var item in _concreteCard.abilities) {
+				if(_mana>=item.mana)
+				{
+					_ableToCast=true;
+					return;
+				}
+			}
+		}
 	}
 	public int maxHealth
 	{
@@ -176,6 +192,7 @@ public class BattleCard : MonoBehaviour {
 	public void LoadConcreteCard(ConcreteCard concreteCard)
 	{
 		_concreteCard = concreteCard;
+		_ableToCast = false;
 		_strength = concreteCard.strength;
 		_agility = concreteCard.agility;
 		_magic = concreteCard.magic;

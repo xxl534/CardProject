@@ -35,6 +35,10 @@ public class ConcreteCard {
 	/// </summary>
 	_level,
 	_experience;
+
+	/// <summary>
+	/// Active abilities
+	/// </summary>
 	protected List<Ability> _abilities;
 #endregion
 

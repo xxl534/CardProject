@@ -6,12 +6,18 @@ public class BattleCardShell : MonoBehaviour {
 	static float _toggleDistance=0.3f;
 	public int _slotIndex;
 	public BattleControl _battleController;
-	public BattleCard _battleCard;
+	public ShellType  _shellType;
+	private BattleCard _battleCard;
 	Vector3 _origLocalPosition;
 	/// <summary>
 	///If the card has been used,this shell is vacant,When reload a new card to this battle card shell "vacant" is false; 
 	/// </summary>
 	private bool _vacant;
+	/// <summary>
+	/// Every card has a chance to cast an ability when a new round started.
+	/// If a card has casted an ability,it's 'hasCast' =true.
+	/// </summary>
+	private bool _hasCast;
 	public GameObject _role;
 	public GameObject _shell;
 	public GameObject _glowEdge;
@@ -31,12 +37,20 @@ public class BattleCardShell : MonoBehaviour {
 		get{return _vacant;}
 //		set{_vacant=value;}
 	}
-
+	public bool hasCast
+	{
+		get{return _hasCast;}
+	}
+	public BattleCard battleCard
+	{
+		get{return _battleCard;}
+	}
 	// Use this for initialization
 	void Awake()
 	{
 		_battleController = GetComponentInParent<BattleControl> ();
 		_origLocalPosition=transform.localPosition;
+		_battleCard = GetComponent<BattleCard> ();
 	}
 	
 	// Update is called once per frame
@@ -136,4 +150,13 @@ public class BattleCardShell : MonoBehaviour {
 		gameObject.SetActive (false);
 		_battleController.CheckVacantShell ();
 	}
+
+	public void RoundStart()
+	{}
+
+	public void RoundEnd()
+	{}
+
+	public void HighLight()
+	{}
 }

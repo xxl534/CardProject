@@ -3,14 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using Holoville.HOTween;
 
-
 public class BattleControl : MonoBehaviour
 {
-	static float _shellRotateTime=1;
+		static float _shellRotateTime = 1;
 
 		/// <summary>
 		/// The level difference between boss and normal enemy.
 		/// </summary>
+		///
+	private CardAIScript _enemyAI;
 		private int _bossLevelDelta = 2;
 		private int _bossAbilityLevelDelta = 1;
 		private CardFactory _cardFactory;
@@ -34,6 +35,7 @@ public class BattleControl : MonoBehaviour
 				_enemyCard = new List<ConcreteCard> ();
 				_playerCard = new List<ConcreteCard> ();
 				_cardFactory = CardFactory.GetCardFactory ();
+		_enemyAI = GetComponent<CardAIScript> ();
 				Debug.Log ("battleControlAwake");
 		}
 		// Use this for initialization
@@ -187,25 +189,55 @@ public class BattleControl : MonoBehaviour
 		
 		public 	void RotateShells ()
 		{
-			foreach (var item in _playerCardShellSet) {
-				if(item.gameObject.activeSelf==true&&item.transform.localRotation!=Quaternion.identity)
-			{
-				HOTween.To (item.transform,_shellRotateTime,new TweenParms().Prop("localRotation",Quaternion.identity).Ease(EaseType.Linear));
-			}
+				foreach (var item in _playerCardShellSet) {
+						if (item.gameObject.activeSelf == true && item.transform.localRotation != Quaternion.identity) {
+								HOTween.To (item.transform, _shellRotateTime, new TweenParms ().Prop ("localRotation", Quaternion.identity).Ease (EaseType.Linear));
+						}
 				}
-		foreach (var item in _enemyCardShellSet) {
-			if(item.gameObject.activeSelf==true&&item.transform.localRotation!=Quaternion.identity)
-			{
-				HOTween.To (item.transform,_shellRotateTime,new TweenParms().Prop("localRotation",Quaternion.identity).Ease(EaseType.Linear));
-			}
-		}
+				foreach (var item in _enemyCardShellSet) {
+						if (item.gameObject.activeSelf == true && item.transform.localRotation != Quaternion.identity) {
+								HOTween.To (item.transform, _shellRotateTime, new TweenParms ().Prop ("localRotation", Quaternion.identity).Ease (EaseType.Linear));
+						}
+				}
 		}
 
 		void RoundStart ()
 		{
+				foreach (var shell in _playerCardShellSet) {
+						if (shell.vacant == false) {
+								shell.RoundStart ();
+						}
+				}
+				foreach (var shell in _enemyCardShellSet) {
+			if (shell.vacant == false) {
+				shell.RoundStart ();
+			}
+				}
+		CheckPlayerCardActivity ();
+		}
+		
+		void CheckPlayerCardActivity ()
+		{
+				bool playerRoundOver = true;
+				foreach (var shell in _playerCardShellSet) {
+						if (shell.vacant == false) {
+								if (shell.hasCast == false && shell.battleCard.ableToCast) {
+										shell.HighLight ();
+					playerRoundOver=false;
+								}
+						}
+				}
+				if (playerRoundOver) {
+			ExecuteEnemyCards();
+				}
 		}
 
-		void RoundEnd ()
+	void ExecuteEnemyCards()
+	{
+
+		}
+
+	public	void RoundEnd ()
 		{
 		}
 		/// <summary>
