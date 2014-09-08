@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Reflection;
-using System;
 /// <summary>
 /// A concrete card based on an particular role with specilized level and rarity.
 /// This card are used as battle levels' enemies or player storage which is used for battle. 

@@ -8,4 +8,5 @@ public static class ResourcesFolderPath {
 	public static string json_level="Json/Level";
 	public static string textures_role="Textures/Card";
 	public static string textures_background="Textures/Background";
+	public static string textures_ability_icon="Textures/Ability/Icon";
 }

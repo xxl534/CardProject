@@ -13,7 +13,7 @@ public static class AbilityVariable  {
 	public static string dot="dot";
 	public static string debuff="debuff";
 	public static string mana="mana";
-	public static string coldDown="coldDown";
+	public static string cooldown="cooldown";
 	static AbilityVariable()
 	{
 		variableStringSet=new HashSet<string>();

@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using Holoville.HOTween;
 using Holoville.HOTween.Plugins;
 public class Test2 : Test {
-
+	public UILabel label;
 
 	// Use this for initialization
 //	void Start () {
@@ -15,14 +15,18 @@ public class Test2 : Test {
 //		HOTween.To (transform, 5, new TweenParms ().Prop ("position", new PlugVector3Path (path,EaseType.EaseOutCubic,PathType.Curved)).Loops(-1));
 //		HOTween.showPathGizmos = true;
 //	}
-
-	void OnMouseOver()
+	void Start()
 	{
-		Debug.Log("On");
+//		HOTween .To (label)
+	}
+
+	void Update()
+	{
+//		renderer.material.SetFloat("coldDown",0.9f);
 	}
 
 	void OnClick()
 	{
-		Debug.Log("click");
+//		Debug.Log("Bgclick");
 	}
 }

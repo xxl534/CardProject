@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Holoville.HOTween;
@@ -7,17 +7,20 @@ public class BattleControl : MonoBehaviour
 {
 		static float _shellRotateTime = 1;
 
+	#region Fields
 		/// <summary>
 		/// The level difference between boss and normal enemy.
 		/// </summary>
 		///
-	private CardAIScript _enemyAI;
+		private CardAIScript _enemyAI;
+		public UICamera _uiCamera;
 		private int _bossLevelDelta = 2;
 		private int _bossAbilityLevelDelta = 1;
 		private CardFactory _cardFactory;
 		public BattleCardShell[] _playerCardShellSet;
 		public BattleCardShell[] _enemyCardShellSet;
 		public Material[] _shellMaterials;
+		public ShieldPanel _shieldPanel;
 		private PlayerControl _player;
 		private GameController _gameController;
 		private List<ConcreteCard> _enemyCard;
@@ -27,29 +30,33 @@ public class BattleControl : MonoBehaviour
 		///Launcher of event(attack boss,merge another card or provide buff....)  
 		/// </summary>
 		private BattleCardShell _currentActiveCard;
+		private Ability _currentActiveAbility;
+		private DynamicTextAdmin _dynamicTextAdmin;
+	#endregion
+
+	#region Properties
+		public ShieldPanel shieldPanel {
+				get{ return _shieldPanel;}
+		}
+
+		public DynamicTextAdmin dynamicTextAdmin {
+				get{ return _dynamicTextAdmin;}
+		}
+
+	#endregion
 
 		void Awake ()
 		{
 				_player = GameObject.FindGameObjectWithTag (Tags.player).GetComponent<PlayerControl> ();
 				_gameController = GameObject.FindGameObjectWithTag (Tags.gameController).GetComponent<GameController> ();
+				_dynamicTextAdmin = GetComponentInChildren<DynamicTextAdmin> ();
 				_enemyCard = new List<ConcreteCard> ();
 				_playerCard = new List<ConcreteCard> ();
 				_cardFactory = CardFactory.GetCardFactory ();
-		_enemyAI = GetComponent<CardAIScript> ();
-				Debug.Log ("battleControlAwake");
-		}
-		// Use this for initialization
-		void Start ()
-		{
-	
-		}
-	
-		// Update is called once per frame
-		void Update ()
-		{
-	
-		}
+				_enemyAI = GetComponent<CardAIScript> ();
 
+		}
+		
 		void Clear ()
 		{
 				_enemyCard.Clear ();
@@ -63,6 +70,7 @@ public class BattleControl : MonoBehaviour
 						item.gameObject.SetActive (false);
 				}
 		}
+
 		/// <summary>
 		/// Loads the battle layer elements by level information.
 		/// </summary>
@@ -191,12 +199,20 @@ public class BattleControl : MonoBehaviour
 		{
 				foreach (var item in _playerCardShellSet) {
 						if (item.gameObject.activeSelf == true && item.transform.localRotation != Quaternion.identity) {
-								HOTween.To (item.transform, _shellRotateTime, new TweenParms ().Prop ("localRotation", Quaternion.identity).Ease (EaseType.Linear));
+								HOTween.To (item.transform, _shellRotateTime, new TweenParms ().Prop ("localRotation", Quaternion.identity).Ease (EaseType.Linear).OnStart (delegate() {
+										_shieldPanel.Activate ();
+								}).OnComplete (delegate() {
+										_shieldPanel.Deactivate ();
+								}));
 						}
 				}
 				foreach (var item in _enemyCardShellSet) {
 						if (item.gameObject.activeSelf == true && item.transform.localRotation != Quaternion.identity) {
-								HOTween.To (item.transform, _shellRotateTime, new TweenParms ().Prop ("localRotation", Quaternion.identity).Ease (EaseType.Linear));
+								HOTween.To (item.transform, _shellRotateTime, new TweenParms ().Prop ("localRotation", Quaternion.identity).Ease (EaseType.Linear).OnStart (delegate() {
+										_shieldPanel.Activate ();
+								}).OnComplete (delegate() {
+										_shieldPanel.Deactivate ();
+								}));
 						}
 				}
 		}
@@ -209,65 +225,123 @@ public class BattleControl : MonoBehaviour
 						}
 				}
 				foreach (var shell in _enemyCardShellSet) {
-			if (shell.vacant == false) {
-				shell.RoundStart ();
-			}
+						if (shell.vacant == false) {
+								shell.RoundStart ();
+						}
 				}
-		CheckPlayerCardActivity ();
+				StartCoroutine ("CRCheckPlayerCardActivity");
 		}
 		
-		void CheckPlayerCardActivity ()
+		IEnumerator CRCheckPlayerCardActivity ()
+		{
+				while (_shieldPanel.gameObject.activeSelf) {
+						yield return null;
+				}
+				CheckPlayerCardShellSetActivity ();
+				yield return null;
+		}
+		
+		/// <summary>
+		/// Check all the player cards' activity.
+		/// </summary>
+		void CheckPlayerCardShellSetActivity ()
 		{
 				bool playerRoundOver = true;
 				foreach (var shell in _playerCardShellSet) {
-						if (shell.vacant == false) {
-								if (shell.hasCast == false && shell.battleCard.ableToCast) {
-										shell.HighLight ();
-					playerRoundOver=false;
-								}
+						if (CheckPlayerCardActivity (shell)) {
+								shell.HighLight ();
+								playerRoundOver = false;
 						}
 				}
 				if (playerRoundOver) {
-			ExecuteEnemyCards();
+						ExecuteEnemyCards ();
 				}
 		}
 
-	void ExecuteEnemyCards()
-	{
-
+		bool CheckPlayerCardActivity (BattleCardShell cardShell)
+		{
+				if (cardShell.shellType == ShellType.Enemy || cardShell.vacant || cardShell.hasCast) {
+						return false;
+				}
+				return cardShell.HasAvailableAbility ();
 		}
 
-	public	void RoundEnd ()
+		void ExecuteEnemyCards ()
 		{
+				_enemyAI.EnemiesActionStart ();
 		}
-		/// <summary>
-		/// Freeze battle layer so that no operation is available.
-		/// </summary>
-		public void Freeze ()
+
+		public	void RoundEnd ()
 		{
+				foreach (var item in _playerCardShellSet) {
+						if (item.vacant == false) {
+								item.RoundEnd ();
+						}
+				}	
+				foreach (var item in _enemyCardShellSet) {
+						if (item.vacant == false) {
+								item.RoundEnd ();
+						}
+				}
+				StartCoroutine ("CRRoundStart");
 		}
-		/// <summary>
-		/// Player can operate after this method is called
-		/// </summary>
-		public void Defreeze ()
+
+		IEnumerator CRRoundStart ()
 		{
+				while (_shieldPanel.gameObject.activeSelf) {
+						yield return null;
+				}
+				RoundStart ();
+				yield return null;
+		}
+		
+		public void AbilityClick (Ability ability)
+		{
+				_currentActiveAbility = ability;
 		}
 
 		public void CardClick (BattleCardShell card)
 		{
-				if (_currentActiveCard == null) {
-						_currentActiveCard = card;
-						_currentActiveCard.Toggle ();
-				} else if (_currentActiveCard == card) {
-						_currentActiveCard.Toggle ();
-						_currentActiveCard = null;
-
+				if (_currentActiveAbility == null) {
+						if (CheckPlayerCardActivity (card)) {
+								_currentActiveCard = card;
+								_currentActiveCard.Show ();
+						} else {
+								card.Deny ();
+						}
 				} else {
-						if (_currentActiveCard.CardInteraction (card))
-								_currentActiveCard = null;
+						if (_currentActiveAbility.targetType == TargetType.All) {
+								CastAbility (card);
+								return;
+						}
+						if (_currentActiveAbility.targetType == TargetType.Friend && card.shellType == ShellType.Player) {
+								CastAbility (card);
+								return;
+						}
+						if (_currentActiveAbility.targetType == TargetType.Enemy && card.shellType == ShellType.Enemy) {
+								CastAbility (card);
+								return;
+						}
+						if (_currentActiveAbility.targetType == TargetType.Self && card == _currentActiveCard) {
+								CastAbility (card);
+								return;
+						}
+						card.Deny ();
 				}
 		}
-
+		
+		void CastAbility (BattleCardShell cardShell)
+		{
+			
+		}
+		
+		public void BackgroundClick()
+	{
+		if(_currentActiveCard!=null)
+		{
+			_currentActiveCard.Hide();
+		}
+	}
 		public void ShowCardDetail (BattleCard card)
 		{
 

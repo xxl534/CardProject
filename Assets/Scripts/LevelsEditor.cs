@@ -46,7 +46,7 @@ public class LevelsEditor : MonoBehaviour {
 		background.name="Backgound_Map";
 		background.layer = Layers.NGUI;
 		background.transform.parent = mapLayerGO.transform;
-		UISprite sprite = background.AddComponent<UISprite> ();
+		background.AddComponent<UISprite> ();
 	}
 
 	[ContextMenu("Generate new level")]

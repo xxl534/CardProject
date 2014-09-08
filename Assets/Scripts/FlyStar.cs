@@ -18,7 +18,7 @@ public class FlyStar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (_lastPosition != null) {
+		if (_lastPosition != transform.position) {
 			transform.up=(transform.position-_lastPosition).normalized;
 				}
 		_lastPosition = transform.position;

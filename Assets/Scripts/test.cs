@@ -2,10 +2,11 @@
 using System.Reflection;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class Test:MonoBehaviour
 {
-
+	bool b=false;
 	void Start()
 	{
 		CardFactory cf=CardFactory.GetCardFactory();
@@ -15,7 +16,27 @@ public class Test:MonoBehaviour
 //		typeof(C1).GetProperty("si").SetValue(null,l,null);
 
 	}
+
+//	void Update()
+//	{
+//		if(!b)
+//		{
+//			b=true;
+//			Debug .Log(Time.time);
+//
+//		}
+//		else
+//			StartCoroutine("T");
+//	}
+
+//	IEnumerator T()
+//	{
+//		Debug.Log(Time.time);
+//		yield return null;
+//	}
+
 }
+
 
 public enum E1
 {

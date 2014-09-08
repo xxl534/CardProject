@@ -23,6 +23,7 @@ public  class AbilityBase
 		private int _maxLevel;
 		private string _name,
 				_description,
+				_icon,
 				_targetAttr,
 	_abilityCast;
 //				_effectCard;
@@ -41,7 +42,11 @@ public  class AbilityBase
 			}
 			_id=value;}
 		}
-
+	public string icon
+	{
+		get{return _icon;}
+		private set{_icon=value;}
+	}
 	public Rarity rarity
 	{
 		get{return _rarity;}
@@ -146,7 +151,7 @@ public  class AbilityBase
 			if(propertyInfo.PropertyType.IsEnum)
 			{
 				try{
-					int value=System.Convert.ToInt32(valueOb);
+					System.Convert.ToInt32(valueOb);
 				}catch{
 					valueOb=	Enum.Parse(propertyInfo.PropertyType,(string)valueOb);
 				}

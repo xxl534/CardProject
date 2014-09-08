@@ -64,7 +64,7 @@ public class LevelData {
 			if(propertyInfo.PropertyType.IsEnum)
 			{
 				try{
-					int value=System.Convert.ToInt32(valueOb);
+					System.Convert.ToInt32(valueOb);
 				}catch{
 					valueOb=	Enum.Parse(propertyInfo.PropertyType,(string)valueOb);
 				}

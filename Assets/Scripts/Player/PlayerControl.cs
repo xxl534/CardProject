@@ -17,6 +17,11 @@ public class PlayerControl : MonoBehaviour
 		public List<ConcreteCard> playCardSet {
 				get{ return _playCardSet;}
 		}
+		
+		public int coins {
+				get{ return _coins;}
+				set{ _coins = value;}
+		}
 
 		void Awake ()
 		{
@@ -44,15 +49,15 @@ public class PlayerControl : MonoBehaviour
 
 		public void LoadFromPlayerPrefs ()
 		{
-			if (!PlayerPrefs.HasKey (PlayerPrefKeys.player)) {
-			LoadFromJson();
+				if (!PlayerPrefs.HasKey (PlayerPrefKeys.player)) {
+						LoadFromJson ();
 				}
 		}
 
 		//when player first enter the game,load information from json and all default card are with level 1.
 		public void LoadFromJson ()
 		{
-						TextAsset textAsset = Resources.Load<TextAsset> (ResourcesFolderPath.json_player+"/player");
+				TextAsset textAsset = Resources.Load<TextAsset> (ResourcesFolderPath.json_player + "/player");
 				if (textAsset == null) {
 						Debug.Log ("Player json information file access error");
 						throw new System.Exception ("Player json information file access error");
@@ -82,7 +87,7 @@ public class PlayerControl : MonoBehaviour
 				}
 
 				if (playerInfo.ContainsKey ("coins")) {
-						_coins =System.Convert.ToInt32(playerInfo ["coins"]);
+						_coins = System.Convert.ToInt32 (playerInfo ["coins"]);
 				}
 		}
 }

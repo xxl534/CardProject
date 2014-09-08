@@ -2,13 +2,15 @@
 	Properties {
 		_EdgeColor("Edge Color ",color )=(1,1,1,1)
 		_MainTex("Main Texture",2D)="white"{}
+		_Brightness("Brightness",range(0,10))=6
 		_EdgeWidth("Edge Width",range(0,1))=0.5
 		_Speed("Edge Move Speed",float)=0
 	}
 	SubShader {
 		Tags { "QUEUE"="Transparent" "IGNOREPROJECTOR"="true" "RenderType"="Transparent" }
+//Tags{"RenderType"="Opaque"}
 	ZWrite Off
-  Cull Off
+//  Cull Off
   Fog {
    Color (0,0,0,0)
   }
@@ -27,6 +29,7 @@
 		float4 _EdgeColor;
 		float _EdgeWidth;
 		float _Speed;
+		float _Brightness;
 		void surf (Input IN, inout SurfaceOutput o) {
 		float x0=IN.uv_MainTex.x-0.5;
 		float y0=IN.uv_MainTex.y-0.5;
@@ -74,7 +77,7 @@
 			uv_1.x=coor.x+0.5;
 			uv_1.y=coor.y+0.5;
 			float4 newPix=tex2D(_MainTex,uv_1);
-			o.Albedo = newPix.rgb*_EdgeColor.rgb*2;
+			o.Albedo = newPix.rgb*_EdgeColor.rgb*_Brightness;
 			o.Alpha=newPix.a*_EdgeColor.a*2;
 		}
 		ENDCG

@@ -93,6 +93,7 @@ public static class EffectCardStatic {
 		int valueDelta=abilityEntity.GetValue(AbilityVariable.value);
 		debuffOrBuff.SetValue (AbilityVariable.restorativeValue, -valueDelta);
 		int value =System.Convert.ToInt32(propertyInfo.GetValue(to,null))+valueDelta;
+		propertyInfo.SetValue(to,value,null);
 		return valueDelta;
 	};
 }

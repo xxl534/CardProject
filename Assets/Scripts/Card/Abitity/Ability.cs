@@ -5,9 +5,10 @@ using System.Collections.Generic;
 public class Ability
 {
 	#region Instance members
+	private Texture _icon;
 		private AbilityBase _baseAbility;
 		private int _mana;
-		private int _coldDown;
+		private int _cooldown;
 		private Dictionary<string,int> _variableValues;
 		private int _level;
 //	private int _interval,_duration;
@@ -21,12 +22,16 @@ public class Ability
 				get{ return _baseAbility.name;}
 		}
 
+	public Texture icon
+	{
+		get{return _icon;}
+	}
 		public int mana {
 				get{ return _mana;}
 		}
 
-		public int coldDown {
-				get{ return _coldDown;}
+		public int cooldown {
+				get{ return _cooldown;}
 		}
 
 		public string description {
@@ -68,9 +73,14 @@ public class Ability
 				get{ return _baseAbility.abilityType;}
 		}
 
-		public string target {
+		public string targetAttr {
 				get{ return _baseAbility.targetAttr;}
 		}
+		
+	public AbilityCast abilityCast
+	{
+		get{return _abilityCast;}
+	}
 //	public EffectCard effectCard
 //	{
 //		get{return _effectCard;}
@@ -83,9 +93,10 @@ public class Ability
 				return _variableValues [variableName];
 		}
 
-		public  Ability (AbilityBase abilityBase, int level, AbilityCast abilityCast, Dictionary<string,int> variables)
+		public  Ability (AbilityBase abilityBase,Texture icon,  int level, AbilityCast abilityCast, Dictionary<string,int> variables)
 		{
 				_baseAbility = abilityBase;
+		_icon=icon;
 				_level = level;
 				_abilityCast = abilityCast;
 //		_effectCard=effectCard;
@@ -95,10 +106,10 @@ public class Ability
 				} else {
 						_mana = 0;
 				}
-				if (_variableValues.ContainsKey (AbilityVariable.coldDown)) {
-						_coldDown = _variableValues [AbilityVariable.coldDown];
+				if (_variableValues.ContainsKey (AbilityVariable.cooldown)) {
+						_cooldown = _variableValues [AbilityVariable.cooldown];
 				} else {
-						_coldDown = 0;
+						_cooldown = 0;
 				}
 		}
 }

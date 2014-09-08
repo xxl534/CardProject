@@ -86,7 +86,7 @@ public static class AbilityCastStatic
 	public static AbilityCast AbilityCast_DebuffOrBuff = delegate(Ability ability, BattleCard from, BattleCard to) {
 		AbilityEntity abilityEntity = new AbilityEntity (ability.baseAbility.id,ability.name,
 		                                                 from, to, ability.abilityType, EffectCardStatic.EffectCard_GenerateDebuffOrBuff);
-				abilityEntity.targetAttr = ability.target;
+				abilityEntity.targetAttr = ability.targetAttr;
 				abilityEntity.SetValue (AbilityVariable.value, ability.GetValue (AbilityVariable.value));
 		abilityEntity.SetValue(AbilityVariable .debuff,ability.GetValue(AbilityVariable.debuff));
 				abilityEntity.SetValue (AbilityVariable.interval, ability.GetValue (AbilityVariable.interval));

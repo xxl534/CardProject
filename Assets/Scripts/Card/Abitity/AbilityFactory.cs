@@ -7,11 +7,10 @@ public class AbilityFactory
 	private static AbilityFactory _instance;
 		private Dictionary <int,AbilityBase> _BaseAbilityTable;
 		private Dictionary<string ,int> _BaseAbilityIdTable;
-
+	private Dictionary<string,Texture> _abilityIconTable;
 		private AbilityFactory ()
 		{
-				_BaseAbilityTable = new Dictionary<int, AbilityBase> ();
-		_BaseAbilityIdTable=new Dictionary<string, int>();
+		LoadAbilityIcon();
 		LoadAbilities();
 		}
 		
@@ -23,6 +22,8 @@ public class AbilityFactory
 	}
 		void LoadAbilities ()
 		{
+		_BaseAbilityTable = new Dictionary<int, AbilityBase> ();
+		_BaseAbilityIdTable=new Dictionary<string, int>();
 				TextAsset[] textAssets = Resources.LoadAll<TextAsset> (ResourcesFolderPath.json_ability);
 		foreach (TextAsset tAsset in textAssets) {
 						string jsonString = tAsset.text;
@@ -72,6 +73,15 @@ public class AbilityFactory
 				return bPass;
 		}
 
+		void LoadAbilityIcon()
+	{
+		_abilityIconTable=new Dictionary<string, Texture>();
+		Texture[] icons=Resources.LoadAll<Texture>(ResourcesFolderPath.textures_ability_icon);
+		for (int i = 0; i < icons.Length; i++) {
+			_abilityIconTable.Add (icons[i].name,icons[i]);
+				}
+	}
+
 		public Ability GeneAbility (int abilityId, int level=1)
 		{
 		return GeneAbility(_BaseAbilityTable[abilityId],level);
@@ -88,6 +98,13 @@ public class AbilityFactory
 			Debug.Log(string.Format("Level of ability '{0}' should not be larger than maxLevel",abilityBase.name));
 			throw new System.ArgumentException(string.Format("Level of ability '{0}' should not be larger than maxLevel",abilityBase.name));
 		}
+
+		string iconName=abilityBase.icon;
+		if(iconName==null)
+		{
+			iconName=abilityBase.name;
+		}
+		Texture icon=_abilityIconTable[iconName];
 		AbilityCast abilityCast=AbilityCastStatic.GetAbilityCast( abilityBase.abilityCast);
 //		EffectCard effectCard=EffectCardStatic.GetEffectCard(abilityBase.effectCard);
 		Dictionary<string,int > variables=new Dictionary<string, int>();
@@ -96,6 +113,6 @@ public class AbilityFactory
 		for (int i = 0; i < variableName.Count; i++) {
 			variables.Add(variableName[i],variableValue[i]);
 				}
-		return new Ability(abilityBase,level,abilityCast,variables);
+		return new Ability(abilityBase,icon,level,abilityCast,variables);
 	}
 }

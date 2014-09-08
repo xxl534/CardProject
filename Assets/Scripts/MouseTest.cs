@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class MouseTest : MonoBehaviour {
-	public 	Camera camera;
 	// Use this for initialization
 	void Start () {
 	
