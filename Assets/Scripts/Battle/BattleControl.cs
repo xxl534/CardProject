@@ -5,7 +5,7 @@ using Holoville.HOTween;
 
 public class BattleControl : MonoBehaviour
 {
-		static float _shellRotateTime = 1;
+		static float _shellRotateTime = 1f;
 
 	#region Fields
 		/// <summary>
@@ -13,12 +13,13 @@ public class BattleControl : MonoBehaviour
 		/// </summary>
 		///
 		private CardAIScript _enemyAI;
-		public UICamera _uiCamera;
+//		public UICamera _uiCamera;
 		private int _bossLevelDelta = 2;
 		private int _bossAbilityLevelDelta = 1;
 		private CardFactory _cardFactory;
 		public BattleCardShell[] _playerCardShellSet;
 		public BattleCardShell[] _enemyCardShellSet;
+		public GameObject _background;
 		public Material[] _shellMaterials;
 		public ShieldPanel _shieldPanel;
 		private PlayerControl _player;
@@ -26,6 +27,7 @@ public class BattleControl : MonoBehaviour
 		private List<ConcreteCard> _enemyCard;
 		private List<ConcreteCard> _playerCard;
 		private int _enemyIndex;
+		private Dictionary<LevelInfo,Texture> _backgroundTextureTable;
 		/// <summary>
 		///Launcher of event(attack boss,merge another card or provide buff....)  
 		/// </summary>
@@ -54,7 +56,7 @@ public class BattleControl : MonoBehaviour
 				_playerCard = new List<ConcreteCard> ();
 				_cardFactory = CardFactory.GetCardFactory ();
 				_enemyAI = GetComponent<CardAIScript> ();
-
+				_backgroundTextureTable = new Dictionary<LevelInfo, Texture> ();
 		}
 		
 		void Clear ()
@@ -64,9 +66,11 @@ public class BattleControl : MonoBehaviour
 				_enemyIndex = 0;
 				_currentActiveCard = null;
 				foreach (var item in _enemyCardShellSet) {
+						item.Clear ();
 						item.gameObject.SetActive (false);
 				}
 				foreach (var item in _playerCardShellSet) {
+						item.Clear ();
 						item.gameObject.SetActive (false);
 				}
 		}
@@ -84,12 +88,24 @@ public class BattleControl : MonoBehaviour
 				//				5.Every player card will gain some experience after win the battle.
 
 				Clear ();
+				LoadBackground (levelInfo);
 				LoadEnemyConcreteCard (levelInfo);
 				LoadPlayerConcreteCard ();
 				LoadEnemyWave ();
 				LoadPlayerBattleCard ();
 		}
 		
+		void LoadBackground (LevelInfo levelInfo)
+		{
+				Texture backgroundTex;
+				if (_backgroundTextureTable.ContainsKey (levelInfo)) {
+						backgroundTex = _backgroundTextureTable [levelInfo];
+				} else {
+						backgroundTex = Resources.Load<Texture> (ResourcesFolderPath.textures_background + "/" + levelInfo.leveldata.background);
+						_backgroundTextureTable.Add (levelInfo, backgroundTex);
+				}
+				_background.renderer.material.mainTexture = backgroundTex;
+		}
 		/// <summary>
 		/// Loads the enemy ConcreteCard via level imformation.
 		/// </summary>
@@ -169,9 +185,11 @@ public class BattleControl : MonoBehaviour
 
 		public void CheckVacantShell ()
 		{
+		Debug.Log("checkVacant");
 				bool enemyWaveDead = true, playerRolesDead = true;
 				for (int i = 0; i < _enemyCardShellSet.Length; i++) {
 						if (_enemyCardShellSet [i].vacant == false) {
+				Debug.Log("i:"+i);
 								enemyWaveDead = false;
 								break;
 						}
@@ -183,9 +201,12 @@ public class BattleControl : MonoBehaviour
 						}
 				}
 				if (enemyWaveDead) {
+
 						if (_enemyIndex < _enemyCard.Count) {
+				Debug.Log("haiyou");
 								LoadEnemyWave ();
 						} else {
+				Debug.Log("BattleComplete");
 								BattleComplete ();
 								return;
 						}
@@ -199,20 +220,22 @@ public class BattleControl : MonoBehaviour
 		{
 				foreach (var item in _playerCardShellSet) {
 						if (item.gameObject.activeSelf == true && item.transform.localRotation != Quaternion.identity) {
-								HOTween.To (item.transform, _shellRotateTime, new TweenParms ().Prop ("localRotation", Quaternion.identity).Ease (EaseType.Linear).OnStart (delegate() {
-										_shieldPanel.Activate ();
-								}).OnComplete (delegate() {
-										_shieldPanel.Deactivate ();
-								}));
+				item.TurnToFront();
+//								HOTween.To (item.transform, _shellRotateTime, new TweenParms ().Prop ("localRotation", Quaternion.identity).Ease (EaseType.Linear).OnStart (delegate() {
+//										_shieldPanel.Activate ();
+//								}).OnComplete (delegate() {
+//										_shieldPanel.Deactivate ();
+//								}));
 						}
 				}
 				foreach (var item in _enemyCardShellSet) {
 						if (item.gameObject.activeSelf == true && item.transform.localRotation != Quaternion.identity) {
-								HOTween.To (item.transform, _shellRotateTime, new TweenParms ().Prop ("localRotation", Quaternion.identity).Ease (EaseType.Linear).OnStart (delegate() {
-										_shieldPanel.Activate ();
-								}).OnComplete (delegate() {
-										_shieldPanel.Deactivate ();
-								}));
+//								HOTween.To (item.transform, _shellRotateTime, new TweenParms ().Prop ("localRotation", Quaternion.identity).Ease (EaseType.Linear).OnStart (delegate() {
+//										_shieldPanel.Activate ();
+//								}).OnComplete (delegate() {
+//										_shieldPanel.Deactivate ();
+				item.TurnToFront();
+//								}));
 						}
 				}
 		}
@@ -303,67 +326,82 @@ public class BattleControl : MonoBehaviour
 		public void CardClick (BattleCardShell card)
 		{
 				if (_currentActiveAbility == null) {
+//						Debug.Log (1);
 						if (CheckPlayerCardActivity (card)) {
-								_currentActiveCard = card;
-								_currentActiveCard.Show ();
+								{
+//										Debug.Log (2);
+										if (_currentActiveCard == card) {
+//												Debug.Log (3);
+												_currentActiveCard.Hide ();
+												_currentActiveCard = null;
+										} else {
+//												Debug.Log (4);
+												_currentActiveCard = card;
+												card.Show ();
+										}
+								}
 						} else {
+//								Debug.Log (5);
 								card.Deny ();
 						}
 				} else {
-						if (_currentActiveAbility.targetType == TargetType.All) {
-								CastAbility (card);
-								return;
+//			Debug.Log(6);
+						bool canCast = false;
+						switch (_currentActiveAbility.targetType) {
+						case TargetType.All:
+								{
+										canCast = true;
+										break;
+								}
+						case TargetType.Friend:
+								{
+										if (card.shellType == ShellType.Player) {canCast = true;}
+										break;
+								}
+						case TargetType.Enemy:
+								{
+//				Debug.Log(7);
+										if (card.shellType == ShellType.Enemy) {canCast = true;}
+										break;
+								}
+						case TargetType.Self:
+								{
+										if (card == _currentActiveCard) {canCast = true;}
+										break;
+								}
+						default:
+								break;
 						}
-						if (_currentActiveAbility.targetType == TargetType.Friend && card.shellType == ShellType.Player) {
-								CastAbility (card);
-								return;
+						if (canCast) {
+//				Debug.Log(8);
+				if(_currentActiveAbility.targetArea== TargetArea.Area)
+				{//If ability is AOE,cast at the middle of enemies;
+					_currentActiveCard.CastAbility(_currentActiveAbility,_enemyCardShellSet[0].battleCard);
+				}
+				else{
+						_currentActiveCard.CastAbility(_currentActiveAbility,card.battleCard);
+				}
+				_currentActiveAbility=null;
+				_currentActiveCard=null;
+						} else {
+								card.Deny ();
 						}
-						if (_currentActiveAbility.targetType == TargetType.Enemy && card.shellType == ShellType.Enemy) {
-								CastAbility (card);
-								return;
-						}
-						if (_currentActiveAbility.targetType == TargetType.Self && card == _currentActiveCard) {
-								CastAbility (card);
-								return;
-						}
-						card.Deny ();
 				}
 		}
 		
-		void CastAbility (BattleCardShell cardShell)
+		public void BackgroundClick ()
 		{
-			
+				if (_currentActiveCard != null) {
+						_currentActiveCard.Hide ();
+						_currentActiveCard = null;
+						_currentActiveAbility = null;
+				}
 		}
-		
-		public void BackgroundClick()
-	{
-		if(_currentActiveCard!=null)
-		{
-			_currentActiveCard.Hide();
-		}
-	}
+
 		public void ShowCardDetail (BattleCard card)
 		{
 
 		}
-
-		public void StopShowCardDetail ()
-		{
-		}
-
-		public void ShowBossDetail (bool show)
-		{
-		}
-//	public void BossClick()
-//	{
-//		if(_currentActiveCard==null){
-//			_boss.Showoff();
-//		}
-//		else{
-//			if(_currentActiveCard.CardInteraction(_boss))
-//				_currentActiveCard=null;
-//		}
-//	}
 
 		void SupplyNewCard ()
 		{

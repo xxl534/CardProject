@@ -1,1 +1,1 @@
-{"level":{"level":1,"experience":20,"enemies":[1],"bosses":[0],"enemiesAbilityLevel":1}}
+{"level":{"level":1,"experience":20,"background":"background sample","enemies":[1],"bosses":[0],"enemiesAbilityLevel":1}}

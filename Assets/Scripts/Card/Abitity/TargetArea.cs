@@ -2,5 +2,5 @@
 using System.Collections;
 
 public enum TargetArea {
-	Single,Area
+	Single,Multiple,Area
 };

@@ -32,7 +32,7 @@ public class StarControl : MonoBehaviour
 				}
 				_flystar = (Instantiate (Resources.Load<GameObject> ("Prefabs/flyStar"))as GameObject).GetComponent<FlyStar>();
 				_flystar.transform.parent = _starSlot.transform;
-
+		Debug.Log("setParent");
 				_flystar.transform.position = _flyPath [0];
 				_flystar.transform.localScale = Vector3.one * 1.5f;
 

@@ -64,13 +64,15 @@ public class AbilityShell : MonoBehaviour {
 	}
 	void OnClick()
 	{
-		if(_clickTimer>_clickInterval)
-			MouseClick();
+		if (_clickTimer > _clickInterval) {
+						_clickTimer = 0;
+						MouseClick ();
+				}
 	}
 
 	void MouseClick()
 	{
-		Debug.Log("Ability activate : "+_ability.name);
+//		Debug.Log("Ability activate : "+_ability.name);
 		if(_available)
 		{
 			_glowEdge.SetActive(true);
@@ -93,9 +95,12 @@ public class AbilityShell : MonoBehaviour {
 		_ability=ability;
 		renderer.material.mainTexture=_ability.icon;
 		_cooldownTimer=_ability.cooldown;
+		if (_cooldownTimer == 0) {
+			_available=true;
+				}
 	}
 
-	void Clear()
+	public void Clear()
 	{
 		_ability=null;
 		_available=false;
@@ -112,7 +117,7 @@ public class AbilityShell : MonoBehaviour {
 			Debug.Log("Empty AbilityShell,'Show' method is unsupported");
 			throw new System.MethodAccessException("Empty AbilityShell,'Show' method is unsupported");
 		}
-		if(_clickTimer>0)
+		if(_cooldownTimer>0)
 		{	//Is still in cooldown.
 			//_ability.cooldown must be positive due to _clickTimer is not larger than it and _clickTimer is positive.
 			_available=false;

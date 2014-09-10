@@ -46,7 +46,6 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Detector.cs" />
      <Compile Include="Assets\HOTween Examples\Path Basics\PathBasics.cs" />
      <Compile Include="Assets\HOTween Examples\_Common Stuff\FPSCounter.cs" />
      <Compile Include="Assets\Holoville\HOTween Extensions\HOTweenManager\Core\ABSHOTweenEditorElement.cs" />
@@ -240,7 +239,6 @@
      <Compile Include="Assets\Scripts\StarCounter\StarCounterLayerControl.cs" />
      <Compile Include="Assets\Scripts\StarFlyPath.cs" />
      <Compile Include="Assets\Scripts\SwordControl.cs" />
-     <Compile Include="Assets\Scripts\Test.cs" />
      <Compile Include="Assets\Scripts\Test2.cs" />
      <Compile Include="Assets\Scripts\Tools\Administrator.cs" />
      <Compile Include="Assets\Scripts\Tools\ComputeContainerSize.cs" />
@@ -250,8 +248,10 @@
      <Compile Include="Assets\Scripts\Unuse\Layers.cs" />
      <Compile Include="Assets\Scripts\Unuse\PrefabPath.cs" />
      <Compile Include="Assets\Scripts\Unuse\Tags.cs" />
+     <Compile Include="Assets\Scripts\test.cs" />
      <Compile Include="Assets\ShieldPanel.cs" />
      <Compile Include="Assets\Test3.cs" />
+     <Compile Include="Assets\battleBackground.cs" />
      <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />
      <None Include="Assets\NGUI\ReadMe - 3.6.8.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text 2.shader" />
@@ -267,6 +267,7 @@
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
      <None Include="Assets\Textures\shader_edgeGlow 2.shader" />
      <None Include="Assets\Textures\shader_edgeGlow 3.shader" />
+     <None Include="Assets\HOTween\HOTween_License.txt" />
      <None Include="Assets\Holoville\HOUnityEditor\Editor\HOEditorGUIFramework.xml" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored 1.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />

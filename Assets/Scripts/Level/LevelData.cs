@@ -7,6 +7,7 @@ public class LevelData {
 	private int _level,_experience,_enemiesAbilityLevel;
 	private List<int> _enemiesId,_bossIndices;
 	private Rarity _enemiesRarity;
+	private string _background;
 	public int level
 	{
 		get{return _level;}
@@ -23,6 +24,11 @@ public class LevelData {
 	{
 		get{return _enemiesAbilityLevel;}
 		private set{_enemiesAbilityLevel=value;}
+	}
+	public string background
+	{
+		get{return _background;}
+		private set{_background=value;}
 	}
 	public List<int> enemiesId
 	{

@@ -231,6 +231,7 @@ public class GameController : MonoBehaviour
 								return _sceneFade.gameObject.activeSelf;
 						},
 			false, delegate {
+				Debug.Log("battlecomplete");
 								_selectLevel.GainStar (starNum);
 								SaveAfterCompleteBattle ();
 						}

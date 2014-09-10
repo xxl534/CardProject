@@ -9,4 +9,5 @@ public static class ResourcesFolderPath {
 	public static string textures_role="Textures/Card";
 	public static string textures_background="Textures/Background";
 	public static string textures_ability_icon="Textures/Ability/Icon";
+	public static string prefabs_ability="Prefabs/Ability";
 }

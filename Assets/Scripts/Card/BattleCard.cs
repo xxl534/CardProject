@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Holoville.HOTween;
 
 /// <summary>
 ///This kind of card will only exist on battle field .
@@ -9,10 +10,10 @@ using System.Reflection;
 /// </summary>
 public class BattleCard : MonoBehaviour
 {
-
+		static float _evasionTime = 0.5f;
 	#region Instance member
 
-		public  BattleCardShell _shell;
+		protected  BattleCardShell _shell;
 		protected ConcreteCard _concreteCard;
 		protected CardEffected _cardEffect;
 		protected Dictionary<int,DotAndHot> _DotAndHotTable;
@@ -41,12 +42,30 @@ public class BattleCard : MonoBehaviour
 		/// If health less equal than zero ,this battle card will be dead and be moved from battle field.
 		/// </summary>
 		/// <value>The health.</value>
+		DynamicTextAdmin dynamicText {
+		get{ 
+			return _shell.battleController.dynamicTextAdmin;}
+		}
+
 		public int health {
 				get { return _health;}
 				set {
-						_health = value;
+						int valueDelta = value - _health;
+						if (valueDelta > 0) {
+								dynamicText.DynamicText (transform.position, "+" + valueDelta.ToString (), Color.green);
+						} else if (valueDelta < 0) {
+						_shell.GetHurt();
+								dynamicText.DynamicText (transform.position, valueDelta.ToString (), Color.red);
+						}
+						
+						if (value > _maxHealth) {
+								_health = _maxHealth;
+						} else {
+								_health = value;
+						}
+			_shell._label_hp.text=_health.ToString();
 						if (_health <= 0) {
-								CardRoleDead ();
+				_shell.CardRoleDead();
 						}
 				}
 		}
@@ -54,63 +73,120 @@ public class BattleCard : MonoBehaviour
 		public int mana {
 				get{ return _mana;}
 				set {
-						_mana = value;
+						int valueDelta = value - _mana;
+						dynamicText.DynamicText (transform.position, "MP:" + valueDelta.ToString (), Color.blue);
+						if (value > _maxMana) {
+								_mana = _maxMana;
+						} else {
+								_mana = value;
+						}
+			_shell._label_mp.text=_mana.ToString();
 				}
 		}
 
 		public int maxHealth {
 				get{ return  _maxHealth;}
-				set{ _maxHealth = value;}
+				set {
+						int valueDelta = value - _maxHealth;
+						dynamicText.DynamicText (transform.position, "HP-MAX:" + valueDelta.ToString (), Color.red);
+						_maxHealth = value;
+						if (_maxHealth > _health) {
+								_health = _maxHealth;
+						}
+				}
 		}
 
 		public int maxMana {
 				get{ return _maxMana;}
-				set{ _maxMana = value;}
+				set {
+						int valueDelta = value - _maxMana;
+						dynamicText.DynamicText (transform.position, "MP-MAX:" + valueDelta.ToString (), Color.blue);
+						_maxMana = value;
+						if (_maxMana > _mana) {
+								_mana = _maxMana;
+						}
+				}
 		}
 
 		public int magicalDefense {
 				get{ return _magicalDefense;}
-				set{ _magicalDefense = value;}
+				set { 
+						int valueDelta = value - _magicalDefense;
+						dynamicText.DynamicText (transform.position, "Spell Resistance:" + valueDelta.ToString ());
+						_magicalDefense = value;
+				}
 		}
 
 		public int magicalCriticalChance {
 				get{ return _magicalCriticalChance;}
-				set{ _magicalCriticalChance = value;}
+				set {
+						int valueDelta = value - _magicalCriticalChance;
+						dynamicText.DynamicText (transform.position, "Spell Crit:" + valueDelta.ToString ());
+						_magicalCriticalChance = value;
+				}
 		}
 
 		public int magicalDamage {
 				get{ return _magicalDamage;}
-				set{ _magicalDamage = value;}
+				set {
+						int valueDelta = value - _magicalDamage;
+						dynamicText.DynamicText (transform.position, "Spell Damage:" + valueDelta.ToString ());
+						_magicalDamage = value;
+				}
 		}
 
 		public int healthResilience {
 				get{ return _healthResilience;}
-				set{ _healthResilience = value;}
+				set {
+						int valueDelta = value - _healthResilience;
+						dynamicText.DynamicText (transform.position, "HP Recovery:" + valueDelta.ToString ());
+						_healthResilience = value;
+				}
 		}
 
 		public int magicResilience {
 				get{ return _magicResilience;}
-				set{ _magicResilience = value;}
+				set { 
+						int valueDelta = value - _magicResilience;
+						dynamicText.DynamicText (transform.position, "MP Recovery:" + valueDelta.ToString ());
+						_magicResilience = value;
+				}
 		}
 
 		public int evasion {
 				get{ return _evasion;}
-				set{ _evasion = value;}
+				set { 
+						int valueDelta = value - _evasion;
+						dynamicText.DynamicText (transform.position, "Evasion:" + valueDelta.ToString ());
+						_evasion = value;
+				}
 		}
 
 		public int physicalDamage {
 				get{ return _physicalDamage;}
-				set{ _physicalDamage = value;}
+				set { 
+						int valueDelta = value - _physicalDamage;
+						dynamicText.DynamicText (transform.position, "Physical Damage:" + valueDelta.ToString ());
+						_physicalDamage = value;
+				}
 		}
 	
 		public int physicalCriticalChance {
 				get{ return _physicalCriticalChance;}
-				set{ _physicalCriticalChance = value;}
+				set {
+						int valueDelta = value - _physicalCriticalChance;
+						dynamicText.DynamicText (transform.position, "Physical Crit:" + valueDelta.ToString ());
+						_physicalCriticalChance = value;
+				}
 		}
 	
 		public int physicalDefense {
 				get{ return _physicalDefense;}
-				set{ _physicalDefense = value;}
+				set { 
+						int valueDelta = value - _physicalDefense;
+						dynamicText.DynamicText (transform.position, "Defense:" + valueDelta.ToString ());
+						_physicalDefense = value;
+				}
 		}
 
 		//The implement, by accumulation, of 3 properties below are different from ConcreteCard. 
@@ -124,6 +200,7 @@ public class BattleCard : MonoBehaviour
 				get{ return _strength;}
 				set {
 						int valueDelta = value - _strength;
+						dynamicText.DynamicText (transform.position, "Strength:" + valueDelta.ToString ());
 						_strength = value;
 						_maxHealth += (int)(valueDelta * BaseCard.rate_strength_maxHealth);
 						_physicalDamage += (int)(valueDelta * BaseCard.rate_strength_physicalDamage);
@@ -140,6 +217,7 @@ public class BattleCard : MonoBehaviour
 				get{ return _agility;}
 				set {
 						int valueDelta = value - _agility;
+						dynamicText.DynamicText (transform.position, "Agility:" + valueDelta.ToString ());
 						_agility = value;
 						_physicalDefense += (int)(valueDelta * BaseCard.rate_agility_physicalDefense);
 						_physicalCriticalChance += (int)(valueDelta * BaseCard.rate_agility_physicalCriticalChance);
@@ -155,6 +233,7 @@ public class BattleCard : MonoBehaviour
 				get{ return _magic;}
 				set {
 						int valueDelta = value - _magic;
+						dynamicText.DynamicText (transform.position, "Magic:" + valueDelta.ToString ());
 						_magic = value;
 						_maxMana += (int)(valueDelta * BaseCard.rate_magic_maxMana);
 						_magicalDefense += (int)(valueDelta * BaseCard.rate_magic_magicalDefense);
@@ -167,11 +246,18 @@ public class BattleCard : MonoBehaviour
 		public ConcreteCard concreteCard {
 				get{ return _concreteCard;}
 		}
-
-	public List<Ability> abilities
+		
+	public BattleCardShell shell
 	{
-		get{return _concreteCard.abilities;}
+		get{return _shell;}
 	}
+		public CardEffected cardEffected {
+				get{ return _cardEffect;}
+		}
+
+		public List<Ability> abilities {
+				get{ return _concreteCard.abilities;}
+		}
 #endregion
 
 		public void LoadConcreteCard (ConcreteCard concreteCard)
@@ -199,6 +285,7 @@ public class BattleCard : MonoBehaviour
 		{
 				_DotAndHotTable = new Dictionary<int, DotAndHot> ();
 				_debuffAndBuffTable = new Dictionary<int, DebuffAndBuff> ();
+		_shell = GetComponent<BattleCardShell> ();
 				_cardEffect = CardEffectedStatic.CardEffected_Normal;
 		}
 
@@ -215,12 +302,6 @@ public class BattleCard : MonoBehaviour
 
 		}
 
-		void CardRoleDead ()
-		{
-				Clear ();
-				_shell.CardRoleDead ();
-		}
-
 		public void AddDotOrHot (DotAndHot dotOrHot)
 		{
 				_DotAndHotTable [dotOrHot.id] = dotOrHot;
@@ -229,5 +310,19 @@ public class BattleCard : MonoBehaviour
 		public void AddDebuffOrBuff (DebuffAndBuff debuffOrBuff)
 		{
 				_debuffAndBuffTable [debuffOrBuff.id] = debuffOrBuff;
+		}
+
+		public void Evade ()
+		{
+				dynamicText.DynamicText (transform.position, "Evade!!!");
+				_shell.battleController.shieldPanel.Activate ();
+				HOTween.To (transform, _evasionTime / 2, new TweenParms ().Prop ("localPotion", transform.localPosition + new Vector3 (1f, 0, 0.5f)).Ease (EaseType.Linear).OnComplete (delegate() {
+						HOTween.To (transform, _evasionTime / 2, new TweenParms ().Prop ("localPosition", _shell.originalLocalPosition).Ease (EaseType.Linear).OnComplete (delegate() {
+								_shell.battleController.shieldPanel.Deactivate ();
+						}));
+				}));
+				HOTween.To (transform, _evasionTime / 2, new TweenParms ().Prop ("localRotation", Quaternion.Euler (new Vector3 (0, 0, 20f))).Ease (EaseType.Linear).OnComplete (delegate() {
+						HOTween.To (transform, _evasionTime / 2, new TweenParms ().Prop ("localRotation", Quaternion.identity).Ease (EaseType.Linear));
+				}));
 		}
 }

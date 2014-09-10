@@ -10,13 +10,16 @@ public class BattleCardShell : MonoBehaviour
 		static float _showCardTimer = 0f;
 		static float _showCardTime = 2f;
 		static float _clickInterval = 0.5f;
+		static float _getHurtTime = 0.2f;
+		static float _castTime = 0.4f;
+	static float _shellRotateTime=1f;
 	#endregion
 
 	#region Instancial fields
-		public BattleControl _battleController;
+		private BattleControl _battleController;
 		public ShellType  _shellType;
-		public GameObject _role;
-		public GameObject _shell;
+		public GameObject _roleMesh;
+		public GameObject _shellMesh;
 		public UILabel _label_hp, _label_mp;
 		public AbilityShell[] _firstRowAbilityShells;
 		public AbilityShell[] _secondRowAbilityShells;
@@ -31,6 +34,7 @@ public class BattleCardShell : MonoBehaviour
 		/// If a card has casted an ability,it's 'hasCast' =true.
 		/// </summary>
 		private bool _hasCast;
+		private BattleCardShell[]  _shellQueue;
 		private static float _showTime = 0.3f;
 		private static float _firstRowAbilityShowTime = 0.2f;
 		private static float _secondRowAbilityShowTime = 0.35f;
@@ -41,6 +45,10 @@ public class BattleCardShell : MonoBehaviour
 	#endregion
 
 	#region Properties
+		public Vector3 originalLocalPosition {
+				get{ return _originalLocalPosition;}
+		}
+
 		public bool vacant {
 				get{ return _vacant;}
 //		set{_vacant=value;}
@@ -61,6 +69,10 @@ public class BattleCardShell : MonoBehaviour
 		public ShellType shellType {
 				get{ return _shellType;}
 		}
+
+		public BattleCardShell[] shellQueue {
+				get{ return _shellQueue;}
+		}
 	#endregion
 
 		void Awake ()
@@ -68,8 +80,8 @@ public class BattleCardShell : MonoBehaviour
 				_battleController = GetComponentInParent<BattleControl> ();
 				_originalLocalPosition = transform.localPosition;
 				_battleCard = GetComponent<BattleCard> ();
-
-				GetComponentsInChildren<AbilityShell> ();
+				_shellQueue = (_shellType == ShellType.Player) ? _battleController._playerCardShellSet : _battleController._enemyCardShellSet;
+				_vacant = true;
 		}
 	
 		// Update is called once per frame
@@ -92,31 +104,25 @@ public class BattleCardShell : MonoBehaviour
 
 		void OnClick ()
 		{
-				Debug.Log ("BattleCardShell click : " + name);
-				MouseClick ();
+				if (_clickTimer > _clickInterval) {
+						MouseClick ();
+						_clickTimer = 0f;
+				}
 		}
-//	void OnMouseExit()
-//	{
-//		Debug.Log("mouseOut");
-//	_showCardTimer=0;
-//		_battleController.StopShowCardDetail();
-//	}
 
-//	void OnMouseOver()
-//	{
-//		Debug.Log("over");
-//	}
-//	void OnMouseExit()
-//	{
-//		Debug.Log("ex");
-//	}
+		void OnTriggerEnter (Collider other)
+		{
+				AbilityEntityShell abilityES = other.GetComponentInParent<AbilityEntityShell> ();
+				if (abilityES != null && abilityES.abilityEntity.targetCard == _battleCard) {
+						_battleCard.cardEffected (abilityES);
+				}
+		}
+
 		void MouseClick ()
 		{
-				if (_clickTimer > _clickInterval) {
-						_battleController.CardClick (this);
-						_clickTimer = 0f;
-
-				}
+//				Debug.Log ("BattleCardShell click : " + name);
+				_battleController.CardClick (this);
+	
 		}
 
 		public void Show ()
@@ -135,6 +141,7 @@ public class BattleCardShell : MonoBehaviour
 										item.Show (_secondRowAbilityShowDistance, _secondRowAbilityShowTime);
 								}
 						}
+
 						_battleController.shieldPanel.Deactivate ();
 				}
 				));
@@ -155,7 +162,26 @@ public class BattleCardShell : MonoBehaviour
 										item.Hide (_secondRowAbilityShowTime);
 								}
 						}
-						StartCoroutine (HideFirstRowAbilityAndCard (_secondRowAbilityShowTime - _firstRowAbilityShowTime));
+						StartCoroutine (HideFirstRowAbility (_secondRowAbilityShowTime - _firstRowAbilityShowTime));
+						StartCoroutine (HideAfterTime (_secondRowAbilityShowTime));
+				}
+		}
+
+		void HideAbilitiesOnly ()
+		{
+				if (_battleCard.concreteCard.abilities.Count <= _abilityCountPerRow) {//Only one row of 'AbilityShell'.
+						foreach (var item in _firstRowAbilityShells) {
+								if (item.vacant == false) {
+										item.Hide (_firstRowAbilityShowTime);
+								}
+						}
+				} else {//Have two rows of 'AbilityShell'.
+						foreach (var item in _secondRowAbilityShells) {
+								if (item.vacant == false) {
+										item.Hide (_secondRowAbilityShowTime);
+								}
+						}
+						StartCoroutine (HideFirstRowAbility (_secondRowAbilityShowTime - _firstRowAbilityShowTime));
 				}
 		}
 
@@ -171,7 +197,7 @@ public class BattleCardShell : MonoBehaviour
 				yield return null;
 		}
 
-		IEnumerator HideFirstRowAbilityAndCard (float time)
+		IEnumerator HideFirstRowAbility (float time)
 		{
 				yield return new WaitForSeconds (time);
 				foreach (var item in _firstRowAbilityShells) {
@@ -179,7 +205,7 @@ public class BattleCardShell : MonoBehaviour
 								item.Hide (_firstRowAbilityShowTime);
 						}
 				}
-				StartCoroutine (HideAfterTime (_firstRowAbilityShowTime));
+//				StartCoroutine (HideAfterTime (_firstRowAbilityShowTime));
 				yield return null;
 		}
 
@@ -204,15 +230,32 @@ public class BattleCardShell : MonoBehaviour
 				return false;
 		}
 
+		public void Clear ()
+		{
+				_vacant = true;
+				gameObject.SetActive (false);
+				_battleCard.Clear ();
+				foreach (var item in _firstRowAbilityShells) {
+						item.Clear ();
+						item.gameObject.SetActive (false);
+				}
+				foreach (var item in _secondRowAbilityShells) {
+						item.Clear ();
+						item.gameObject.SetActive (false);
+				}
+		}
+
 		public void LoadCard (ConcreteCard concreteCard)
 		{
 				_battleCard.LoadConcreteCard (concreteCard);
 				_vacant = false;
 				_hasCast = false;
-				_shell.renderer.material = _battleController._shellMaterials [(int)concreteCard.rarity];
-				_role.renderer.material.mainTexture = concreteCard.roleTexture;
+				_shellMesh.renderer.material = _battleController._shellMaterials [(int)concreteCard.rarity];
+				_roleMesh.renderer.material.mainTexture = concreteCard.roleTexture;
 				_label_hp.text = _battleCard.health.ToString ();
 				_label_mp.text = _battleCard.mana.ToString ();
+		_label_hp.alpha=0;
+		_label_mp.alpha=0;
 				transform.localRotation = Quaternion.Euler (new Vector3 (0, 180f, 0));
 				if (_shellType == ShellType.Player) {//Load 'AbilityShell'
 						if (_battleCard.abilities.Count <= _abilityCountPerRow) {
@@ -235,11 +278,29 @@ public class BattleCardShell : MonoBehaviour
 				gameObject.SetActive (true);
 		}
 
-		public void CardRoleDead ()
+	public void TurnToFront()
+	{
+		HOTween.To (transform, _shellRotateTime, new TweenParms ().Prop ("localRotation", Quaternion.identity).Ease (EaseType.Linear).OnStart (delegate() {
+		_battleController.shieldPanel.Activate ();
+		}).OnComplete (delegate() {
+		_battleController.shieldPanel.Deactivate ();
+			HOTween.To (_label_hp,0.5f,new TweenParms().Prop("alpha",1f).Ease( EaseType.Linear));
+			HOTween.To (_label_mp,0.5f,new TweenParms().Prop("alpha",1f).Ease( EaseType.Linear));
+		}));
+	}
+	
+	public void CardRoleDead ()
 		{
-				_vacant = true;
-				gameObject.SetActive (false);
-				_battleController.CheckVacantShell ();
+				Debug.Log ("dead");
+				Invoke ("Dead", 1f);
+		}
+		
+		void Dead ()
+		{
+				if (_vacant == false) {
+						Clear ();
+						_battleController.CheckVacantShell ();
+				}
 		}
 
 		public void RoundStart ()
@@ -257,6 +318,9 @@ public class BattleCardShell : MonoBehaviour
 		public bool HasAvailableAbility ()
 		{
 				foreach (var item in _firstRowAbilityShells) {
+//			Debug.Log(item.ability.name);
+//			Debug.Log(item.vacant);
+//			Debug.Log(item.available);
 						if (!item.vacant && item.available) {
 								return true;
 						}
@@ -274,4 +338,60 @@ public class BattleCardShell : MonoBehaviour
 		public void Deny ()
 		{
 		}
+
+		public void CastAbility (Ability ability, BattleCard target)
+		{
+//		Debug.Log(9);
+				float time = 0f;
+				if (_shellType == ShellType.Player) {
+						HideAbilitiesOnly ();
+						if (_battleCard.abilities.Count > _abilityCountPerRow) {
+								time = _secondRowAbilityShowTime;
+						} else {
+								time = _firstRowAbilityShowTime;
+						}
+				}
+				if (ability.targetArea == TargetArea.Multiple) {
+						foreach (var item in _shellQueue) {
+								if (item.vacant == false) {
+										StartCoroutine (CastAbilityAfter (ability, item._battleCard, time));
+								}
+						}
+				} else {
+						StartCoroutine (CastAbilityAfter (ability, target, time));
+				}
+//				_hasCast = true;
+				StartCoroutine (HideAfterTime (time + _castTime));
+		}
+
+		IEnumerator CastAbilityAfter (Ability ability, BattleCard target, float time)
+		{
+//		Debug.Log(10);
+				yield return new WaitForSeconds (time);
+				AbilityEntityShell prefab = Resources.Load<AbilityEntityShell> (ResourcesFolderPath.prefabs_ability + "/" + ability.name);
+				AbilityEntityShell abilityEntityShell = Instantiate (prefab) as AbilityEntityShell;
+//		Debug.Log(abilityEntityShell.name);
+				abilityEntityShell.Init (ability.abilityCast (ability, _battleCard, target));
+
+		}
+
+		public void GetHurt ()
+		{
+		if(transform.localPosition==_originalLocalPosition)
+		{
+			StartCoroutine(Reposition());
+		}
+		HOTween.To (transform, _getHurtTime, new TweenParms ().Prop ("position", Random.onUnitSphere * 0.4f, true).Ease (EaseType.Linear));
+//		HOTween.To (transform, _getHurtTime, new TweenParms ().Prop ("rotation", Quaternion.Euler(Random.onUnitSphere*15f), true).Loops(2, LoopType.Yoyo).Ease( EaseType.Linear));
+		}
+
+	IEnumerator Reposition()
+	{
+		yield return null;
+		while(transform.localPosition!=_originalLocalPosition)
+		{
+			transform.localPosition=Vector3.Lerp(transform.localPosition,_originalLocalPosition,0.3f);
+			yield return null;
+		}
+	}
 }

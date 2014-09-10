@@ -4,7 +4,7 @@ using Holoville.HOTween;
 
 public class DynamicTextAdmin : MonoBehaviour {
 	public UILabel _textPrefab;
-	public float _movementDuration=0.5f;
+	public float _movementDuration=1f;
 	public Vector3 _movementDirection;
 	public Color _textColor=Color.blue;
 
@@ -52,7 +52,8 @@ public class DynamicTextAdmin : MonoBehaviour {
 		{
 			sample=_textPrefab;
 		}
-
+		duration=Random.Range(duration-0.25f,duration+0.25f);
+		startPosition=startPosition+Random.insideUnitSphere*0.5f;
 		ActivateText(startPosition,text,duration,color,direction,sample);
 	}
 
@@ -67,13 +68,19 @@ public class DynamicTextAdmin : MonoBehaviour {
 		else
 		{
 			textGO=(Instantiate(sample)as UILabel).gameObject;
+
 		}
+
+		textGO.transform.parent=_activeSet;
 		UILabel label=textGO.GetComponent<UILabel>();
+
 		textGO.transform.position=startPosition;
 		label.text=text;
-		label.color=color;
+		label.gradientTop=color;
+		label.alpha=1;
+//		label.color=color;
 		textGO.SetActive(true);
-		textGO.transform.parent=_activeSet;
+
 		HOTween.To(textGO.transform,duration,new TweenParms().Prop("position",textGO.transform.position+direction)
 		           .Ease(EaseType.EaseOutQuad).OnComplete(delegate() {
 			textGO.SetActive(false);
