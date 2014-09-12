@@ -4,16 +4,23 @@ using Holoville.HOTween;
 
 public class AbilityShell : MonoBehaviour {
 
+
 //	private static Color _lightColor=Color.white;
 //	private static Color _darkColor=new Color(0.4f,0.4f,0.4f);
 	private static float _clickInterval=0.3f;
 
-//	public  float _motionDistance;
-//	public  float _motionTime;
+	
+	public BattleCardShell _battleCardShell;
+	public GameObject _glowEdge;
+	public AbilityDetailDisplayer _abilityDetailDisplayer;
+
 
 	private Ability _ability;
 	private Vector3 _localPosition;
 
+	private float _timeToShowDetail=2f;
+	private float _showDetailTimer=float.NegativeInfinity;
+	private bool _detailDisplayed=false;
 	/// <summary>
 	/// Recording how how many rounds have passed since last time the ability has cast.
 	/// </summary>
@@ -35,8 +42,6 @@ public class AbilityShell : MonoBehaviour {
 
 	private float _clickTimer;
 
-	public BattleCardShell _battleCardShell;
-	public GameObject _glowEdge;
 	public bool vacant
 	{
 		get{return _vacant;}
@@ -65,6 +70,27 @@ public class AbilityShell : MonoBehaviour {
 	{
 		_clickTimer+=Time.deltaTime;
 		renderer.material.SetFloat("cooldown",_cdPercent);
+		_showDetailTimer+=Time.deltaTime;
+		if(_showDetailTimer>_timeToShowDetail&&_detailDisplayed==false)
+		{
+			_abilityDetailDisplayer.DisplayerAbilityDetail(_ability,transform.position.y+1f,_cooldownTimer);
+			_detailDisplayed=true;
+		}
+	}
+	void OnHover(bool isOver)
+	{
+		if(isOver)
+		{
+			_showDetailTimer=0;
+		}
+		else{
+			if(_detailDisplayed)
+			{
+				_abilityDetailDisplayer.HideAbilityDetail();
+			}
+			_detailDisplayed=false;
+			_showDetailTimer=float.NegativeInfinity;
+		}
 	}
 	void OnClick()
 	{
