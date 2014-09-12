@@ -13,6 +13,10 @@ public class AbilityShell : MonoBehaviour {
 
 	private Ability _ability;
 	private Vector3 _localPosition;
+
+	/// <summary>
+	/// Recording how how many rounds have passed since last time the ability has cast.
+	/// </summary>
 	private int _cooldownTimer;
 
 	/// <summary>
@@ -76,9 +80,9 @@ public class AbilityShell : MonoBehaviour {
 		if(_available)
 		{
 			_glowEdge.SetActive(true);
-			_battleCardShell.battleController.AbilityClick(_ability);
+			_battleCardShell.battleController.AbilityClick(this);
 		}
-		else if(_cooldownTimer>0)
+		else if(_cooldownTimer<_ability.cooldown)
 		{
 			_battleCardShell.battleController.dynamicTextAdmin.DynamicText(transform.position,"Not Available");
 		}
@@ -94,7 +98,7 @@ public class AbilityShell : MonoBehaviour {
 		_vacant=false;
 		_ability=ability;
 		renderer.material.mainTexture=_ability.icon;
-		_cooldownTimer=_ability.cooldown;
+		_cooldownTimer=0;
 		if (_cooldownTimer == 0) {
 			_available=true;
 				}
@@ -117,11 +121,11 @@ public class AbilityShell : MonoBehaviour {
 			Debug.Log("Empty AbilityShell,'Show' method is unsupported");
 			throw new System.MethodAccessException("Empty AbilityShell,'Show' method is unsupported");
 		}
-		if(_cooldownTimer>0)
+		if(_cooldownTimer<_ability.cooldown)
 		{	//Is still in cooldown.
-			//_ability.cooldown must be positive due to _clickTimer is not larger than it and _clickTimer is positive.
+			//_ability.cooldown must be positive due to _clickTimer is less than it and _clickTimer is not negative.
 			_available=false;
-			_cdPercent=(_ability.cooldown-_clickTimer)/_ability.cooldown;
+			_cdPercent=(_cooldownTimer%_ability.cooldown)/_ability.cooldown;
 		}
 		else if(_battleCardShell.battleCard.mana<_ability.mana)
 		{//Not enough mana.
@@ -158,11 +162,11 @@ public class AbilityShell : MonoBehaviour {
 
 	public void NewRound()
 	{
-	_cooldownTimer=_cooldownTimer<=0?0:_cooldownTimer-1;
+	_cooldownTimer+=1;
 	}
 
 	public void UpdateCDTimer()
 	{
-		_cooldownTimer=_ability.cooldown;
+		_cooldownTimer=0;
 	}
 }

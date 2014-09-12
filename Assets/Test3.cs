@@ -25,21 +25,25 @@ public class Test3 : MonoBehaviour {
 //
 //		Debug.Log((hotweenDataList[0].targetName)+"||"+hotweenDataList[0].propDatas[0].propName);
 
-		HOTween.To (transform, 5f, new TweenParms ().Prop ("position", de.transform.position,true).Loops(1, LoopType.Yoyo));
+//		HOTween.To (transform, 5f, new TweenParms ().Prop ("position", de.transform.position,true).Loops(1, LoopType.Yoyo));
 	}
 
-	void OnCollisionEnter()
-	{
-		Debug.Log("enter");
-	}
+//	void OnCollisionEnter()
+//	{
+//		Debug.Log("enter");
+//	}
+//
+//	void OnTriggerEnter(Collider other)
+//	{
+//		Debug.Log("trigg");
+//	}
+//	void Update()
+//	{
+//		if(transform.position!=position)
+//			transform.position=Vector3.Lerp(position,transform.position,0.3f);
+//	}
 
-	void OnTriggerEnter(Collider other)
+	void OnHover()
 	{
-		Debug.Log("trigg");
-	}
-	void Update()
-	{
-		if(transform.position!=position)
-			transform.position=Vector3.Lerp(position,transform.position,0.3f);
-	}
+		Debug.Log("HOver");}
 }

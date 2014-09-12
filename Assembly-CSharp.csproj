@@ -46,6 +46,8 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\AbilityDisplayer.cs" />
+     <Compile Include="Assets\CardDetailDisplayer.cs" />
      <Compile Include="Assets\HOTween Examples\Path Basics\PathBasics.cs" />
      <Compile Include="Assets\HOTween Examples\_Common Stuff\FPSCounter.cs" />
      <Compile Include="Assets\Holoville\HOTween Extensions\HOTweenManager\Core\ABSHOTweenEditorElement.cs" />
@@ -186,6 +188,7 @@
      <Compile Include="Assets\NGUI\Scripts\UI\UITexture.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
+     <Compile Include="Assets\Scripts\AbilityDetailDisplayer.cs" />
      <Compile Include="Assets\Scripts\Battle\BattleControl.cs" />
      <Compile Include="Assets\Scripts\Battle\BattleLayerLoader.cs" />
      <Compile Include="Assets\Scripts\Battle\CardAIScript.cs" />
@@ -251,13 +254,14 @@
      <Compile Include="Assets\Scripts\test.cs" />
      <Compile Include="Assets\ShieldPanel.cs" />
      <Compile Include="Assets\Test3.cs" />
+     <Compile Include="Assets\Test4.cs" />
      <Compile Include="Assets\battleBackground.cs" />
      <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />
      <None Include="Assets\NGUI\ReadMe - 3.6.8.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text 2.shader" />
      <None Include="Assets\NGUI\Examples\Models\Orc\Orc Skin.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo20.txt" />
-     <None Include="Assets\Textures\shader_ability.shader" />
+     <None Include="Assets\Shader\shader_ability.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo14.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text 1.shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored 2.shader" />
@@ -265,8 +269,8 @@
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 3.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo18.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
-     <None Include="Assets\Textures\shader_edgeGlow 2.shader" />
-     <None Include="Assets\Textures\shader_edgeGlow 3.shader" />
+     <None Include="Assets\Shader\shader_edgeGlow 2.shader" />
+     <None Include="Assets\Shader\shader_edgeGlow 3.shader" />
      <None Include="Assets\HOTween\HOTween_License.txt" />
      <None Include="Assets\Holoville\HOUnityEditor\Editor\HOEditorGUIFramework.xml" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored 1.shader" />
@@ -275,7 +279,7 @@
      <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 2.shader" />
      <None Include="Assets\Resources\Json\Card\card.txt" />
-     <None Include="Assets\Textures\shader_edgeGlow 1.shader" />
+     <None Include="Assets\Shader\shader_edgeGlow 1.shader" />
      <None Include="Assets\xinjiandewendang.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text 3.shader" />
      <None Include="Assets\Standard Assets\artWork\3D\Prefabs\readMe.txt" />
@@ -289,14 +293,15 @@
      <None Include="Assets\Resources\Json\Ability\ability.txt" />
      <None Include="Assets\Resources\Json\Level\level_001.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
-     <None Include="Assets\Textures\shader_ultraEdgeGlow.shader" />
+     <None Include="Assets\Shader\shader_ultraEdgeGlow.shader" />
      <None Include="Assets\Plugins\HOTween\HOTween_License.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text.shader" />
      <None Include="Assets\Holoville\readme.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed.shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed 3.shader" />
-     <None Include="Assets\Textures\shader_edgeGlow.shader" />
-     <None Include="Assets\Textures\shader_frameAnim.shader" />
+     <None Include="Assets\Shader\shader_edgeGlow.shader" />
+     <None Include="Assets\Shader\shader_frameAnim.shader" />
+     <None Include="Assets\Shader\shader_bright.shader" />
      <None Include="Assets\NGUI\Examples\Shaders\Unlit - Additive Colored.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
      <None Include="Assets\NGUI\Examples\Shaders\Refractive.shader" />

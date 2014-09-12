@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour
 		public TextAsset _jsonDataFile;
 		public int _mapWidth;
 		PlayerControl _player;
-		StarCounterControl _starCounter;
+//		StarCounterControl _starCounter;
 		List<MapLayerControl> _maps;
 		int  _selectMapIndex;
 		public List<LevelGateControl> _levels;
@@ -33,7 +33,7 @@ public class GameController : MonoBehaviour
 						_allInfoDict = MiniJSON.Json.Deserialize (_jsonDataFile.text) as Dictionary<string ,object>;
 				_uniqueIdentityString = transform.parent.name + name + GetType ().ToString ();
 				_player = GameObject.FindGameObjectWithTag (Tags.player).GetComponent<PlayerControl> ();
-				_starCounter = GameObject.FindGameObjectWithTag (Tags.starCounter).GetComponentInChildren<StarCounterControl> ();
+//				_starCounter = GameObject.FindGameObjectWithTag (Tags.starCounter).GetComponentInChildren<StarCounterControl> ();
 				_sceneFade = GameObject.FindGameObjectWithTag (Tags.sceneFader).GetComponent<SceneFade> ();
 				_battleController = GameObject.FindGameObjectWithTag (Tags.battle).GetComponent<BattleControl> ();
 				//_battleController.gameObject.SetActive (false);

@@ -8,7 +8,7 @@ public class BattleCardShell : MonoBehaviour
 	#region Static fields
 		static float _toggleDistance = 0.3f;
 		static float _showCardTimer = 0f;
-		static float _showCardTime = 2f;
+		static float _showCardTime = 10f;
 		static float _clickInterval = 0.5f;
 		static float _getHurtTime = 0.2f;
 		static float _castTime = 0.4f;
@@ -34,8 +34,11 @@ public class BattleCardShell : MonoBehaviour
 		/// If a card has casted an ability,it's 'hasCast' =true.
 		/// </summary>
 		private bool _hasCast;
+	private bool _displayed;
+	private float _displayTimer=0f;
 		private BattleCardShell[]  _shellQueue;
 		private static float _showTime = 0.3f;
+	private static float _displayTime=2f;
 		private static float _firstRowAbilityShowTime = 0.2f;
 		private static float _secondRowAbilityShowTime = 0.35f;
 		private static float _firstRowAbilityShowDistance = 0.8f;
@@ -82,6 +85,7 @@ public class BattleCardShell : MonoBehaviour
 				_battleCard = GetComponent<BattleCard> ();
 				_shellQueue = (_shellType == ShellType.Player) ? _battleController._playerCardShellSet : _battleController._enemyCardShellSet;
 				_vacant = true;
+		_displayed = false;
 		}
 	
 		// Update is called once per frame
@@ -90,6 +94,11 @@ public class BattleCardShell : MonoBehaviour
 				_clickTimer += Time.deltaTime;
 				if (_showCardTimer > _showCardTime)
 						_battleController.ShowCardDetail (_battleCard);
+		_displayTimer += Time.deltaTime;
+		if (_displayed && _displayTimer > _displayTime) {
+			_battleController.cardDetailDisplayer.DisplayCardDetail (_battleCard);
+			_displayTimer=-1000f;
+				}
 		}
 
 //	void OnMouseOver()
@@ -97,9 +106,12 @@ public class BattleCardShell : MonoBehaviour
 //		Debug.Log("on");
 //			_showCardTimer+=Time.deltaTime;
 //	}
-		void OnHover ()
+		void OnHover (bool IsOver)
 		{
-//		Debug.Log("hover");
+		_displayed=IsOver;
+		if (_displayed) {
+			_displayTimer=0f;
+				}
 		}
 
 		void OnClick ()

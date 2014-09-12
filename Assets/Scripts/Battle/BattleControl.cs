@@ -5,7 +5,7 @@ using Holoville.HOTween;
 
 public class BattleControl : MonoBehaviour
 {
-		static float _shellRotateTime = 1f;
+		
 
 	#region Fields
 		/// <summary>
@@ -16,12 +16,14 @@ public class BattleControl : MonoBehaviour
 //		public UICamera _uiCamera;
 		private int _bossLevelDelta = 2;
 		private int _bossAbilityLevelDelta = 1;
+//	private float _shellRotateTime = 1f;
 		private CardFactory _cardFactory;
 		public BattleCardShell[] _playerCardShellSet;
 		public BattleCardShell[] _enemyCardShellSet;
 		public GameObject _background;
 		public Material[] _shellMaterials;
 		public ShieldPanel _shieldPanel;
+	public CardDetailDisplayer _cardDetailDisplayer;
 		private PlayerControl _player;
 		private GameController _gameController;
 		private List<ConcreteCard> _enemyCard;
@@ -32,7 +34,7 @@ public class BattleControl : MonoBehaviour
 		///Launcher of event(attack boss,merge another card or provide buff....)  
 		/// </summary>
 		private BattleCardShell _currentActiveCard;
-		private Ability _currentActiveAbility;
+		private AbilityShell _currentActiveAbility;
 		private DynamicTextAdmin _dynamicTextAdmin;
 	#endregion
 
@@ -44,6 +46,11 @@ public class BattleControl : MonoBehaviour
 		public DynamicTextAdmin dynamicTextAdmin {
 				get{ return _dynamicTextAdmin;}
 		}
+
+	public CardDetailDisplayer cardDetailDisplayer
+	{
+		get{return _cardDetailDisplayer;}
+	}
 
 	#endregion
 
@@ -318,7 +325,7 @@ public class BattleControl : MonoBehaviour
 				yield return null;
 		}
 		
-		public void AbilityClick (Ability ability)
+		public void AbilityClick (AbilityShell ability)
 		{
 				_currentActiveAbility = ability;
 		}
@@ -347,7 +354,7 @@ public class BattleControl : MonoBehaviour
 				} else {
 //			Debug.Log(6);
 						bool canCast = false;
-						switch (_currentActiveAbility.targetType) {
+						switch (_currentActiveAbility.ability.targetType) {
 						case TargetType.All:
 								{
 										canCast = true;
@@ -374,13 +381,14 @@ public class BattleControl : MonoBehaviour
 						}
 						if (canCast) {
 //				Debug.Log(8);
-				if(_currentActiveAbility.targetArea== TargetArea.Area)
+				if(_currentActiveAbility.ability.targetArea== TargetArea.Area)
 				{//If ability is AOE,cast at the middle of enemies;
-					_currentActiveCard.CastAbility(_currentActiveAbility,_enemyCardShellSet[0].battleCard);
+					_currentActiveCard.CastAbility(_currentActiveAbility.ability,_enemyCardShellSet[0].battleCard);
 				}
 				else{
-						_currentActiveCard.CastAbility(_currentActiveAbility,card.battleCard);
+						_currentActiveCard.CastAbility(_currentActiveAbility.ability,card.battleCard);
 				}
+				_currentActiveAbility.UpdateCDTimer();
 				_currentActiveAbility=null;
 				_currentActiveCard=null;
 						} else {

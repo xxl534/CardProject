@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: e98d8624680522843b410b39120138d5
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: Shadow Arrow
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

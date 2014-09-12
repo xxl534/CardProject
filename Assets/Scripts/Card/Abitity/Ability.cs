@@ -112,4 +112,9 @@ public class Ability
 						_cooldown = 0;
 				}
 		}
+
+	public string GetDescription()
+	{
+		return "";
+	}
 }

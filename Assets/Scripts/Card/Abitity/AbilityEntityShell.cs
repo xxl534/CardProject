@@ -42,6 +42,7 @@ public class AbilityEntityShell : MonoBehaviour
 				}
 
 		foreach (var item in _moveToTarget) {
+			item.transform.up=(_abilityEntity.targetCard.transform.position-item.transform.position).normalized;
 			HOTween.To(item.transform,_flyTime,new TweenParms().Prop("position",_abilityEntity.targetCard.transform.position));
 				}
 				//Set destination of hotweens which tween transform.position.
@@ -64,10 +65,14 @@ public class AbilityEntityShell : MonoBehaviour
 	public void Hit()
 	{
 		_abilityEntity.effectCard (_abilityEntity);
+		foreach (var item in _moveToTarget) {
+			item.SetActive(false);
+				}
 		_abilityEntity.targetCard.shell.GetHurt ();
 		foreach (var item in _hitEffect) {
 			item.SetActive(true);
 				}
+		Destroy (gameObject, 0.5f);
 	}
 
 	public void Abort()
