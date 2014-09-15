@@ -7,7 +7,7 @@ public class AbilityDetailDisplayer : MonoBehaviour
 	
 	public UITexture _texture_abilityIcon;
 	public UILabel _label_level,_label_comsume,_label_cooldown,_label_description,_label_name;
-	public float _fadeTime=0.3f;
+	public float _fadeTime=0.2f;
 	private UIPanel _panel;
 	void Awake()
 	{

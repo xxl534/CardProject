@@ -60,7 +60,6 @@ public class BattleControl : MonoBehaviour
 				_gameController = GameObject.FindGameObjectWithTag (Tags.gameController).GetComponent<GameController> ();
 				_dynamicTextAdmin = GetComponentInChildren<DynamicTextAdmin> ();
 				_enemyCard = new List<ConcreteCard> ();
-				_playerCard = new List<ConcreteCard> ();
 				_cardFactory = CardFactory.GetCardFactory ();
 				_enemyAI = GetComponent<CardAIScript> ();
 				_backgroundTextureTable = new Dictionary<LevelInfo, Texture> ();
@@ -69,7 +68,6 @@ public class BattleControl : MonoBehaviour
 		void Clear ()
 		{
 				_enemyCard.Clear ();
-				_playerCard.Clear ();
 				_enemyIndex = 0;
 				_currentActiveCard = null;
 				foreach (var item in _enemyCardShellSet) {
@@ -146,9 +144,12 @@ public class BattleControl : MonoBehaviour
 
 		void LoadPlayerConcreteCard ()
 		{
-				for (int i = 0; i < _player.playCardSet.Count; i++) {
-						_playerCard.Add (_player.playCardSet [i]);
-				}
+//				for (int i = 0; i < _player.playCardSet.Count; i++) {
+//			{
+//						_playerCard.Add (_player.playCardSet [i]);
+//			}
+//				}
+		_playerCard=_player.playCardSet;
 		}
 
 		/// <summary>
@@ -156,6 +157,8 @@ public class BattleControl : MonoBehaviour
 		/// </summary>
 		void LoadEnemyWave ()
 		{
+		
+
 				bool emptyWave = true;
 				for (int i = 0; i < _enemyCardShellSet.Length; i++) {
 						if (_enemyIndex + i < _enemyCard.Count) {
@@ -163,11 +166,11 @@ public class BattleControl : MonoBehaviour
 										emptyWave = false;
 										_enemyCardShellSet [i].LoadCard (_enemyCard [i + _enemyIndex]);
 								}
-								_enemyIndex++;
 						} else {
 								break;
 						}
 				}
+		_enemyIndex+=5;
 
 				//In case of a wave of empty enemy
 				if (emptyWave) {

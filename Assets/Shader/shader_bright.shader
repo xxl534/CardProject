@@ -1,7 +1,7 @@
 ﻿Shader "Custom/shader_bright" {
 	Properties {
 		_MainTex ("Base (RGB)", 2D) = "white" {}
-		_Brightness("Brightness",range(0.5,8))=6
+		_Brightness("Brightness",range(0.5,3))=1
 		_Color("Main Color ",color )=(1,1,1,1)
 	}
 	SubShader {

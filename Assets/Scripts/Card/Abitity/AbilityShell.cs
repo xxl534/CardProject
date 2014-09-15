@@ -73,12 +73,14 @@ public class AbilityShell : MonoBehaviour {
 		_showDetailTimer+=Time.deltaTime;
 		if(_showDetailTimer>_timeToShowDetail&&_detailDisplayed==false)
 		{
-			_abilityDetailDisplayer.DisplayerAbilityDetail(_ability,transform.position.y+1f,_cooldownTimer);
+			Debug.Log("Show");
+			_abilityDetailDisplayer.DisplayerAbilityDetail(_ability,transform.position.y+0.5f,_cooldownTimer);
 			_detailDisplayed=true;
 		}
 	}
 	void OnHover(bool isOver)
 	{
+		Debug.Log("Hover");
 		if(isOver)
 		{
 			_showDetailTimer=0;

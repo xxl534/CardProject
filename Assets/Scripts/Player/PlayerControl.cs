@@ -26,7 +26,7 @@ public class PlayerControl : MonoBehaviour
 		void Awake ()
 		{
 //				_gameController = GameObject.FindGameObjectWithTag (Tags.gameController).GetComponent<GameController> ();
-				_playCardSet = new List<ConcreteCard> ();
+		_playCardSet = new List<ConcreteCard>();
 				_cardBag = new List<ConcreteCard> ();
 				_cardFactory = CardFactory.GetCardFactory ();
 				LoadFromPlayerPrefs ();
@@ -81,9 +81,14 @@ public class PlayerControl : MonoBehaviour
 						}
 				}
 
-				for (int i = 0; i < 10; i++) {
-						if (_cardBag.Count > i)
-								_playCardSet.Add (_cardBag [i]);
+				for (int i = 0; i < 5; i++) {
+						if (_cardBag.Count > 0){
+								_playCardSet.Add(_cardBag [0]);
+				_cardBag.RemoveAt(0);
+			}
+			else{
+				_playCardSet.Add(null);
+			}
 				}
 
 				if (playerInfo.ContainsKey ("coins")) {

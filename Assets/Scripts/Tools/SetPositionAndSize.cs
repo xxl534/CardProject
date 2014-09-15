@@ -22,8 +22,12 @@ public class SetPositionAndSize : MonoBehaviour {
 				}
 		int width = pixelWidth, height = pixelHeight;
 		//thisUI.pivot = UIWidget.Pivot.TopLeft;
-		if (!center)
+		if (!center){
+
+			Debug.Log((parentUI==null)+"dd");
 			thisUI.SetRect (parentUI.localCorners[1].x+localLeft,parentUI.localCorners[1].y -localTop - pixelHeight, width, height);			//UIWidget.SetRect params:left,bottom,width,height
+
+		}
 		else {
 			thisUI.pivot= UIWidget.Pivot.Center;
 //			Debug.Log(parentUI.localCenter.x+"//"+parentUI.localCenter.y);

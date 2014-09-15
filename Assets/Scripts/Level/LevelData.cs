@@ -5,7 +5,8 @@ using System;
 using System.Reflection;
 public class LevelData {
 	private int _level,_experience,_enemiesAbilityLevel;
-	private List<int> _enemiesId,_bossIndices;
+	private List<int> _enemiesId,_bossIndices,_dropCards,_dropRates;
+
 	private Rarity _enemiesRarity;
 	private string _background;
 	public int level
@@ -37,6 +38,22 @@ public class LevelData {
 	private List<object> enemies
 	{
 		set{_enemiesId=value.ConvertAll(x=>System.Convert.ToInt32(x));}
+	}
+	public List<int> dropCards
+	{
+		get{return _dropCards;}
+	}
+	private List<object> dropCard
+	{
+		set{_dropCards=value.ConvertAll(x=>System.Convert.ToInt32(x));}
+	}
+	public List<int> dropRates
+	{
+		get{return _dropRates;}
+	}
+	private List<object> dropRate
+	{
+		set{_dropRates=value.ConvertAll(x=>System.Convert.ToInt32(x));}
 	}
 	public List<int> bossIndices
 	{
