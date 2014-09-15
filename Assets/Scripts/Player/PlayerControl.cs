@@ -8,8 +8,8 @@ public class PlayerControl : MonoBehaviour
 		private List<ConcreteCard> _playCardSet;
 		private GameController _gameController;
 		private CardFactory _cardFactory;
-		private int _coins;
-
+		private int _coins,_experience,_level;
+	private string _name;
 		public List<ConcreteCard> cardBag {
 				get{ return _cardBag;}
 		}
@@ -22,6 +22,19 @@ public class PlayerControl : MonoBehaviour
 				get{ return _coins;}
 				set{ _coins = value;}
 		}
+
+	public string playerName {
+		get{return _name;}
+	}
+
+	public int level
+	{
+		get{return _level;}
+	}
+	public int experience
+	{
+		get{return _experience;}
+	}
 
 		void Awake ()
 		{
@@ -91,8 +104,15 @@ public class PlayerControl : MonoBehaviour
 			}
 				}
 
-				if (playerInfo.ContainsKey ("coins")) {
+				
 						_coins = System.Convert.ToInt32 (playerInfo ["coins"]);
-				}
+		_name=playerInfo["playerName"].ToString();
+		_experience = 0;
+		_level = 1;
 		}
+
+	public void Sell(List<ConcreteCard> sellList)
+	{
+
+	}
 }

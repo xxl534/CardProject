@@ -4,10 +4,12 @@ using Holoville.HOTween;
 using System.Collections.Generic;
 public class Test3 : MonoBehaviour {
 	public GameObject de;
-	private Vector3 position;
+//	private Vector3 position;
 	void Awake()
 	{
-		position =transform.position;
+		Instantiate (de);
+		Debug.Log("insta");
+//		position =transform.position;
 //		HOTweenComponent hotc=GetComponent<HOTweenComponent>();
 //
 //		Debug.Log (hotc == null);
@@ -45,5 +47,6 @@ public class Test3 : MonoBehaviour {
 
 	void OnHover()
 	{
-		Debug.Log("HOver");}
+//		Debug.Log("HOver");}
+		}
 }
