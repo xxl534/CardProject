@@ -180,7 +180,7 @@ public class UIPanel : UIRect
 	/// Panel's alpha affects everything drawn by the panel.
 	/// </summary>
 
-	public override float alpha
+	public sealed override float alpha
 	{
 		get
 		{

@@ -4,12 +4,14 @@ using System.Collections.Generic;
 
 public class PlayerControl : MonoBehaviour
 {
+		public BagManagement _bagManagement;
 		private  List<ConcreteCard> _cardBag;
 		private List<ConcreteCard> _playCardSet;
 		private GameController _gameController;
 		private CardFactory _cardFactory;
-		private int _coins,_experience,_level;
-	private string _name;
+		private int _coins, _experience, _level;
+		private string _name;
+
 		public List<ConcreteCard> cardBag {
 				get{ return _cardBag;}
 		}
@@ -23,31 +25,31 @@ public class PlayerControl : MonoBehaviour
 				set{ _coins = value;}
 		}
 
-	public string playerName {
-		get{return _name;}
-	}
+		public string playerName {
+				get{ return _name;}
+		}
 
-	public int level
-	{
-		get{return _level;}
-	}
-	public int experience
-	{
-		get{return _experience;}
-	}
+		public int level {
+				get{ return _level;}
+		}
+
+		public int experience {
+				get{ return _experience;}
+		}
 
 		void Awake ()
 		{
 //				_gameController = GameObject.FindGameObjectWithTag (Tags.gameController).GetComponent<GameController> ();
-		_playCardSet = new List<ConcreteCard>();
+				_playCardSet = new List<ConcreteCard> ();
 				_cardBag = new List<ConcreteCard> ();
 				_cardFactory = CardFactory.GetCardFactory ();
 				LoadFromPlayerPrefs ();
+				
 		}
 		// Use this for initialization
 		void Start ()
 		{
-				
+		_bagManagement.Load ();
 		}
 	
 		// Update is called once per frame
@@ -95,24 +97,25 @@ public class PlayerControl : MonoBehaviour
 				}
 
 				for (int i = 0; i < 5; i++) {
-						if (_cardBag.Count > 0){
-								_playCardSet.Add(_cardBag [0]);
-				_cardBag.RemoveAt(0);
-			}
-			else{
-				_playCardSet.Add(null);
-			}
+						if (_cardBag.Count > 0) {
+								_playCardSet.Add (_cardBag [0]);
+								_cardBag.RemoveAt (0);
+						} else {
+								_playCardSet.Add (null);
+						}
 				}
 
-				
-						_coins = System.Convert.ToInt32 (playerInfo ["coins"]);
-		_name=playerInfo["playerName"].ToString();
-		_experience = 0;
-		_level = 1;
+				_coins = System.Convert.ToInt32 (playerInfo ["coins"]);
+				_name = playerInfo ["playerName"].ToString ();
+				_experience = 0;
+				_level = 1;
 		}
 
-	public void Sell(List<ConcreteCard> sellList)
-	{
-
-	}
+		public void Sell (List<ConcreteCard> sellList)
+		{
+				foreach (var item in sellList) {
+						_coins += item.price;
+						_cardBag.Remove (item);
+				}
+		}
 }

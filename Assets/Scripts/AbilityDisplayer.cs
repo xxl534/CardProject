@@ -4,17 +4,17 @@ using System.Collections;
 public class AbilityDisplayer : MonoBehaviour
 {
 		public 	UILabel _abilityLevel;
-		public 	Renderer _renderer_icon;
+		public 	UISprite _icon;
 		public AbilityDetailDisplayer _abilityDetailDisplayer;
 		Ability _ability;
 		bool _displayed = false;
 		float _timeToShowDetail = 2f;
 		float _ShowTimer = float.NegativeInfinity;
-
-		void Start ()
-		{
-				gameObject.SetActive (false);
-		}
+		
+//		void Start ()
+//		{
+//				gameObject.SetActive (false);
+//		}
 		// Update is called once per frame
 		void Update ()
 		{
@@ -28,9 +28,10 @@ public class AbilityDisplayer : MonoBehaviour
 		public void LoadAbility (Ability ability)
 		{
 				_ability = ability;
-				_renderer_icon.material.mainTexture = ability.icon;
+				_icon.spriteName=ability.name;
 				_abilityLevel.text = ability.level.ToString ();
 				gameObject.SetActive (true);
+		Debug.Log("loadabili");
 		}
 
 		void OnHover (bool isOver)

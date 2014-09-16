@@ -19,7 +19,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_4_5_1;UNITY_4_5;UNITY_IPHONE;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;UNITY_IPHONE_API;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_GAMECENTER;UNITY_IOS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_4_5_1;UNITY_4_5;UNITY_WEBPLAYER;WEBPLUG;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -46,8 +46,6 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\AbilityDisplayer.cs" />
-     <Compile Include="Assets\CardDetailDisplayer.cs" />
      <Compile Include="Assets\HOTween Examples\Path Basics\PathBasics.cs" />
      <Compile Include="Assets\HOTween Examples\_Common Stuff\FPSCounter.cs" />
      <Compile Include="Assets\Holoville\HOTween Extensions\HOTweenManager\Core\ABSHOTweenEditorElement.cs" />
@@ -189,6 +187,7 @@
      <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
      <Compile Include="Assets\Scripts\AbilityDetailDisplayer.cs" />
+     <Compile Include="Assets\Scripts\AbilityDisplayer.cs" />
      <Compile Include="Assets\Scripts\Battle\BattleControl.cs" />
      <Compile Include="Assets\Scripts\Battle\BattleLayerLoader.cs" />
      <Compile Include="Assets\Scripts\Battle\CardAIScript.cs" />
@@ -217,6 +216,8 @@
      <Compile Include="Assets\Scripts\Card\ConcreteCard.cs" />
      <Compile Include="Assets\Scripts\Card\Rarity.cs" />
      <Compile Include="Assets\Scripts\Card\ShellType.cs" />
+     <Compile Include="Assets\Scripts\CardComparisonDisplayer.cs" />
+     <Compile Include="Assets\Scripts\CardDetailDisplayer.cs" />
      <Compile Include="Assets\Scripts\DynamicTextAdmin.cs" />
      <Compile Include="Assets\Scripts\FlyStar.cs" />
      <Compile Include="Assets\Scripts\GameController\GameController.cs" />
@@ -239,26 +240,27 @@
      <Compile Include="Assets\Scripts\Player\BattleSlot.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerControl.cs" />
      <Compile Include="Assets\Scripts\PlayerPrefKeys.cs" />
+     <Compile Include="Assets\Scripts\RarityColorStatic.cs" />
      <Compile Include="Assets\Scripts\ResourcesFolderPath.cs" />
+     <Compile Include="Assets\Scripts\ShieldPanel.cs" />
      <Compile Include="Assets\Scripts\StarCounter\BigStarControl.cs" />
      <Compile Include="Assets\Scripts\StarCounter\StarCounterControl.cs" />
      <Compile Include="Assets\Scripts\StarCounter\StarCounterLayerControl.cs" />
      <Compile Include="Assets\Scripts\StarFlyPath.cs" />
      <Compile Include="Assets\Scripts\SwordControl.cs" />
-     <Compile Include="Assets\Scripts\Test2.cs" />
      <Compile Include="Assets\Scripts\Tools\Administrator.cs" />
      <Compile Include="Assets\Scripts\Tools\ComputeContainerSize.cs" />
      <Compile Include="Assets\Scripts\Tools\SetPositionAndSize.cs" />
-     <Compile Include="Assets\Scripts\UnitTest.cs" />
      <Compile Include="Assets\Scripts\Unuse\ConstantValue.cs" />
      <Compile Include="Assets\Scripts\Unuse\Layers.cs" />
      <Compile Include="Assets\Scripts\Unuse\PrefabPath.cs" />
      <Compile Include="Assets\Scripts\Unuse\Tags.cs" />
-     <Compile Include="Assets\Scripts\test.cs" />
-     <Compile Include="Assets\ShieldPanel.cs" />
+     <Compile Include="Assets\Scripts\battleBackground.cs" />
+     <Compile Include="Assets\Test2.cs" />
      <Compile Include="Assets\Test3.cs" />
      <Compile Include="Assets\Test4.cs" />
-     <Compile Include="Assets\battleBackground.cs" />
+     <Compile Include="Assets\UnitTest.cs" />
+     <Compile Include="Assets\test.cs" />
      <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />
      <None Include="Assets\NGUI\ReadMe - 3.6.8.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text 2.shader" />

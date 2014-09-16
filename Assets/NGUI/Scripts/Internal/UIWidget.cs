@@ -271,7 +271,7 @@ public class UIWidget : UIRect
 	/// Widget's alpha -- a convenience method.
 	/// </summary>
 
-	public override float alpha
+	public sealed override float alpha
 	{
 		get
 		{

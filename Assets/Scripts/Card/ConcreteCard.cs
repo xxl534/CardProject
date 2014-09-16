@@ -141,7 +141,7 @@ public class ConcreteCard {
 	}
 	public int price
 	{
-		get{return price;}
+		get{return _price;}
 	}
 	public int maxLevel
 	{
@@ -254,6 +254,7 @@ public class ConcreteCard {
 		_price=baseCard.price;
 
 		_cardSprite=cardSprite;
+	
 	}
 
 

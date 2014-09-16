@@ -13,13 +13,20 @@ public class BagManagement : MonoBehaviour
 		public GameObject _bagSlotPrefab;
 		public UIGrid _grid;
 		public List<BattleSlot> _battleSlots;
+		public ShieldPanel _shieldPanel;
 		private List<BagSlot> _bagSlots;
+		private UIScrollView _scrollView;
 		private PlayerControl _player;
 		private BagSlot _selectBagSlot;
 		private BattleSlot _selectBattleSlot;
+		private CardComparisonDisplayer _cardComparisonDisplayer;
 		private float _fadeDuration = 0.3f;
-		public ShieldPanel _shieldPanel;
 		private int _coinAmount;
+
+		public int coinAmount {
+				get{ return _coinAmount;}
+				set{ _coinAmount = value;}
+		}
 
 		static BagManagement ()
 		{
@@ -63,6 +70,8 @@ public class BagManagement : MonoBehaviour
 		{
 				_player = GameObject.FindGameObjectWithTag (Tags.player).GetComponent<PlayerControl> ();
 				_bagSlots = new List<BagSlot> ();
+				_scrollView = GetComponentInChildren<UIScrollView> ();
+				_cardComparisonDisplayer = GetComponentInChildren<CardComparisonDisplayer> ();
 		}
 
 		public void Load ()
@@ -72,7 +81,7 @@ public class BagManagement : MonoBehaviour
 				_coin.text = _coinAmount.ToString ();
 				_level.text = "Lv." + _player.level.ToString ();
 				_experience.text = _player.experience.ToString () + "/" + BaseCard.experienceTable [_player.level - 1].ToString ();
-				_experienceSlider.value = _player.experience / (float)BaseCard.experienceTable [_player.level - 1];
+				_experienceSlider.value = _player.experience / (float)(BaseCard._experienceTable [_player.level - 1]);
 				
 				for (int i = 0; i < _player.playCardSet.Count; i++) {
 						if (_player.playCardSet [i] != null) {
@@ -83,9 +92,11 @@ public class BagManagement : MonoBehaviour
 
 				for (int i = 0; i < _player.cardBag.Count; i++) {
 						GameObject bagSlotGO = Instantiate (_bagSlotPrefab)as GameObject;
+						bagSlotGO.GetComponent<UIDragScrollView> ().scrollView = _scrollView;
 						BagSlot bagSlot = bagSlotGO.GetComponent<BagSlot> ();
 						bagSlot.LoadConcreteCard (_player.cardBag [i]);
 						_grid.AddChild (bagSlotGO.transform);
+						bagSlotGO.transform.localScale = Vector3.one;
 						_bagSlots.Add (bagSlot);
 				}
 		}
@@ -163,6 +174,7 @@ public class BagManagement : MonoBehaviour
 										_selectBattleSlot = null;
 								}));
 						}));
+						Debug.Log (bagSlot.slotBody == null);
 						HOTween.To (bagSlot.slotBody, _fadeDuration, new TweenParms ().Prop ("alpha", 0f).Ease (EaseType.Linear).OnStart (() => {
 								_shieldPanel.Activate ();}).OnComplete (() => { 
 								if (first != null) {
@@ -182,28 +194,61 @@ public class BagManagement : MonoBehaviour
 
 		public void SlotShowDetail (BattleSlot battleSlot)
 		{
+				SlotShowDetail (battleSlot.concreteCard);		
 		}
 
 		public void SlotShowDetail (BagSlot bagSlot)
 		{
+				SlotShowDetail (bagSlot.concreteCard);
+		}
+
+		void SlotShowDetail (ConcreteCard card)
+		{
+				ConcreteCard second = card;
+				ConcreteCard first = null;
+				if (_selectBagSlot != null) {
+						first = _selectBagSlot.concreteCard;
+				} else if (_selectBattleSlot != null) {
+						first = _selectBattleSlot.concreteCard;
+				}
+				if (first == null) {
+						Debug.Log (second == null);
+						_cardComparisonDisplayer.DisplayCardComparison (second);
+				} else {
+						_cardComparisonDisplayer.DisplayCardComparison (second, first);
+				}
 		}
 
 		public void SellSelectedCards ()
 		{
 				List<ConcreteCard> sellList = new List<ConcreteCard> ();
-				for (int i = _bagSlots.Count-1; i >=0; i++) {
+				List<Transform> gridChildren = _grid.GetChildList ();
+				for (int i = _bagSlots.Count-1; i >=0; i--) {
 						if (_bagSlots [i].isSell) {
+								Debug.Log ("sell");
 								sellList.Add (_bagSlots [i].concreteCard);
-								_grid.RemoveChild (_bagSlots [i].transform);
+								BagSlot bagSlot = _bagSlots [i];
+								HOTween.To (bagSlot.slotBody, _fadeDuration, new TweenParms ().Prop ("alpha", 0).Ease (EaseType.Linear).OnComplete (() => {
+										Destroy (bagSlot.gameObject);}));
+								bagSlot.transform.parent = null;
 								_bagSlots.RemoveAt (i);
 						}
 				}
+				StartCoroutine (GridRepositionDelay (_fadeDuration));
+
 				if (sellList.Count == 0) {
 						return;
 				}
 				_player.Sell (sellList);
-				HOTween.To (this, 4f, new TweenParms ().Prop ("_coinAmount", _player.coins).Ease (EaseType.Linear));
+				HOTween.To (this, 2f, new TweenParms ().Prop ("coinAmount", _player.coins).Ease (EaseType.Linear));
 				StartCoroutine (CoinIncrease ());
+		}
+
+		IEnumerator GridRepositionDelay (float delay)
+		{
+				yield return new WaitForSeconds (delay);
+				_grid.Reposition ();
+				yield return null;
 		}
 
 		IEnumerator CoinIncrease ()
@@ -214,5 +259,25 @@ public class BagManagement : MonoBehaviour
 				}
 				_coin.text = _player.coins.ToString ();
 				yield return null;
+		}
+
+		public void SortByLevel ()
+		{
+				if (_grid.onCustomSort == gridSort_byLevelReverse) {
+						_grid.onCustomSort = gridSort_byLevel;
+				} else {
+						_grid.onCustomSort = gridSort_byLevelReverse;
+				}
+				_grid.Reposition ();
+		}
+
+		public void SortByRarity ()
+		{
+				if (_grid.onCustomSort == gridSort_byRarityReverse) {
+						_grid.onCustomSort = gridSort_byRarity;
+				} else {
+						_grid.onCustomSort = gridSort_byRarityReverse;
+				}
+				_grid.Reposition ();
 		}
 }
