@@ -23,12 +23,13 @@ public class BattleControl : MonoBehaviour
 		public GameObject _background;
 		public Material[] _shellMaterials;
 		public ShieldPanel _shieldPanel;
-	public CardDetailDisplayer _cardDetailDisplayer;
+		public CardDetailDisplayer _cardDetailDisplayer;
 		private PlayerControl _player;
 		private GameController _gameController;
 		private List<ConcreteCard> _enemyCard;
 		private List<ConcreteCard> _playerCard;
 		private int _enemyIndex;
+		private List<int>.Enumerator _bossIndexIter;
 		private Dictionary<LevelInfo,Texture> _backgroundTextureTable;
 		/// <summary>
 		///Launcher of event(attack boss,merge another card or provide buff....)  
@@ -47,10 +48,9 @@ public class BattleControl : MonoBehaviour
 				get{ return _dynamicTextAdmin;}
 		}
 
-	public CardDetailDisplayer cardDetailDisplayer
-	{
-		get{return _cardDetailDisplayer;}
-	}
+		public CardDetailDisplayer cardDetailDisplayer {
+				get{ return _cardDetailDisplayer;}
+		}
 
 	#endregion
 
@@ -94,6 +94,8 @@ public class BattleControl : MonoBehaviour
 
 				Clear ();
 				LoadBackground (levelInfo);
+				_bossIndexIter = levelInfo.leveldata.bossIndices.GetEnumerator ();
+		_bossIndexIter.MoveNext ();
 				LoadEnemyConcreteCard (levelInfo);
 				LoadPlayerConcreteCard ();
 				LoadEnemyWave ();
@@ -149,7 +151,7 @@ public class BattleControl : MonoBehaviour
 //						_playerCard.Add (_player.playCardSet [i]);
 //			}
 //				}
-		_playerCard=_player.playCardSet;
+				_playerCard = _player.playCardSet;
 		}
 
 		/// <summary>
@@ -157,20 +159,25 @@ public class BattleControl : MonoBehaviour
 		/// </summary>
 		void LoadEnemyWave ()
 		{
-		
-
 				bool emptyWave = true;
 				for (int i = 0; i < _enemyCardShellSet.Length; i++) {
 						if (_enemyIndex + i < _enemyCard.Count) {
 								if (_enemyCard [i + _enemyIndex] != null) {
 										emptyWave = false;
+										if (i + _enemyIndex == _bossIndexIter.Current) {
+						Debug.Log(0.8);
+												_enemyCardShellSet [i].transform.localScale = Vector3.one * 0.8f;
+												_bossIndexIter.MoveNext ();
+					} else {Debug.Log(0.6);
+												_enemyCardShellSet [i].transform.localScale = Vector3.one * 0.6f;
+										}
 										_enemyCardShellSet [i].LoadCard (_enemyCard [i + _enemyIndex]);
 								}
 						} else {
 								break;
 						}
 				}
-		_enemyIndex+=5;
+				_enemyIndex += 5;
 
 				//In case of a wave of empty enemy
 				if (emptyWave) {
@@ -195,11 +202,11 @@ public class BattleControl : MonoBehaviour
 
 		public void CheckVacantShell ()
 		{
-		Debug.Log("checkVacant");
+//				Debug.Log ("checkVacant");
 				bool enemyWaveDead = true, playerRolesDead = true;
 				for (int i = 0; i < _enemyCardShellSet.Length; i++) {
 						if (_enemyCardShellSet [i].vacant == false) {
-				Debug.Log("i:"+i);
+//								Debug.Log ("i:" + i);
 								enemyWaveDead = false;
 								break;
 						}
@@ -211,17 +218,25 @@ public class BattleControl : MonoBehaviour
 						}
 				}
 				if (enemyWaveDead) {
-
+						_enemyAI.run = false;
 						if (_enemyIndex < _enemyCard.Count) {
-				Debug.Log("haiyou");
+								Debug.Log ("haiyou");
 								LoadEnemyWave ();
+								foreach (var item in _enemyCardShellSet) {
+										if (item.vacant == false) {
+												item.TurnToFront ();
+										}
+								}
+								RoundEnd ();
+								
 						} else {
-				Debug.Log("BattleComplete");
+								Debug.Log ("BattleComplete");
 								BattleComplete ();
 								return;
 						}
 				}
 				if (playerRolesDead) {
+						_enemyAI.run = false;
 						BattleAbort ();
 				}
 		}
@@ -230,7 +245,7 @@ public class BattleControl : MonoBehaviour
 		{
 				foreach (var item in _playerCardShellSet) {
 						if (item.gameObject.activeSelf == true && item.transform.localRotation != Quaternion.identity) {
-				item.TurnToFront();
+								item.TurnToFront ();
 //								HOTween.To (item.transform, _shellRotateTime, new TweenParms ().Prop ("localRotation", Quaternion.identity).Ease (EaseType.Linear).OnStart (delegate() {
 //										_shieldPanel.Activate ();
 //								}).OnComplete (delegate() {
@@ -244,7 +259,7 @@ public class BattleControl : MonoBehaviour
 //										_shieldPanel.Activate ();
 //								}).OnComplete (delegate() {
 //										_shieldPanel.Deactivate ();
-				item.TurnToFront();
+								item.TurnToFront ();
 //								}));
 						}
 				}
@@ -279,6 +294,7 @@ public class BattleControl : MonoBehaviour
 		/// </summary>
 		void CheckPlayerCardShellSetActivity ()
 		{
+				Debug.Log ("CheckPlayerCardShellSetActivity");
 				bool playerRoundOver = true;
 				foreach (var shell in _playerCardShellSet) {
 						if (CheckPlayerCardActivity (shell)) {
@@ -287,13 +303,15 @@ public class BattleControl : MonoBehaviour
 						}
 				}
 				if (playerRoundOver) {
-						ExecuteEnemyCards ();
+						Invoke ("ExecuteEnemyCards", 1f);
 				}
 		}
 
 		bool CheckPlayerCardActivity (BattleCardShell cardShell)
 		{
+//		Debug.Log((cardShell.shellType == ShellType.Enemy) .ToString()+(cardShell.vacant)+( cardShell.hasCast));
 				if (cardShell.shellType == ShellType.Enemy || cardShell.vacant || cardShell.hasCast) {
+
 						return false;
 				}
 				return cardShell.HasAvailableAbility ();
@@ -301,6 +319,7 @@ public class BattleControl : MonoBehaviour
 
 		void ExecuteEnemyCards ()
 		{
+				Debug.Log ("executeEnemycards");
 				_enemyAI.EnemiesActionStart ();
 		}
 
@@ -346,6 +365,9 @@ public class BattleControl : MonoBehaviour
 												_currentActiveCard = null;
 										} else {
 //												Debug.Log (4);
+												if (_currentActiveCard != null) {
+														_currentActiveCard.Hide ();
+												}
 												_currentActiveCard = card;
 												card.Show ();
 										}
@@ -365,18 +387,24 @@ public class BattleControl : MonoBehaviour
 								}
 						case TargetType.Friend:
 								{
-										if (card.shellType == ShellType.Player) {canCast = true;}
+										if (card.shellType == ShellType.Player) {
+												canCast = true;
+										}
 										break;
 								}
 						case TargetType.Enemy:
 								{
 //				Debug.Log(7);
-										if (card.shellType == ShellType.Enemy) {canCast = true;}
+										if (card.shellType == ShellType.Enemy) {
+												canCast = true;
+										}
 										break;
 								}
 						case TargetType.Self:
 								{
-										if (card == _currentActiveCard) {canCast = true;}
+										if (card == _currentActiveCard) {
+												canCast = true;
+										}
 										break;
 								}
 						default:
@@ -384,16 +412,15 @@ public class BattleControl : MonoBehaviour
 						}
 						if (canCast) {
 //				Debug.Log(8);
-				if(_currentActiveAbility.ability.targetArea== TargetArea.Area)
-				{//If ability is AOE,cast at the middle of enemies;
-					_currentActiveCard.CastAbility(_currentActiveAbility.ability,_enemyCardShellSet[0].battleCard);
-				}
-				else{
-						_currentActiveCard.CastAbility(_currentActiveAbility.ability,card.battleCard);
-				}
-				_currentActiveAbility.UpdateCDTimer();
-				_currentActiveAbility=null;
-				_currentActiveCard=null;
+								if (_currentActiveAbility.ability.targetArea == TargetArea.Area) {//If ability is AOE,cast at the middle of enemies;
+										_currentActiveCard.CastAbility (_currentActiveAbility.ability, _enemyCardShellSet [0].battleCard);
+								} else {
+										_currentActiveCard.CastAbility (_currentActiveAbility.ability, card.battleCard);
+								}
+//				_currentActiveAbility.UpdateCDTimer();
+								_currentActiveAbility = null;
+								_currentActiveCard = null;
+								CheckPlayerCardShellSetActivity ();
 						} else {
 								card.Deny ();
 						}

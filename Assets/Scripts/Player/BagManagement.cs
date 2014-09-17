@@ -222,7 +222,7 @@ public class BagManagement : MonoBehaviour
 		public void SellSelectedCards ()
 		{
 				List<ConcreteCard> sellList = new List<ConcreteCard> ();
-				List<Transform> gridChildren = _grid.GetChildList ();
+//				List<Transform> gridChildren = _grid.GetChildList ();
 				for (int i = _bagSlots.Count-1; i >=0; i--) {
 						if (_bagSlots [i].isSell) {
 								Debug.Log ("sell");

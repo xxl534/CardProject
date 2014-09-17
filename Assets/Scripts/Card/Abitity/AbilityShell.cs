@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Holoville.HOTween;
-
+using System.Collections.Generic;
 public class AbilityShell : MonoBehaviour {
 
 
@@ -18,13 +18,14 @@ public class AbilityShell : MonoBehaviour {
 	private Ability _ability;
 	private Vector3 _localPosition;
 
+	private KeyValuePair<Ability,int> _cdKVPair;
 	private float _timeToShowDetail=2f;
 	private float _showDetailTimer=float.NegativeInfinity;
 	private bool _detailDisplayed=false;
 	/// <summary>
 	/// Recording how how many rounds have passed since last time the ability has cast.
 	/// </summary>
-	private int _cooldownTimer;
+//	private int _cooldownTimer;
 
 	/// <summary>
 	/// For setting shader value.
@@ -74,13 +75,13 @@ public class AbilityShell : MonoBehaviour {
 		if(_showDetailTimer>_timeToShowDetail&&_detailDisplayed==false)
 		{
 			Debug.Log("Show");
-			_abilityDetailDisplayer.DisplayerAbilityDetail(_ability,transform.position.y+0.5f,_cooldownTimer);
+			_abilityDetailDisplayer.DisplayerAbilityDetail(_ability,transform.position.y+0.5f,_cdKVPair.Value);
 			_detailDisplayed=true;
 		}
 	}
 	void OnHover(bool isOver)
 	{
-		Debug.Log("Hover");
+//		Debug.Log("Hover");
 		if(isOver)
 		{
 			_showDetailTimer=0;
@@ -110,7 +111,7 @@ public class AbilityShell : MonoBehaviour {
 			_glowEdge.SetActive(true);
 			_battleCardShell.battleController.AbilityClick(this);
 		}
-		else if(_cooldownTimer<_ability.cooldown)
+		else if(_cdKVPair.Value<_ability.cooldown)
 		{
 			_battleCardShell.battleController.dynamicTextAdmin.DynamicText(transform.position,"Not Available");
 		}
@@ -126,10 +127,18 @@ public class AbilityShell : MonoBehaviour {
 		_vacant=false;
 		_ability=ability;
 		renderer.material.mainTexture=_ability.icon;
-		_cooldownTimer=0;
-		if (_cooldownTimer == 0) {
-			_available=true;
+		Dictionary<Ability,int>.Enumerator iterator= _battleCardShell.battleCard.abilityCDTable.GetEnumerator ();
+//		_cdKVPair = _battleCardShell.battleCard.abilityCDTable.GetEnumerator ().Current;
+		while (iterator.Current.Key!=ability) {
+			iterator.MoveNext();
 				}
+		_cdKVPair = iterator.Current;
+		iterator.Dispose ();
+//		_cooldownTimer=0;
+//		if (_cooldownTimer == 0) {
+//			_available=true;
+//				}
+
 	}
 
 	public void Clear()
@@ -138,7 +147,8 @@ public class AbilityShell : MonoBehaviour {
 		_available=false;
 		_vacant=true;
 		_glowEdge.SetActive(false);
-		_cooldownTimer=0;
+//		_cooldownTimer=0;
+
 	}
 
 	public void Show(float distance,float duration)
@@ -149,11 +159,11 @@ public class AbilityShell : MonoBehaviour {
 			Debug.Log("Empty AbilityShell,'Show' method is unsupported");
 			throw new System.MethodAccessException("Empty AbilityShell,'Show' method is unsupported");
 		}
-		if(_cooldownTimer<_ability.cooldown)
+		if(_cdKVPair.Value<_ability.cooldown)
 		{	//Is still in cooldown.
 			//_ability.cooldown must be positive due to _clickTimer is less than it and _clickTimer is not negative.
 			_available=false;
-			_cdPercent=(_cooldownTimer%_ability.cooldown)/_ability.cooldown;
+			_cdPercent=(_cdKVPair.Value%_ability.cooldown)/_ability.cooldown;
 		}
 		else if(_battleCardShell.battleCard.mana<_ability.mana)
 		{//Not enough mana.
@@ -188,13 +198,13 @@ public class AbilityShell : MonoBehaviour {
 		}));
 	}
 
-	public void NewRound()
-	{
-	_cooldownTimer+=1;
-	}
+//	public void NewRound()
+//	{
+//	
+//	}
 
-	public void UpdateCDTimer()
-	{
-		_cooldownTimer=0;
-	}
+//	public void UpdateCDTimer()
+//	{
+//		_cooldownTimer=0;
+//	}
 }

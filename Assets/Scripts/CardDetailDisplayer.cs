@@ -29,6 +29,9 @@ public class CardDetailDisplayer : MonoBehaviour {
 	void Start()
 	{
 		gameObject.SetActive(false);
+		foreach (var item in _abilitiesDisplayer) {
+			item.gameObject.SetActive(false);
+				}
 	}
 	void OnClick()
 	{
@@ -54,7 +57,7 @@ public class CardDetailDisplayer : MonoBehaviour {
 
 		gameObject.SetActive (true);
 		HOTween.To(transform,_showTime,new TweenParms().Prop("position",new Vector3(6f,0,0),true).Ease(EaseType.Linear));
-		Debug.Log(card.magicalDamage+"|"+card.concreteCard.baseCard.magicalDamageBase+"|"+BaseCard.rate_magic_magicalDamage);
+//		Debug.Log(card.magicalDamage+"|"+card.concreteCard.baseCard.magicalDamageBase+"|"+BaseCard.rate_magic_magicalDamage);
 	}
 
 	public void HideCardDetail()

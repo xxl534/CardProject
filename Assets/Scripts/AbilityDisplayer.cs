@@ -31,7 +31,7 @@ public class AbilityDisplayer : MonoBehaviour
 				_icon.spriteName=ability.name;
 				_abilityLevel.text = ability.level.ToString ();
 				gameObject.SetActive (true);
-		Debug.Log("loadabili");
+//		Debug.Log("loadabili");
 		}
 
 		void OnHover (bool isOver)

@@ -81,7 +81,7 @@ public class BagSlot : MonoBehaviour
 				_experienceSlider.value = card.experience / (float)BaseCard._experienceTable [card.level - 1];
 				_slotEdge.color = Color.white;
 				_background.color = RarityColorStatic.rarityColors [(int)card.rarity];
-				_background.alpha = 0.75f;
+				_background.alpha = _bgAlpha;
 				Deselect ();
 		}
 

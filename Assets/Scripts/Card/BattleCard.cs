@@ -18,6 +18,7 @@ public class BattleCard : MonoBehaviour
 		protected CardEffected _cardEffect;
 		protected Dictionary<int,DotAndHot> _DotAndHotTable;
 		protected Dictionary<int,DebuffAndBuff> _debuffAndBuffTable;
+	protected Dictionary<Ability,int> _abilityCDTable;
 		protected int _health,
 				_mana, 
 				_strength,
@@ -258,6 +259,11 @@ public class BattleCard : MonoBehaviour
 		public List<Ability> abilities {
 				get{ return _concreteCard.abilities;}
 		}
+
+	public Dictionary<Ability,int> abilityCDTable
+	{
+		get{return _abilityCDTable;}
+	}
 #endregion
 
 		public void LoadConcreteCard (ConcreteCard concreteCard)
@@ -279,12 +285,16 @@ public class BattleCard : MonoBehaviour
 				_healthResilience = concreteCard.healthResilience;
 				_magicResilience = concreteCard.magicResilience;
 				_evasion = concreteCard.evasion;
+				foreach (var item in concreteCard.abilities) {
+			_abilityCDTable.Add(item,0);
+				}
 		}
 
 		void Awake ()
 		{
 				_DotAndHotTable = new Dictionary<int, DotAndHot> ();
 				_debuffAndBuffTable = new Dictionary<int, DebuffAndBuff> ();
+		_abilityCDTable = new Dictionary<Ability, int> ();
 		_shell = GetComponent<BattleCardShell> ();
 				_cardEffect = CardEffectedStatic.CardEffected_Normal;
 		}
@@ -299,7 +309,7 @@ public class BattleCard : MonoBehaviour
 				}
 				_debuffAndBuffTable.Clear ();
 				_DotAndHotTable.Clear ();
-
+		_abilityCDTable.Clear ();
 		}
 
 		public void AddDotOrHot (DotAndHot dotOrHot)
@@ -316,7 +326,7 @@ public class BattleCard : MonoBehaviour
 		{
 				dynamicText.DynamicText (transform.position, "Evade!!!");
 				_shell.battleController.shieldPanel.Activate ();
-				HOTween.To (transform, _evasionTime / 2, new TweenParms ().Prop ("localPotion", transform.localPosition + new Vector3 (1f, 0, 0.5f)).Ease (EaseType.Linear).OnComplete (delegate() {
+				HOTween.To (transform, _evasionTime / 2, new TweenParms ().Prop ("localPosition", transform.localPosition + new Vector3 (1f, 0, 0.5f)).Ease (EaseType.Linear).OnComplete (delegate() {
 						HOTween.To (transform, _evasionTime / 2, new TweenParms ().Prop ("localPosition", _shell.originalLocalPosition).Ease (EaseType.Linear).OnComplete (delegate() {
 								_shell.battleController.shieldPanel.Deactivate ();
 						}));

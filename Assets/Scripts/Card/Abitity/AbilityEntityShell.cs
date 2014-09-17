@@ -15,16 +15,23 @@ public class AbilityEntityShell : MonoBehaviour
 		get{return _abilityEntity;}
 	}
 
+	void Awake()
+	{
+
+	}
 	void Update()
 	{
 //		Debug.Log (Time.time);
 	}
 	public void Init (AbilityEntity abilityEntity)
-	{Debug.Log(gameObject.activeSelf);
-		Debug.Log (gameObject.activeInHierarchy);
-		Debug.Log (gameObject.transform.parent);
-		Debug.Log (name);
+	{
+//		Debug.Log(gameObject.activeSelf);
+//		Debug.Log (gameObject.activeInHierarchy);
+//		Debug.Log (gameObject.transform.parent);
+//		Debug.Log (name);
 				_abilityEntity = abilityEntity;
+
+		_abilityEntity.castCard.shell.battleController.shieldPanel.Activate ();
 		transform.position = _abilityEntity.castCard.transform.position;
 				
 				Vector3 destination = abilityEntity.targetCard.transform.position;
@@ -72,6 +79,7 @@ public class AbilityEntityShell : MonoBehaviour
 		foreach (var item in _hitEffect) {
 			item.SetActive(true);
 				}
+		_abilityEntity.castCard.shell.battleController.shieldPanel.Deactivate();
 		Destroy (gameObject, 0.5f);
 	}
 
