@@ -21,23 +21,28 @@ public class SwordControl : MonoBehaviour {
 	
 	}
 
-	public void Disappear(Operation oper)
-	{
-		Holoville.HOTween.Core.TweenDelegate.TweenCallback callback =delegate {
-			oper();
-	} ;
-		_particle.Play ();
-		gameObject.AddComponent<RunOnCondition> ().RunDelay (0.5f * _anim_time, delegate {
-			HOTween.To(_sword.transform,0.5f*_anim_time,new TweenParms().Prop("localScale",Vector3.zero).Ease(EaseType.Linear).OnComplete(callback));
-				});
-	}
+//	public void Disappear(Operation oper)
+//	{
+//		Holoville.HOTween.Core.TweenDelegate.TweenCallback callback =delegate {
+//			oper();
+//	} ;
+//		_particle.Play ();
+//		gameObject.AddComponent<RunOnCondition> ().RunDelay (0.5f * _anim_time, delegate {
+//			HOTween.To(_sword.transform,0.5f*_anim_time,new TweenParms().Prop("localScale",Vector3.zero).Ease(EaseType.Linear).OnComplete(callback));
+//				});
+//	}
 
 	public void Show(Vector3 position)
 	{
-		_sword.transform.localScale = Vector3.zero;
+		HOTween.To(_sword.transform,_anim_time,new TweenParms().Prop("localPosition",new Vector3(0,-40f,0)).Ease(EaseType.Linear).OnComplete(()=>{
+			transform.position=position;
+
+			_particle.Play ();
+			HOTween.To(_sword.transform,_anim_time,new TweenParms().Prop("localPosition",new Vector3(0,20f,0)).Ease(EaseType.Linear));
+		}));
 		_particle.Play ();
 
-		HOTween.To(_sword.transform,0.5f*_anim_time,new TweenParms().Prop("localScale",Vector3.one).Ease(EaseType.Linear));
+
 	
 	}
 }

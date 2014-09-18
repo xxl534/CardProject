@@ -2,77 +2,44 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+public class LevelInfo:MonoBehaviour
+{
+		LevelGateControl _gateControl;
+		string _name;
+		string _uniqueIdentifer;
+		bool _unlocked;
+		private LevelData _levelData;
 
-public class LevelInfo:MonoBehaviour {
-	//Level name
-	LevelGateControl _gateControl;
-	string _name;
-	string _uniqueIdentifer;
-	bool _unlocked;
+		public LevelData leveldata {
+				get{ return _levelData;}
+		}
 
-	private LevelData _levelData;
+		public bool unlocked {
+				get{ return _unlocked;}
+		}
 
-	public LevelData leveldata
-	{
-		get{return _levelData;}
-	}
+		public int index {
+				get{ return _gateControl.levelIndex;}
+		}
 
-	public bool unlocked
-	{
-		get{return _unlocked;}
-	}
+		void Awake ()
+		{
+				_gateControl = GetComponent<LevelGateControl> ();
+		}
 
-	public int index
-	{
-		get{return _gateControl.levelIndex;}
-	}
+		public void Unlock ()
+		{
+				_unlocked = true;
+		}
 
-	void Awake()
-	{
-		_gateControl = GetComponent<LevelGateControl> ();
-	}
-	/// <summary>
-	/// Initializes a new instance of the <see cref="Level_editMode"/> class.
-	/// </summary>
-	/// <param name="name">Name.</param>
-//	public  string levelName{
-//		get{
-//			return _name;
-//		}
-//		set{
-//			_name=value;
-//		}
-//	}
-
-	public void Unlock()
-	{
-		_unlocked = true;
-	}
-
-//	public void GainStar(StarNum starNum)
-//	{
-//		if (starNum > _starNum)
-//						_starNum = starNum;
-//	}
-
-//	public int GetLevelIndex()
-//	{
-//		return _index;
-//	}
-
-//	public void SetLevelIndex(int index)
-//	{
-//		_index = index;
-//	}
-
-	public void LoadFromJson()
-	{
-		TextAsset text = Resources.Load <TextAsset>(string.Format("{0}/level_{1:000}",ResourcesFolderPath.json_level ,index));
-		if (text == null)
+		public void LoadFromJson ()
+		{
+				TextAsset text = Resources.Load <TextAsset> (string.Format ("{0}/level_{1:000}", ResourcesFolderPath.json_level, index));
+				if (text == null)
 						return;
-		string json = text.text;
-		Dictionary<string ,object> dict = MiniJSON.Json.Deserialize (json)as Dictionary<string,object>;
-		_levelData=LevelData.GetLevelData(dict["level"]as Dictionary<string,object>);
+				string json = text.text;
+				Dictionary<string ,object> dict = MiniJSON.Json.Deserialize (json)as Dictionary<string,object>;
+				_levelData = LevelData.GetLevelData (dict ["level"]as Dictionary<string,object>);
 //		Debug.Log ("experience:"+_levelData.experience);
 //		Debug.Log ("level:"+_levelData.level);
 //		foreach (var item in _levelData.enemiesId)
@@ -80,23 +47,27 @@ public class LevelInfo:MonoBehaviour {
 //		foreach (var item in _levelData.bossIndices) {
 //			Debug.Log(item);
 //				}
-	}
+		}
 
-	public void LoadFromPlayerPrefs()
-	{
-		 int iUnlock=	PlayerPrefs.GetInt(_uniqueIdentifer);
-		_unlocked = iUnlock > 0;
-	}
+		public void LoadFromPlayerPrefs ()
+		{
 
-	public void Load()
-	{
-			_uniqueIdentifer = string.Format ("level_{0:000}", index);
-		LoadFromJson ();
-		LoadFromPlayerPrefs ();
-	}
-	public void Save()
-	{
-		PlayerPrefs.SetInt (_uniqueIdentifer, _unlocked ? 1 : 0);
-	}
+				int iUnlock = PlayerPrefs.GetInt (_uniqueIdentifer);
+				if (iUnlock > 0) {
+						_unlocked = true;
+				}
+		}
+
+		public void Load ()
+		{
+				_uniqueIdentifer = string.Format ("level_{0:000}", index);
+				LoadFromJson ();
+				LoadFromPlayerPrefs ();
+		}
+
+		public void Save ()
+		{
+				PlayerPrefs.SetInt (_uniqueIdentifer, _unlocked ? 1 : 0);
+		}
 
 }
