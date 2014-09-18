@@ -27,7 +27,7 @@ public class CardAIScript : MonoBehaviour
 		void Update ()
 		{
 				
-		if (_run && !_shieldPanelGO.activeInHierarchy) {Debug.Log("1");
+		if (_run && !_shieldPanelGO.activeInHierarchy) {
 						BattleCardShell activeShell = GetRandomActivaEnemy ();
 						if (activeShell == null) {//No active enemy
 								EnemiesActionOver ();

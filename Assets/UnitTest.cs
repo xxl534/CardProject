@@ -11,11 +11,11 @@ public class UnitTest : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		if(Time.time>2f&&_gan==false){
-			_gameController._selectLevel=_gameController._levels[0];
-		_gameController.BattleStart(_gameController._selectLevel.GetComponent<LevelInfo>());
-			_gan=true;
-		}
-	}
+//	void Update () {
+//		if(Time.time>2f&&_gan==false){
+//			_gameController._selectLevel=_gameController._levels[0];
+//		_gameController.BattleStart(_gameController._selectLevel.GetComponent<LevelInfo>());
+//			_gan=true;
+//		}
+//	}
 }

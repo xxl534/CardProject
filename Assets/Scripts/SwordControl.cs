@@ -32,7 +32,7 @@ public class SwordControl : MonoBehaviour {
 				});
 	}
 
-	public void Show()
+	public void Show(Vector3 position)
 	{
 		_sword.transform.localScale = Vector3.zero;
 		_particle.Play ();

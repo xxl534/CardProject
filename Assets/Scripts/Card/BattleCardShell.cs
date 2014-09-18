@@ -314,6 +314,8 @@ public class BattleCardShell : MonoBehaviour
 
 		public void RoundStart ()
 		{
+		_battleCard.health += _battleCard.healthResilience;
+		_battleCard.mana += _battleCard.magicResilience;
 		_hasCast = false;
 		foreach (var item in _battleCard.abilities) {
 			_battleCard.abilityCDTable[item]++;
@@ -331,7 +333,7 @@ public class BattleCardShell : MonoBehaviour
 		public bool HasAvailableAbility ()
 		{
 				foreach (var item in _battleCard.abilityCDTable) {
-						if (item.Value >= item.Key.cooldown && item.Key.mana >= _battleCard.mana) {
+						if (item.Value >= item.Key.cooldown && item.Key.mana <= _battleCard.mana) {
 								return true;
 						}
 				}
@@ -374,33 +376,36 @@ public class BattleCardShell : MonoBehaviour
 		{
 //		Debug.Log(10);
 		_battleController.shieldPanel.Activate ();
-		Debug.Log("ya");
+//		Debug.Log("ya");
 				yield return new WaitForSeconds (time);
 				AbilityEntityShell prefab = Resources.Load<AbilityEntityShell> (ResourcesFolderPath.prefabs_ability + "/" + ability.name);
 				AbilityEntityShell abilityEntityShell = Instantiate (prefab) as AbilityEntityShell;
 //		Debug.Log(abilityEntityShell.name);
 				abilityEntityShell.Init (ability.abilityCast (ability, _battleCard, target));
 		_battleController.shieldPanel.Deactivate ();
-		Debug.Log("ha");
+//		Debug.Log("ha");
 				yield return null;
 		}
 
 		public void GetHurt ()
 		{
-				if (transform.localPosition == _originalLocalPosition) {
-						StartCoroutine (Reposition ());
-				}
-				HOTween.To (transform, _getHurtTime, new TweenParms ().Prop ("position", Random.onUnitSphere * 0.4f, true).Ease (EaseType.Linear));
-//		HOTween.To (transform, _getHurtTime, new TweenParms ().Prop ("rotation", Quaternion.Euler(Random.onUnitSphere*15f), true).Loops(2, LoopType.Yoyo).Ease( EaseType.Linear));
+//				if (transform.localPosition == _originalLocalPosition) {
+//						StartCoroutine (Reposition ());
+//				}
+//				HOTween.To (transform, _getHurtTime, new TweenParms ().Prop ("position", Random.onUnitSphere * 0.4f, true).Ease (EaseType.Linear));
+//		HOTween.To (transform, _getHurtTime, new TweenParms ().Prop ("rotation", Quaternion.Euler(new Vector3(30f,0,0)), true).Loops(2, LoopType.Yoyo).Ease( EaseType.Linear));
+		HOTween.To (transform, _getHurtTime, new TweenParms ().Prop ("localRotation", Quaternion.Euler(new Vector3(30f,0,0)), true).Ease( EaseType.Linear).OnComplete(()=>{
+			HOTween.To (transform,_getHurtTime,new TweenParms().Prop("localRotation",Quaternion.identity).Ease(EaseType.Linear));
+            		}));
 		}
 
-		IEnumerator Reposition ()
-		{
-				yield return new WaitForSeconds (0.1f);
-				while (transform.localPosition!=_originalLocalPosition) {
-						transform.localPosition = Vector3.Lerp (transform.localPosition, _originalLocalPosition, 0.3f);
-						yield return null;
-				}
-				yield return null;
-		}
+//		IEnumerator Reposition ()
+//		{
+//				yield return new WaitForSeconds (0.1f);
+//				while (transform.localPosition!=_originalLocalPosition) {
+//						transform.localPosition = Vector3.Lerp (transform.localPosition, _originalLocalPosition, 0.3f);
+//						yield return null;
+//				}
+//				yield return null;
+//		}
 }

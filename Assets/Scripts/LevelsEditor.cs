@@ -94,13 +94,13 @@ public class LevelsEditor : MonoBehaviour {
 	{
 		UIWidget newLevelBtn=GameObject.Instantiate (_levelButtonPrefab) as UIWidget;
 		LevelInfo level=newLevelBtn.gameObject.AddComponent<LevelInfo>();
-		level.Init (levelName);
+//		level.Init (levelName);
 		newLevelBtn.name = "btn_levelEntrance_" + (_levelButtons.Count+1);
 		UILabel[] labels=newLevelBtn.GetComponentsInChildren<UILabel>();
 		foreach (UILabel label in labels) {
 			if(label.name=="label_levelName")
 			{
-				label.text=level.levelName;
+//				label.text=level.levelName;
 			}
 		}
 

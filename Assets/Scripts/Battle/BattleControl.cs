@@ -64,6 +64,11 @@ public class BattleControl : MonoBehaviour
 				_enemyAI = GetComponent<CardAIScript> ();
 				_backgroundTextureTable = new Dictionary<LevelInfo, Texture> ();
 		}
+
+	void Start()
+	{
+		gameObject.SetActive (false);
+	}
 		
 		void Clear ()
 		{
@@ -95,7 +100,7 @@ public class BattleControl : MonoBehaviour
 				Clear ();
 				LoadBackground (levelInfo);
 				_bossIndexIter = levelInfo.leveldata.bossIndices.GetEnumerator ();
-		_bossIndexIter.MoveNext ();
+				_bossIndexIter.MoveNext ();
 				LoadEnemyConcreteCard (levelInfo);
 				LoadPlayerConcreteCard ();
 				LoadEnemyWave ();
@@ -165,12 +170,14 @@ public class BattleControl : MonoBehaviour
 								if (_enemyCard [i + _enemyIndex] != null) {
 										emptyWave = false;
 										if (i + _enemyIndex == _bossIndexIter.Current) {
-						Debug.Log(0.8);
+//												Debug.Log (0.8);
 												_enemyCardShellSet [i].transform.localScale = Vector3.one * 0.8f;
 												_bossIndexIter.MoveNext ();
-					} else {Debug.Log(0.6);
+										} else {
+//												Debug.Log (0.6);
 												_enemyCardShellSet [i].transform.localScale = Vector3.one * 0.6f;
 										}
+										_enemyCardShellSet [i].transform.localRotation = Quaternion.identity;
 										_enemyCardShellSet [i].LoadCard (_enemyCard [i + _enemyIndex]);
 								}
 						} else {
@@ -194,7 +201,10 @@ public class BattleControl : MonoBehaviour
 				for (int i = 0; i < _playerCardShellSet.Length; i++) {
 						if (i < _playerCard.Count) {
 								if (_playerCard [i] != null) {
-										_playerCardShellSet [i].LoadCard (_playerCard [i]);
+										BattleCardShell shell = _playerCardShellSet [i];
+										shell.transform.localScale = Vector3.one * 0.6f;
+										shell.transform.localRotation = Quaternion.identity;
+										shell.LoadCard (_playerCard [i]);
 								}
 						}
 				}
@@ -294,7 +304,7 @@ public class BattleControl : MonoBehaviour
 		/// </summary>
 		void CheckPlayerCardShellSetActivity ()
 		{
-				Debug.Log ("CheckPlayerCardShellSetActivity");
+//				Debug.Log ("CheckPlayerCardShellSetActivity");
 				bool playerRoundOver = true;
 				foreach (var shell in _playerCardShellSet) {
 						if (CheckPlayerCardActivity (shell)) {
@@ -303,7 +313,7 @@ public class BattleControl : MonoBehaviour
 						}
 				}
 				if (playerRoundOver) {
-						Invoke ("ExecuteEnemyCards", 1f);
+			ExecuteEnemyCards();
 				}
 		}
 
@@ -319,7 +329,7 @@ public class BattleControl : MonoBehaviour
 
 		void ExecuteEnemyCards ()
 		{
-				Debug.Log ("executeEnemycards");
+//				Debug.Log ("executeEnemycards");
 				_enemyAI.EnemiesActionStart ();
 		}
 
@@ -343,6 +353,7 @@ public class BattleControl : MonoBehaviour
 				while (_shieldPanel.gameObject.activeSelf) {
 						yield return null;
 				}
+		yield return new WaitForSeconds (0.5f);
 				RoundStart ();
 				yield return null;
 		}
@@ -448,12 +459,12 @@ public class BattleControl : MonoBehaviour
 
 		public void BattleComplete ()
 		{
-				_gameController.BattleComplete (StarNum.TRHEE);
+				_gameController.BattleComplete ();
 		}
 
 		void BattleAbort ()
 		{
-				_gameController.BattleComplete (StarNum.ZERO);
+//				_gameController.BattleComplete (StarNum.ZERO);
 		}
 
 }

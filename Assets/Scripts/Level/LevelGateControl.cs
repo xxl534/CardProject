@@ -2,83 +2,66 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using Holoville.HOTween;
 
 public class LevelGateControl : MonoBehaviour,IComparable<LevelGateControl>
 {
+
+	private static float _unlockDuration=1f,
+		_hoverFadeDuration=0.3f;
 		LevelInfo _levelInfo;
-		public	StarSlotControl _starOne, _starTwo, _starThree;
 		GameController	_gameController;
 		public  PathPointControl _nextPathPoint;
-		GameObject _lock;
-		public GameObject _mainButton;
-		string _uniqueIdentityString;
-		StarFlyPath _starPath;
+		public UISprite _mainButton,_whiteEdge;
+	public UILabel _levelName;
+	public int _levelIndex;
+	private float _clickTimer = 0,_clickThreshold=0.3f;	
 
+	public int levelIndex
+	{
+		get{return _levelIndex;}
+	}
 		// Use this for initialization
 		void Awake ()
 		{
-
-				_uniqueIdentityString = transform.parent.name + name;
 				_gameController = GameObject.FindGameObjectWithTag (Tags.gameController).GetComponent<GameController> ();
 				_levelInfo = GetComponent<LevelInfo> ();
-//				foreach (StarSlotControl starControl in GetComponentsInChildren<StarSlotControl>()) {
-//						switch (starControl.name) {
-//						case "starEmpty_01":
-//								_starOne = starControl;
-//								break;
-//						case "starEmpty_02":
-//								_starTwo = starControl;
-//								break;
-//						case "starEmpty_03":
-//								_starThree = starControl;
-//								break;
-//						default:
-//								break;
-//						}
-//				}
-				foreach (Transform trans in GetComponentsInChildren<Transform>()) {
-						switch (trans.name) {
-						case "starEmpty_01":
-								_starOne = trans.GetComponent<StarSlotControl> ();
-								break;
-						case "starEmpty_02":
-								_starTwo = trans.GetComponent<StarSlotControl> ();
-								break;
-						case "starEmpty_03":
-								_starThree = trans.GetComponent<StarSlotControl> ();
-								break;
-						case "btn_main":
-								_mainButton = trans.gameObject;
-								break;
-						case "icon_lock":
-								_lock = trans.gameObject;
-								break;
-						default:
-								break;
-						}
-				}
-
-				_starPath = gameObject.AddComponent<StarFlyPath> ();
-				_starPath._levelControl = this;
 		}
 
 		void Start ()
 		{
-				LoadFromJson (_gameController._allInfoDict);
-				LoadFromPlayerPrefs ();
-				Init ();
+		_levelInfo.Load ();
+		Init ();
 		}
 		// Update is called once per frame
 		void Update ()
 		{
-	
+		_clickTimer += Time.deltaTime;
 		}
+		
+		void OnClick()
+	{
+		if (_clickTimer > _clickThreshold) {
+			_clickTimer=0f;
+			_gameController.LevelButtonClick(this);
+				}
+	}
 
+	void OnHover(bool isOver)
+	{
+		if (_levelInfo.unlocked) {
+			if(isOver){
+				HOTween.To(_whiteEdge,_hoverFadeDuration,new TweenParms().Prop("alpha",1f).OnStart(()=>{_whiteEdge.gameObject.SetActive(true);}));
+				HOTween.To(_levelName,_hoverFadeDuration,new TweenParms().Prop("effectDistance",new Vector2(6f,6f)).OnStart(()=>{_levelName.effectStyle= UILabel.Effect.Shadow;}));
+			}
+			else{
+				HOTween.To(_whiteEdge,_hoverFadeDuration,new TweenParms().Prop("alpha",0f).OnComplete(()=>{_whiteEdge.gameObject.SetActive(false);}));
+				HOTween.To(_levelName,_hoverFadeDuration,new TweenParms().Prop("effectDistance",Vector2.zero).OnComplete(()=>{_levelName.effectStyle= UILabel.Effect.None;}));}
+				}
+	}
 		public int CompareTo (LevelGateControl other)
 		{
-				if (transform.parent.name.Equals (other.transform.parent.name))
-						return name.CompareTo (other.name);
-				return transform.parent.name.CompareTo (other.transform.parent.name); 
+				return _levelIndex-other._levelIndex; 
 		}
 /// <summary>
 /// Unlock this level and process relative events.
@@ -87,34 +70,17 @@ public class LevelGateControl : MonoBehaviour,IComparable<LevelGateControl>
 		{
 				_levelInfo.Unlock ();
 				_mainButton.GetComponentInChildren<ParticleSystem> ().Play ();
-				gameObject.AddComponent<RunOnCondition> ().RunDelay (1.5f, UnlockButton);
-				
-//				Transform[] childTransforms = GetComponentsInChildren<Transform> ();
-//		Debug.Log (childTransforms.Length);
-//		foreach (Transform trans in GetComponentsInChildren<Transform> ()) {
-//			Debug.Log(trans.name);
-//						if (trans.name == "icon_lock") {
-////				Debug.Log("icon_lock");
-//								trans.gameObject.SetActive (false);
-//						} else if (trans.name == "btn_main") {
-////				Debug.Log("btn_main");
-//								trans.GetComponent<UISprite> ().spriteName = "iconStage_01";
-//						}
-//				}
-				Debug.Log ("Unlock");
+		HOTween.To (_mainButton, _unlockDuration, new TweenParms ().Prop ("color", Color.white).Ease (EaseType.Linear));
+		HOTween.To (_levelName, _unlockDuration, new TweenParms ().Prop ("alpha", 1f).Ease (EaseType.Linear).OnStart(()=>{_levelName.gameObject.SetActive(true);}));
 				
 		}
 
-		void UnlockButton ()
-		{
-				_mainButton.GetComponent<UISprite> ().spriteName = "iconStage_01";
-				_lock.SetActive (false);
-				_mainButton.GetComponent<UIPlayAnimation> ().enabled = true;
-		_starOne.Unlock ();
-		_starTwo.Unlock ();
-		_starThree.Unlock ();
-		_gameController.UnlockLevel ();
-		}
+//		void UnlockButton ()
+//		{
+//				_mainButton.GetComponent<UISprite> ().spriteName = "iconStage_01";
+//				_mainButton.GetComponent<UIPlayAnimation> ().enabled = true;
+//		_gameController.UnlockLevel ();
+//		}
 
 		/// <summary>
 		/// Unlocks the next level through path points.
@@ -124,112 +90,43 @@ public class LevelGateControl : MonoBehaviour,IComparable<LevelGateControl>
 				_nextPathPoint.Activate ();
 		}
 
-		public void GainStar (StarNum starNum)
-		{
-				_levelInfo.GainStar (starNum);
-				if (starNum >= StarNum.ONE)
-						_starOne.GainStar ();
-				if (starNum >= StarNum.TWO) {
-						gameObject.AddComponent<RunOnCondition> ().RunDelay (0.35f, _starTwo.GainStar);
-//						_starTwo.GainStar ();
-				}
-				if (starNum >= StarNum.TRHEE) {
-						gameObject.AddComponent<RunOnCondition> ().RunDelay (0.7f, _starThree.GainStar);
-//						_starThree.GainStar ();
-				}
-				Debug.Log (name + "GainStar");
-				UnlockNextLevel ();
-		}
-
-		public void SetLevelIndex (int index)
-		{
-				_levelInfo.SetLevelIndex (index);
-		}
-
-		public int GetLevelIndex ()
-		{
-				return _levelInfo.GetLevelIndex ();
-		}
-
-		public void MainButtonMouseEnter ()
-		{
+//		public void SetLevelIndex (int index)
+//		{
+//				_levelInfo.SetLevelIndex (index);
+//		}
+//
+//		public int GetLevelIndex ()
+//		{
+//				return _levelInfo.GetLevelIndex ();
+//		}
 		
-		}
-
-		public void MainButtonMouseLeave ()
-		{
-
-		}
-
-		public void MainButtonMouseClick ()
-		{
-
-				if (_levelInfo.unlocked) {
-						_gameController.LevelButtonClick (this);
-				}
-		}
 
 		public void Save ()
 		{
-				if (_levelInfo.unlocked) {
-						PlayerPrefs.SetInt (_uniqueIdentityString, 1);
-						PlayerPrefs.SetInt (_uniqueIdentityString + "_starNum", _levelInfo.GetStarNum ());
-				}
+		_levelInfo.Save ();
 		}
 
-		public void LoadFromPlayerPrefs ()
-		{
-		}
-
-		public void LoadFromJson (Dictionary<string,object> dict)
-		{
-		}
-
-		void Init ()
-		{
-				if (!_levelInfo.unlocked) {
-						_starOne.FillStar (false);
-						_starOne.gameObject.SetActive (false);
-						_starTwo.FillStar (false);
-						_starTwo.gameObject.SetActive (false);
-						_starThree.FillStar (false);
-						_starThree.gameObject.SetActive (false);
-
+	public void LevelComplete()
+	{
+		_nextPathPoint.Activate ();
+	}
+	void Init()
+	{
+		bool unlock = _levelInfo.unlocked;
+		if (unlock) {
+						_mainButton.alpha = 1;
+			_levelName.gameObject.SetActive(true);
+						_levelName.alpha = 1;
+						_nextPathPoint.Init (_levelInfo.unlocked);
 				} else {
-						_mainButton.GetComponent<UISprite> ().spriteName = "iconStage_01";
-						_lock.SetActive (false);
-						int starNum = _levelInfo.GetStarNum ();
-						if (starNum < 3)
-								_starThree.FillStar (false);
-						if (starNum < 2)
-								_starTwo.FillStar (false);
-						if (starNum < 1)
-								_starOne.FillStar (false);
+			_mainButton.color=new Color(0.5f,0.5f,0.5f,0.75f);
+			_levelName.alpha=0f;
+			_levelName.gameObject.SetActive(false);
 				}
-		}
+		_whiteEdge.alpha = 0f;
+		_whiteEdge.gameObject.SetActive (false);
+		_levelName.effectStyle = UILabel.Effect.None;
+		_levelName.effectDistance = Vector2.zero;
+	}
 
-		public Vector3[] GetStarFlyPath (StarSlotControl  starSlot)
-		{
-				Vector3[] path = null;
-				if (starSlot == _starOne) {
-						path = _starPath.GetPathOne ();
-				} else if (starSlot == _starTwo) {
-						path = _starPath.GetPathTwo ();
-				} else if (starSlot == _starThree) {
-						path = _starPath.GetPathThree ();
-				}
-				for (int i=0; i!=path.Length; i++)
-						path [i] += _mainButton.transform.position;
-				return path;
-		}
-
-		public MapLayerControl GetMapLayer ()
-		{
-				return GetComponentInParent<MapLayerControl> ();
-		}
-
-		public GameObject GetMainButton ()
-		{
-				return _mainButton;
-		}
 }
