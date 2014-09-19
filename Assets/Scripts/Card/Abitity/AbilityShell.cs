@@ -74,7 +74,7 @@ public class AbilityShell : MonoBehaviour {
 		_showDetailTimer+=Time.deltaTime;
 		if(_showDetailTimer>_timeToShowDetail&&_detailDisplayed==false)
 		{
-			Debug.Log("Show");
+//			Debug.Log("Show");
 			_abilityDetailDisplayer.DisplayerAbilityDetail(_ability,transform.position.y+0.5f,_cdKVPair.Value);
 			_detailDisplayed=true;
 		}

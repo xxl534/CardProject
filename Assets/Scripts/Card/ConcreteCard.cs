@@ -26,7 +26,6 @@ public class ConcreteCard {
 	_healthResilience,
 	_magicResilience,
 	_evasion,
-	_drapRate,
 	_price,
 	_maxLevel,
 	/// <summary>
@@ -135,9 +134,9 @@ public class ConcreteCard {
 	{
 		get{return _evasion;}
 	}
-	public int drapRate
+	public float dropRate
 	{
-		get{return _drapRate;}
+		get{return _baseCard.drapRate;}
 	}
 	public int price
 	{

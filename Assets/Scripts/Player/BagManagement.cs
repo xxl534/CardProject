@@ -28,6 +28,8 @@ public class BagManagement : MonoBehaviour
 				set{ _coinAmount = value;}
 		}
 
+		
+
 		static BagManagement ()
 		{
 				gridSort_byLevel = delegate(Transform x, Transform y) {
@@ -91,16 +93,20 @@ public class BagManagement : MonoBehaviour
 				}
 
 				for (int i = 0; i < _player.cardBag.Count; i++) {
-						GameObject bagSlotGO = Instantiate (_bagSlotPrefab)as GameObject;
-						bagSlotGO.GetComponent<UIDragScrollView> ().scrollView = _scrollView;
-						BagSlot bagSlot = bagSlotGO.GetComponent<BagSlot> ();
-						bagSlot.LoadConcreteCard (_player.cardBag [i]);
-						_grid.AddChild (bagSlotGO.transform);
-						bagSlotGO.transform.localScale = Vector3.one;
-						_bagSlots.Add (bagSlot);
+			AddNewCardToBag(_player.cardBag[i]);
 				}
 		}
-
+		
+		public void AddNewCardToBag(ConcreteCard card)
+	{
+		GameObject bagSlotGO = Instantiate (_bagSlotPrefab)as GameObject;
+		bagSlotGO.GetComponent<UIDragScrollView> ().scrollView = _scrollView;
+		BagSlot bagSlot = bagSlotGO.GetComponent<BagSlot> ();
+		bagSlot.LoadConcreteCard (card);
+		_grid.AddChild (bagSlotGO.transform);
+		bagSlotGO.transform.localScale = Vector3.one;
+		_bagSlots.Add (bagSlot);
+		}
 		public void SlotClick (BattleSlot battleSlot)
 		{
 				if (_selectBattleSlot == null) {

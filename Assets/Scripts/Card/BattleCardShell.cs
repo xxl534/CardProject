@@ -7,8 +7,6 @@ public class BattleCardShell : MonoBehaviour
 {
 	#region Static fields
 		static float _toggleDistance = 0.3f;
-		static float _showCardTimer = 0f;
-		static float _showCardTime = 10f;
 		static float _clickInterval = 0.5f;
 		static float _getHurtTime = 0.2f;
 		static float _castTime = 0.4f;
@@ -93,8 +91,6 @@ public class BattleCardShell : MonoBehaviour
 		void Update ()
 		{
 				_clickTimer += Time.deltaTime;
-				if (_showCardTimer > _showCardTime)
-						_battleController.ShowCardDetail (_battleCard);
 				_displayTimer += Time.deltaTime;
 				if (_displayed && _displayTimer > _displayTime) {
 						_battleController.cardDetailDisplayer.DisplayCardDetail (_battleCard);
@@ -305,6 +301,9 @@ public class BattleCardShell : MonoBehaviour
 		public void CardRoleDead ()
 		{
 		HOTween.To (transform, _deadTime, new TweenParms ().Prop ("localScale", Vector3.one*0.001f).Ease (EaseType.Linear).OnStart (()=>{_battleController.shieldPanel.Activate();}).OnComplete (()=>{
+			if(_shellType== ShellType.Enemy){
+				_battleController.Drop(this);
+			}
 			Clear();
 			_battleController.CheckVacantShell ();
 			_battleController.shieldPanel.Deactivate();

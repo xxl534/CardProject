@@ -24,6 +24,9 @@ public class BattleControl : MonoBehaviour
 		public Material[] _shellMaterials;
 		public ShieldPanel _shieldPanel;
 		public CardDetailDisplayer _cardDetailDisplayer;
+	public GameObject _cardBGIconPrefab;
+	public UILabel _trophyAmount;
+	public BattleCompleteDisplayer _battleCompleteDisplayer;
 		private PlayerControl _player;
 		private GameController _gameController;
 		private List<ConcreteCard> _enemyCard;
@@ -37,6 +40,9 @@ public class BattleControl : MonoBehaviour
 		private BattleCardShell _currentActiveCard;
 		private AbilityShell _currentActiveAbility;
 		private DynamicTextAdmin _dynamicTextAdmin;
+	private List<ConcreteCard> _trophyCards;
+	private LevelData _levelData;
+	private SceneFade _sceneFader;
 	#endregion
 
 	#region Properties
@@ -58,11 +64,13 @@ public class BattleControl : MonoBehaviour
 		{
 				_player = GameObject.FindGameObjectWithTag (Tags.player).GetComponent<PlayerControl> ();
 				_gameController = GameObject.FindGameObjectWithTag (Tags.gameController).GetComponent<GameController> ();
+		_sceneFader = GameObject.FindGameObjectWithTag (Tags.sceneFader).GetComponent<SceneFade> ();
 				_dynamicTextAdmin = GetComponentInChildren<DynamicTextAdmin> ();
 				_enemyCard = new List<ConcreteCard> ();
 				_cardFactory = CardFactory.GetCardFactory ();
 				_enemyAI = GetComponent<CardAIScript> ();
 				_backgroundTextureTable = new Dictionary<LevelInfo, Texture> ();
+		_trophyCards = new List<ConcreteCard> ();
 		}
 
 	void Start()
@@ -72,6 +80,7 @@ public class BattleControl : MonoBehaviour
 		
 		void Clear ()
 		{
+		_trophyCards.Clear ();
 				_enemyCard.Clear ();
 				_enemyIndex = 0;
 				_currentActiveCard = null;
@@ -98,6 +107,7 @@ public class BattleControl : MonoBehaviour
 				//				5.Every player card will gain some experience after win the battle.
 
 				Clear ();
+		_levelData = levelInfo.leveldata;
 				LoadBackground (levelInfo);
 				_bossIndexIter = levelInfo.leveldata.bossIndices.GetEnumerator ();
 				_bossIndexIter.MoveNext ();
@@ -105,6 +115,7 @@ public class BattleControl : MonoBehaviour
 				LoadPlayerConcreteCard ();
 				LoadEnemyWave ();
 				LoadPlayerBattleCard ();
+		_trophyAmount.text = "0";
 		}
 		
 		void LoadBackground (LevelInfo levelInfo)
@@ -169,16 +180,18 @@ public class BattleControl : MonoBehaviour
 						if (_enemyIndex + i < _enemyCard.Count) {
 								if (_enemyCard [i + _enemyIndex] != null) {
 										emptyWave = false;
-										if (i + _enemyIndex == _bossIndexIter.Current) {
-//												Debug.Log (0.8);
-												_enemyCardShellSet [i].transform.localScale = Vector3.one * 0.8f;
-												_bossIndexIter.MoveNext ();
-										} else {
-//												Debug.Log (0.6);
-												_enemyCardShellSet [i].transform.localScale = Vector3.one * 0.6f;
-										}
-										_enemyCardShellSet [i].transform.localRotation = Quaternion.identity;
 										_enemyCardShellSet [i].LoadCard (_enemyCard [i + _enemyIndex]);
+					if (i + _enemyIndex == _bossIndexIter.Current) {
+						_enemyCardShellSet [i].transform.localScale = Vector3.one * 0.02f;
+						HOTween.To (_enemyCardShellSet[i].transform,0.3f,new TweenParms().Prop("localScale",Vector3.one*0.8f).Ease(EaseType.Linear).
+						            OnStart(()=>{_shieldPanel.Activate();}).OnComplete(()=>{_shieldPanel.Deactivate();}));
+						_bossIndexIter.MoveNext ();
+					} else {
+						_enemyCardShellSet [i].transform.localScale = Vector3.one * 0.02f;
+						HOTween.To (_enemyCardShellSet[i].transform,0.3f,new TweenParms().Prop("localScale",Vector3.one*0.6f).Ease(EaseType.Linear).
+						            OnStart(()=>{_shieldPanel.Activate();}).OnComplete(()=>{_shieldPanel.Deactivate();}));
+					}
+					Invoke("RotateShells",0.3f);
 								}
 						} else {
 								break;
@@ -203,7 +216,6 @@ public class BattleControl : MonoBehaviour
 								if (_playerCard [i] != null) {
 										BattleCardShell shell = _playerCardShellSet [i];
 										shell.transform.localScale = Vector3.one * 0.6f;
-										shell.transform.localRotation = Quaternion.identity;
 										shell.LoadCard (_playerCard [i]);
 								}
 						}
@@ -232,11 +244,7 @@ public class BattleControl : MonoBehaviour
 						if (_enemyIndex < _enemyCard.Count) {
 								Debug.Log ("haiyou");
 								LoadEnemyWave ();
-								foreach (var item in _enemyCardShellSet) {
-										if (item.vacant == false) {
-												item.TurnToFront ();
-										}
-								}
+				RotateShells();
 								RoundEnd ();
 								
 						} else {
@@ -256,21 +264,11 @@ public class BattleControl : MonoBehaviour
 				foreach (var item in _playerCardShellSet) {
 						if (item.gameObject.activeSelf == true && item.transform.localRotation != Quaternion.identity) {
 								item.TurnToFront ();
-//								HOTween.To (item.transform, _shellRotateTime, new TweenParms ().Prop ("localRotation", Quaternion.identity).Ease (EaseType.Linear).OnStart (delegate() {
-//										_shieldPanel.Activate ();
-//								}).OnComplete (delegate() {
-//										_shieldPanel.Deactivate ();
-//								}));
 						}
 				}
 				foreach (var item in _enemyCardShellSet) {
 						if (item.gameObject.activeSelf == true && item.transform.localRotation != Quaternion.identity) {
-//								HOTween.To (item.transform, _shellRotateTime, new TweenParms ().Prop ("localRotation", Quaternion.identity).Ease (EaseType.Linear).OnStart (delegate() {
-//										_shieldPanel.Activate ();
-//								}).OnComplete (delegate() {
-//										_shieldPanel.Deactivate ();
 								item.TurnToFront ();
-//								}));
 						}
 				}
 		}
@@ -447,24 +445,35 @@ public class BattleControl : MonoBehaviour
 				}
 		}
 
-		public void ShowCardDetail (BattleCard card)
-		{
-
-		}
-
-		void SupplyNewCard ()
-		{
-
-		}
-
 		public void BattleComplete ()
 		{
-				_gameController.BattleComplete ();
+		_battleCompleteDisplayer.DisplayBattleComplete (_levelData, _trophyCards);
 		}
 
 		void BattleAbort ()
 		{
-//				_gameController.BattleComplete (StarNum.ZERO);
+		_sceneFader.BeginFading (() => {
+						gameObject.SetActive (false);
+						_sceneFader.ExitFading ();});
 		}
+
+	public void Drop(BattleCardShell shell)
+	{
+		if (shell.shellType == ShellType.Enemy) {
+			if(shell.battleCard.concreteCard.dropRate>=Random.Range(0.001f,100f)){
+				_trophyCards.Add (shell.battleCard.concreteCard);
+			_trophyAmount.text=_trophyCards.Count.ToString();
+		  GameObject dropCardIcon	=Instantiate( _cardBGIconPrefab,shell.transform.position,Quaternion.identity) as GameObject;
+			dropCardIcon.transform.parent=transform;
+			dropCardIcon.transform.localScale=Vector3.one*0.01f;
+			Destroy(dropCardIcon,2f);
+			}
+				}
+	}
+
+//	public void ShowCardDetail (BattleCard battleCard)
+//	{
+//		_cardDetailDisplayer.DisplayCardDetail (battleCard);
+//	}
 
 }

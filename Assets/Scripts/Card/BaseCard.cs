@@ -37,8 +37,8 @@ public class BaseCard {
 	_healthResilienceBase,
 	_magicResilienceBase,
 	_evasionBase,
-	_drapRate,
 	_price;
+	private float _drapRate;
 	private Rarity _cardRarity;
 	private string _name;
 	private string _description;
@@ -436,7 +436,7 @@ public class BaseCard {
 //			}
 			_evasionBase=value;}
 	}
-	public int drapRate
+	public float drapRate
 	{
 		get{return _drapRate;}
 		private set{

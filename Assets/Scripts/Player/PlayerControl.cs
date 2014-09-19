@@ -9,8 +9,8 @@ public class PlayerControl : MonoBehaviour
 		private List<ConcreteCard> _playCardSet;
 		private GameController _gameController;
 		private CardFactory _cardFactory;
-		private int _coins, _experience, _level;
-		private string _name;
+		private int _coins, _experience, _level, _maxLevel;
+		private string _name, _spriteName;
 
 		public List<ConcreteCard> cardBag {
 				get{ return _cardBag;}
@@ -35,6 +35,27 @@ public class PlayerControl : MonoBehaviour
 
 		public int experience {
 				get{ return _experience;}
+				set {
+						if (value < _experience) {
+								Debug.Log ("Decrease of experience is forbidden");
+								throw new System.ArgumentException ("experience");
+						}
+						_experience = value;
+						int newLevel = level;
+						while (newLevel<BaseCard._experienceTable.Count&&_experience>BaseCard._experienceTable[newLevel-1]) {
+								_experience -= BaseCard._experienceTable [newLevel - 1];
+								newLevel++;
+						}
+						if (_experience > BaseCard._experienceTable [newLevel - 1]) {//When experience exceed the max,it equals the max
+								_experience = BaseCard._experienceTable [newLevel - 1];
+						}
+						_level = newLevel;
+				}
+		}
+		
+		public string spriteName {
+				get{ return _spriteName;}
+				set{ _spriteName = value;}
 		}
 
 		void Awake ()
@@ -43,13 +64,13 @@ public class PlayerControl : MonoBehaviour
 				_playCardSet = new List<ConcreteCard> ();
 				_cardBag = new List<ConcreteCard> ();
 				_cardFactory = CardFactory.GetCardFactory ();
-				LoadFromPlayerPrefs ();
+				Load ();
 				
 		}
 		// Use this for initialization
 		void Start ()
 		{
-		_bagManagement.Load ();
+				_bagManagement.Load ();
 		}
 	
 		// Update is called once per frame
@@ -62,11 +83,14 @@ public class PlayerControl : MonoBehaviour
 		{
 		}
 
+		void Load ()
+		{
+				LoadFromJson ();
+				LoadFromPlayerPrefs ();
+		}
+
 		public void LoadFromPlayerPrefs ()
 		{
-				if (!PlayerPrefs.HasKey (PlayerPrefKeys.player)) {
-						LoadFromJson ();
-				}
 		}
 
 		//when player first enter the game,load information from json and all default card are with level 1.
@@ -107,6 +131,7 @@ public class PlayerControl : MonoBehaviour
 
 				_coins = System.Convert.ToInt32 (playerInfo ["coins"]);
 				_name = playerInfo ["playerName"].ToString ();
+				_spriteName = "player";
 				_experience = 0;
 				_level = 1;
 		}
@@ -118,4 +143,10 @@ public class PlayerControl : MonoBehaviour
 						_cardBag.Remove (item);
 				}
 		}
+
+	public void GainNewCard(ConcreteCard  newCard)
+	{
+		_cardBag.Add (newCard);
+		_bagManagement.AddNewCardToBag (newCard);
+	}
 }
