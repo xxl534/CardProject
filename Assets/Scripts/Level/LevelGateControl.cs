@@ -100,6 +100,7 @@ public class LevelGateControl : MonoBehaviour,IComparable<LevelGateControl>
 		public void LevelComplete ()
 		{
 				_nextPathPoint.Activate ();
+		Debug.Log("levelcom");
 		}
 
 		void Init ()
@@ -127,6 +128,7 @@ public class LevelGateControl : MonoBehaviour,IComparable<LevelGateControl>
 		{
 				if (_nextPathPoint != null) {
 						_nextPathPoint.Init (_levelInfo.unlocked);
+			Debug.Log("UNlcok path");
 				}
 		}
 }

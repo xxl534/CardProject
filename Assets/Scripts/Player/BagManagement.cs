@@ -14,6 +14,7 @@ public class BagManagement : MonoBehaviour
 		public UIGrid _grid;
 		public List<BattleSlot> _battleSlots;
 		public ShieldPanel _shieldPanel;
+	public  GameObject _popButton;
 		private List<BagSlot> _bagSlots;
 		private UIScrollView _scrollView;
 		private PlayerControl _player;
@@ -22,7 +23,8 @@ public class BagManagement : MonoBehaviour
 		private CardComparisonDisplayer _cardComparisonDisplayer;
 		private float _fadeDuration = 0.3f;
 		private int _coinAmount;
-
+	private Vector3 _initLocalPosition=new Vector3(0,-912f,0);
+	private float _popDuration=0.8f;
 		public int coinAmount {
 				get{ return _coinAmount;}
 				set{ _coinAmount = value;}
@@ -97,6 +99,20 @@ public class BagManagement : MonoBehaviour
 				}
 		}
 		
+	public void UpdateData()
+	{
+		_coinAmount = _player.coins;
+		_coin.text = _coinAmount.ToString ();
+		_level.text = "Lv." + _player.level.ToString ();
+		_experience.text = _player.experience.ToString () + "/" + BaseCard.experienceTable [_player.level - 1].ToString ();
+		_experienceSlider.value = _player.experience / (float)(BaseCard._experienceTable [_player.level - 1]);
+		foreach (var item in _bagSlots) {
+			item.UpdateData();
+				}
+		foreach (var item in _battleSlots) {
+			item.UpdateData();
+				}
+	}
 		public void AddNewCardToBag(ConcreteCard card)
 	{
 		GameObject bagSlotGO = Instantiate (_bagSlotPrefab)as GameObject;
@@ -286,4 +302,22 @@ public class BagManagement : MonoBehaviour
 				}
 				_grid.Reposition ();
 		}
+		
+		public void PopUp()
+	{
+		HOTween.To(transform,_popDuration,new TweenParms().Prop("localPosition",Vector3.zero).Ease(EaseType.EaseOutBounce)
+		           .OnComplete(()=>{
+			_popButton.SetActive(false);
+		}));
+
+	}
+		public void Pullback()
+	{
+		HOTween.To(transform,_popDuration,new TweenParms().Prop("localPosition",_initLocalPosition).Ease(EaseType.Linear)
+		           .OnComplete(()=>{
+			_popButton.SetActive(true);
+		}));
+
+	}
+
 }

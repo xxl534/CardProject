@@ -4,7 +4,7 @@ using Holoville.HOTween;
 public class SwordControl : MonoBehaviour {
 	ParticleSystem _particle;
 	UISprite _sword;
-
+	public ShieldPanel _shield;
 	float _anim_time=1.5f;
 	// Use this for initialization
 	void Awake()
@@ -34,11 +34,15 @@ public class SwordControl : MonoBehaviour {
 
 	public void Show(Vector3 position)
 	{
-		HOTween.To(_sword.transform,_anim_time,new TweenParms().Prop("localPosition",new Vector3(0,-40f,0)).Ease(EaseType.Linear).OnComplete(()=>{
+		HOTween.To(_sword.transform,_anim_time,new TweenParms().Prop("localPosition",new Vector3(0,-40f,0)).Ease(EaseType.Linear).OnStart(()=>{
+			_shield.Activate();
+		}).OnComplete(()=>{
 			transform.position=position;
 
 			_particle.Play ();
-			HOTween.To(_sword.transform,_anim_time,new TweenParms().Prop("localPosition",new Vector3(0,20f,0)).Ease(EaseType.Linear));
+			HOTween.To(_sword.transform,_anim_time,new TweenParms().Prop("localPosition",new Vector3(0,20f,0)).Ease(EaseType.Linear).OnComplete(()=>{
+				_shield.Deactivate();
+			}));
 		}));
 		_particle.Play ();
 

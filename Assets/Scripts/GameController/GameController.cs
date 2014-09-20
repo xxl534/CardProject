@@ -97,6 +97,7 @@ public class GameController : MonoBehaviour
 				}
 				_levels.Sort ();
 				_levels [0].Unlock ();
+		LevelButtonClick(_levels[0]);
 		}
 
 		public void LevelButtonClick (LevelGateControl level)

@@ -203,6 +203,7 @@ private	UIPanel _panel;
 			_canClick=false;
 				}
 		_fader.BeginFading (()=>{
+			_player.bagManagement.UpdateData();
 			Clear();
 			_battleController.gameObject.SetActive(false);
 			_fader.ExitFading(()=>{_gamerController.BattleComplete();});

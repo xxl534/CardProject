@@ -66,6 +66,13 @@ public class BattleSlot : MonoBehaviour
 				_level.color = RarityColorStatic.rarityColors [(int)card.rarity];
 		}
 
+	public void UpdateData()
+	{
+		if(_concreteCard!=null){
+		_level.text = _concreteCard.level.ToString ();
+		}
+	}
+
 		public void Select ()
 		{
 				_Edge.color = Color.white;

@@ -12,6 +12,10 @@ public class PlayerControl : MonoBehaviour
 		private int _coins, _experience, _level, _maxLevel;
 		private string _name, _spriteName;
 
+	public BagManagement bagManagement
+	{
+		get{return _bagManagement;}
+	}
 		public List<ConcreteCard> cardBag {
 				get{ return _cardBag;}
 		}
@@ -131,7 +135,7 @@ public class PlayerControl : MonoBehaviour
 
 				_coins = System.Convert.ToInt32 (playerInfo ["coins"]);
 				_name = playerInfo ["playerName"].ToString ();
-				_spriteName = "player";
+		_spriteName = _name;
 				_experience = 0;
 				_level = 1;
 		}

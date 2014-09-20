@@ -1,0 +1,1 @@
+{"level":{"level":8,"experience":60,"background":"background sample","enemies":[8,8,8],"bosses":[0],"enemiesAbilityLevel":2,"dropCard":[0],"dropRate":[100]}}

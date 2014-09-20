@@ -85,6 +85,13 @@ public class BagSlot : MonoBehaviour
 				Deselect ();
 		}
 
+	public void UpdateData()
+	{
+		_level.text = "Lv." + _concreteCard.level.ToString ();
+		_experience .text = _concreteCard.experience.ToString () + "/" + BaseCard.experienceTable [_concreteCard.level - 1];
+		_experienceSlider.value = _concreteCard.experience / (float)BaseCard._experienceTable [_concreteCard.level - 1];
+	}
+
 		public void Refresh ()
 		{
 				_level.text = "Lv." + _concreteCard.level.ToString ();

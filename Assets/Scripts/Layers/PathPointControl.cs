@@ -7,7 +7,7 @@ public class PathPointControl : MonoBehaviour
 {
 		public PathPointControl _nextPathPoint;
 		public LevelGateControl _nextLevelGate;
-		public float _glowTime = 0.3f;
+		 float _glowTime = 0.4f;
 		bool _active;
 		UISprite _sprite;
 		// Use this for initialization
@@ -15,6 +15,7 @@ public class PathPointControl : MonoBehaviour
 		{
 				_sprite = GetComponent<UISprite> ();
 				_active = false;
+		gameObject.SetActive(false);
 		}
 	
 		// Update is called once per frame
@@ -30,7 +31,10 @@ public class PathPointControl : MonoBehaviour
 		{
 				if (_active == false) {
 						_active = true;
-						HOTween.To (_sprite, _glowTime, new TweenParms ().Prop ("alpha", 1f).Ease (EaseType.Linear).OnComplete (ActivateNext));
+			HOTween.To (_sprite, _glowTime, new TweenParms ().Prop ("alpha", 1f).Ease (EaseType.Linear).OnStart(()=>{
+				gameObject.SetActive(true);
+				_sprite.alpha=0f;
+			}).OnComplete (ActivateNext));
 				}
 		}
 
@@ -44,7 +48,7 @@ public class PathPointControl : MonoBehaviour
 
 		public 	void Init (bool show)
 		{
-				if (show) {
+		if (show) {
 						gameObject.SetActive (true);
 						_active = true;
 						_sprite.alpha = 1f;
